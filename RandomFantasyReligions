@@ -1,0 +1,67 @@
+function Get-God{
+    
+    Param(
+        [Parameter(Mandatory=$False)]
+        [string]
+        $Alignment
+    )
+
+}
+
+function Get-Religion{
+    
+    Param(
+        [Parameter(Mandatory=$False)]
+        [int16[]]
+        $Number
+    )
+
+}
+
+$PsychomachiaVirtues = @("Prudence/Wisdom","Faith","Good Works","Concord","Sobriety","Patience","Humility")
+$GregoryIVirtues = @("Chastity","Temperance","Charity","Diligence","Kindness","Patience","Humility")
+
+$PsychomachiaVices = @("Lust","Idolatry","Avarice","Discord","Indulgence","Wrath","Pride")
+$GregoryIVices = @("Lust","Gluttony","Greed","Sloth","Envy","Wrath","Pride")
+
+$AristotilianVirtues = @(
+
+    [pscustomobject]@{Dimension="Fear and confidence";Excess="Rashness";'Golden Mean'="Courage in the face of fear";Deficiency="Cowardice"}
+    [pscustomobject]@{Dimension="Pleasure and pain";Excess="Self-indulgence";'Golden Mean'="Temperance in the face of pleasure and pain";Deficiency="Insensibility"}
+    [pscustomobject]@{Dimension="Getting and spending (minor)";Excess="Prodigality";'Golden Mean'="Liberality with wealth and possessions";Deficiency="Illiberality"}
+    [pscustomobject]@{Dimension="Getting and spending (major)";Excess="Vulgarity";'Golden Mean'="Magnificence with great wealth and possessions";Deficiency="Pettiness"}
+    [pscustomobject]@{Dimension="Honor and dishonor (major)";Excess="Vanity";'Golden Mean'="Magnanimity with great honors";Deficiency="Pusillanimity"}
+    [pscustomobject]@{Dimension="Honor and dishonor (minor)";Excess="Empty vanity";'Golden Mean'="Proper ambition with normal honors";Deficiency="Unambitiousness"}
+    [pscustomobject]@{Dimension="Anger";Excess="Irascibility";'Golden Mean'="Patience";Deficiency="Lack of spirit"}
+    [pscustomobject]@{Dimension="Self-expression";Excess="Boastfulness";'Golden Mean'="Honesty with self-expression";Deficiency="False modesty"}
+    [pscustomobject]@{Dimension="Conversation";Excess="Buffoonery";'Golden Mean'="Wittiness in conversation";Deficiency="Boorishness"}
+    [pscustomobject]@{Dimension="Social conduct";Excess="Obsequiousness";'Golden Mean'="Friendliness in social conduct";Deficiency="Cantankerousness"}
+    [pscustomobject]@{Dimension="Indignation";Excess="Envy";'Golden Mean'="Justice and righteous indignation in the face of injury";Deficiency="Spitefulness"}
+
+)
+
+$Sefirot = @(
+
+    [pscustomobject]@{Category="Super-conscious";SefirahHebrew="Keter";SefirahEnglish="Crown";QlippahHebrew="Thaumiel";QlippahEnglishDescription="Twins of God"}
+    [pscustomobject]@{Category="Conscious intellect";SefirahHebrew="Chokmah";SefirahEnglish="Wisdom";QlippahHebrew="Ghogiel";QlippahEnglishDescription="The Hinderers"}
+    [pscustomobject]@{Category="Conscious intellect";SefirahHebrew="Binah";SefirahEnglish="Understanding";QlippahHebrew="Satariel";QlippahEnglishDescription="The Concealers"}
+    [pscustomobject]@{Category="Conscious emotion, primary";SefirahHebrew="Chesed";SefirahEnglish="Kindness";QlippahHebrew="Agshekeloh";QlippahEnglishDescription="Smiters"}
+    [pscustomobject]@{Category="Conscious emotion, primary";SefirahHebrew="Gevurah";SefirahEnglish="Discipline";QlippahHebrew="Golohab";QlippahEnglishDescription="The Burners"}
+    [pscustomobject]@{Category="Conscious emotion, primary";SefirahHebrew="Tiferet";SefirahEnglish="Glory";QlippahHebrew="Tagiriron";QlippahEnglishDescription="The Disputers"}
+    [pscustomobject]@{Category="Conscious emotion, secondary";SefirahHebrew="Netzach";SefirahEnglish="Victory";QlippahHebrew="Gharab Tzerek";QlippahEnglishDescription="Corrosive Ones"}
+    [pscustomobject]@{Category="Conscious emotion, secondary";SefirahHebrew="Hod";SefirahEnglish="Splendor";QlippahHebrew="Samael";QlippahEnglishDescription="Poison of God"}
+    [pscustomobject]@{Category="Conscious emotion, secondary";SefirahHebrew="Yesod";SefirahEnglish="Foundation";QlippahHebrew="Gamaliel";QlippahEnglishDescription="Obscene Ones"}
+    [pscustomobject]@{Category="Conscious emotion, vessel to bring action";SefirahHebrew="Malkuth";SefirahEnglish="Kingdom/Kingship";QlippahHebrew="Lilith";QlippahEnglishDescription="Queen of Night"}
+
+)
+
+$Humors = @(
+
+    [pscustomobject]@{Humor="Blood";Temperment="Sanguine";Element="Air";Season="Spring";Age="Infancy";Organ="Liver"}
+    [pscustomobject]@{Humor="Yellow Bile";Temperment="Choleric";Element="Fire";Season="Summer";Age="Youth";Organ="Gallbladder"}
+    [pscustomobject]@{Humor="Black Bile";Temperment="Melancholic";Element="Earth";Season="Autumn";Age="Adulthood";Organ="Spleen"}
+    [pscustomobject]@{Humor="Phlegm";Temperment="Phlegmatic";Element="Water";Season="Winter";Age="Old Age";Organ="Brain/Lungs"}
+
+)
+
+$Locus = @("Specific Individual","Location/Region","Alignment/Value","Concept")
