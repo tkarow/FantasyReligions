@@ -64,4 +64,139 @@ $Humors = @(
 
 )
 
-$Locus = @("Specific Individual","Location/Region","Alignment/Value","Concept")
+$Locus = @("Specific Individual","Dead human (ancestor or prophet)","Saint/Demi-god","Location/Region","Alignment/Value","Concept")
+
+$Secrecy = @()
+
+$Exclusivity = @()
+
+$Jealousness = @("Polytheistic","Preference","Exclusivity","Hostility to other gods")
+
+$Hedonism = @()
+
+$Demands = @("Prayer","Child sacrifice","Libation","Festivals - sports/athletics, hedomsim, sacrifice, family, penance","Temperance/Self control - vows, asceticism")
+<#What transactions does the religion demand?
+-Sacrifices
+    -Libation/Food offering
+        -Eaten in ritual by followers
+        -Eaten by priests on behalf of god
+        -Abandoned for nature or god/Burned in fire/Thrown into ocean, etc.
+    -Human
+        -Slaves/Captives
+        -Children
+    -Mutilation
+        -Blood
+        -A body part
+-Tithing
+
+Rules: Mandates/Taboos (Add specific object(s)/location(s)/time(s) as appropriate to each):
+-Gifts
+-Dietary restriction
+    -Animals
+        -Specific animals
+        -Types of animals
+        -All animals
+     -Drink
+        -Specific drink
+        -Types of drink
+            -Alcohol
+            -"Hot"
+            -Elvish
+    -Days
+    -Specific types (blood, etc.)
+    -Preparation (must be made in this way/by this person/not by that person, etc.)
+-Observance
+-Prayers/Meditation
+    -Aknowledgement- Thanks/Blessings
+    -Atonement/Apology
+-Rituals
+    -Bathing
+    -Blessing meals
+    -Shaving
+    -Flagellation
+    -Exercise
+    -Games/Sports
+    -Feasts
+    -Specific times of day to pray
+-Holy days
+    -Focus on Past (ancestors/creation/deeds/anniversary of specific birth/death, victory/defeat, event)
+    -Focus on Present (gratitude for family/friends/bounty/life/etc., atonement)
+    -Focus on Future (end of the world, afterlife, impending victory)
+-Appearance
+    -Dress
+        -Iconography
+        -Specific garments
+    -Hair
+        -Shaving
+            -Complete
+            -Patch
+                -Mohawk
+        -Never cutting
+        -Style
+            Prescribed hairstyle
+                -Braid
+    -Modesty (Hiding body parts)
+    -Annointment/Pigment
+        -Oils
+        -Paint on body
+        -Dust/Chalk
+        -Dye
+        -Tattoo
+    -Piercing
+-Sex
+    -Chastity
+    -Monogamy
+    -Polygamy
+    -Hedonism
+-Fasting
+-Reading/Study
+-Pilgrimages
+-Prayer
+
+Sacred things/Fixations:
+-Foods/Drink
+    -Specific
+        -Specially prepared
+        -Salt
+        -Hallucinogenic mushroom/whatever
+        -Plant
+        -Animal
+        -Water (specific location)
+    -Type(s)
+        -Bread
+        -Honey
+        -Wine
+        -Oil
+        -Water (running water/river water/stream water)
+-Being
+    -Animal
+    -Monster
+    -Plant
+-Color
+-Gemstone
+-Language
+-Location
+    -Civilization
+    -City
+    -Country
+    -Mountain
+    -Body of water
+    -The Heavens
+        -Star
+        -Planet
+        -Moon
+    -Plane
+-Element
+
+Sex-Specific for any of the above
+#>
+
+
+$Practices = @("Public works/Community projects/Patronage","Secret code","Juggernaut")
+
+$Heirarchy = @()
+
+$Aggression = @("Pacifism","Holy war")
+
+#Emphasis on afterlife? None? Martyrdom?
+#Iconography
