@@ -8,6 +8,36 @@ function Get-God{
 
 }
 
+function Get-ApproximateSD{
+    
+    Param(
+        [Parameter(Mandatory=$False)]
+        [int16[]]
+        $Number
+    )
+
+    $SND = ''
+
+    if(($Number -le 5) -or $Number -ge 96){
+    
+        $SND = 2
+
+        if($Number -le 5){$SND = $SND * -1}
+        
+    }elseif((($Number -ge 6) -and ($Number -le 18)) -or (($Number -le 95) -and ($Number -ge 83))){
+    
+        $SND = 1
+
+        if($Number -le 18){$SND = $SND * -1}
+    
+    }elseif(($Number -ge 19) -or $Number -le 82){$SND = 0}
+
+    #Range from -2 to +2
+
+    $SND
+
+}
+
 function Get-Religion{
     
     Param(
@@ -18,11 +48,41 @@ function Get-Religion{
 
 }
 
-$PsychomachiaVirtues = @("Prudence/Wisdom","Faith","Good Works","Concord","Sobriety","Patience","Humility")
-$GregoryIVirtues = @("Chastity","Temperance","Charity","Diligence","Kindness","Patience","Humility")
+function Get-ArrayCount{
 
-$PsychomachiaVices = @("Lust","Idolatry","Avarice","Discord","Indulgence","Wrath","Pride")
-$GregoryIVices = @("Lust","Gluttony","Greed","Sloth","Envy","Wrath","Pride")
+    param (
+        [Parameter(Mandatory = $true)]
+        [string[]]
+        $Array
+    )
+
+    ($Array | Measure).Count
+
+}
+
+$PsychomachiaVirtuesAndVices = @(
+
+    [pscustomobject]@{Virtue="Prudence/Wisdom";Vice="Lust"}
+    [pscustomobject]@{Virtue="Faith";Vice="Idolatry"}
+    [pscustomobject]@{Virtue="Good Works";Vice="Avarice"}
+    [pscustomobject]@{Virtue="Concord";Vice="Discord"}
+    [pscustomobject]@{Virtue="Sobriety";Vice="Indulgence"}
+    [pscustomobject]@{Virtue="Patience";Vice="Wrath"}
+    [pscustomobject]@{Virtue="Humility";Vice="Pride"}
+    
+)
+
+$GregoryIVirtuesAndVices = @(
+
+    [pscustomobject]@{Virtue="Chastity";Vice="Lust"}
+    [pscustomobject]@{Virtue="Temperance";Vice="Gluttony"}
+    [pscustomobject]@{Virtue="Charity";Vice="Greed"}
+    [pscustomobject]@{Virtue="Diligence";Vice="Sloth"}
+    [pscustomobject]@{Virtue="Kindness";Vice="Envy"}
+    [pscustomobject]@{Virtue="Patience";Vice="Wrath"}
+    [pscustomobject]@{Virtue="Humility";Vice="Pride"}
+    
+)
 
 $AristotilianVirtues = @(
 
@@ -200,3 +260,10 @@ $Aggression = @("Pacifism","Holy war")
 
 #Emphasis on afterlife? None? Martyrdom?
 #Iconography
+
+
+##########
+
+$NewArray = @()
+
+$GregoryIVirtuesAndVices | %{$SD='';$SD=Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)";if(($SD -ge 1) -or ($SD -ge -1)){$NewArray += [pscustomobject]@{Virtue=if($SD -ge 1){$_.Virtue}elseif($SD -le -1){$_.Vice};SD=$SD}}}
