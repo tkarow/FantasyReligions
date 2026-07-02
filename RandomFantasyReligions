@@ -6,6 +6,54 @@ function Get-God{
         $Alignment
     )
 
+    $GodPersonality = @()
+
+    $HEXACO | %{$Score = Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)";$GodPersonality += [pscustomobject]@{Trait = $_.Trait; Key = $_.Key; Score = $Score; PN = "$(if($Score -lt 0){'-'}elseif($Score -gt 0){'+'}else{if((Get-Random -Minimum 1 -Maximum 3) -eq 1){"-"}else{"+"}})"}}
+
+    $Extremes = @()
+    $GodPersonality | ?{$_.Score -ne 0} | %{$Extremes += [pscustomobject]@{Trait = $_.Trait; Score = $_.Score}}
+
+    $HEXACODisposition = "$(($HEXACODispositions | ?{($_.H -eq ($GodPersonality | ?{$_.Key -eq "H"}).PN -and $_.E -eq ($GodPersonality | ?{$_.Key -eq "E"}).PN -and $_.A -eq ($GodPersonality | ?{$_.Key -eq "A"}).PN)}).Disposition)"
+
+    $HEXACORole = "$(($HEXACORoles | ?{($_.X -eq ($GodPersonality | ?{$_.Key -eq "X"}).PN -and $_.C -eq ($GodPersonality | ?{$_.Key -eq "C"}).PN -and $_.O -eq ($GodPersonality | ?{$_.Key -eq "O"}).PN)}).Disposition)"
+
+    $HEXACOPersonalityType = $HEXACOPersonalityTypes | ?{$_.Type -like "$($HEXACODisposition) $($HEXACORole)"}
+
+    $Descriptors = ''
+    
+    foreach($Extreme in $Extremes){
+    
+        if($Extreme.Score -lt 0){
+        
+            $HEXACO | ?{$_.Trait -like "$($Extreme.Trait)"} | %{$Descriptors = "$($Descriptors, $($_.Low.trim())) | "}
+
+        }
+
+        if($Extreme.Score -gt 0){
+        
+            $HEXACO | ?{$_.Trait -like "$($Extreme.Trait)"} | %{$Descriptors = "$($Descriptors, $($_.High.trim())) | "}
+
+        }
+
+    }
+
+    if($Descriptors -notlike ""){$Descriptors = "$($Descriptors)".Substring(0, $Descriptors.Length - 3);$Descriptors = $Descriptors.trim();$Descriptors = $Descriptors.Replace('  ',' ')}
+
+    [pscustomobject]@{
+    
+        Personality = $HEXACOPersonalityType.Type
+        Tagline = $HEXACOPersonalityType.Tagline
+        Traits = $HEXACOPersonalityType.Traits
+        'Honesty-humility' = "$(($GodPersonality | ?{$_.Trait -like "Honesty-humility"}).Score)"
+        'Emotionality' = "$(($GodPersonality | ?{$_.Trait -like "Emotionality"}).Score)"
+        'Extraversion' = "$(($GodPersonality | ?{$_.Trait -like "Extraversion"}).Score)"
+        'Agreeableness' = "$(($GodPersonality | ?{$_.Trait -like "Agreeableness"}).Score)"
+        'Conscientiousness' = "$(($GodPersonality | ?{$_.Trait -like "Conscientiousness"}).Score)"
+        'Openness to experience' = "$(($GodPersonality | ?{$_.Trait -like "Openness to experience"}).Score)"
+        Adjectives = $Descriptors
+    
+    }
+
 }
 
 function Get-ApproximateSD{
@@ -123,6 +171,131 @@ $Humors = @(
     [pscustomobject]@{Humor="Phlegm";Temperment="Phlegmatic";Element="Water";Season="Winter";Age="Old Age";Organ="Brain/Lungs"}
 
 )
+
+$BigFive = @(
+
+    [pscustomobject]@{Trait = "Openness"; High = "Absolute Chaos, Creation"; 1 = "Change, Curiosity, Adventure, Imagination, Novelty, Abstraction, Risk-taking, Lack of focus, Whimsy, Fantasy, Rebelliousness, Art, Recklessness, Peculiar thinking, Diffuse identity, Unstable goals, Nonconformity, Dreams, Sex, Drugs"; Low = "Order, Law, Rules, Practicality, Tradition, Logic, Focus, Routine, Obsession, Rigidity, Resistance to change, Judgement, Emotional flattening, OCD, Autism"}
+    [pscustomobject]@{Trait = "Conscientiousness"; High = "Organitation, Disciple, Responsibility, Goals, Plans, Care, Thoroughness, Perfection, Duty, Deliberate, Ambition, Reliability, Determination, Perseverance, Neat, Hard work, Caution, Productiveness"; Low = "Spontaneity, Flexibity, Impulsivity, Chaos, Distraction, ADHD, Carefree, Lazy, Laid-back, Cluttered, Procrastination, Unemployment, Homelessness, Recklessness, Irresponsibility"}
+    [pscustomobject]@{Trait = "Extraversion"; High = "Socializing, Outgoing, Energetic, Noise, Activity, Talkativeness, Assertiveness, Confidence, Parties, Politics"; Low = "Reserved, Quiet, Independent, Introspection, Observation, Analysis, Shyness, Intelligence"}
+    [pscustomobject]@{Trait = "Agreeableness"; High = "Compassion, Cooperation, Trust, Empathy, Helpful, Sincerity, Altruism, Modesty"; Low = "Analytical, Skepticism, Independence, Competition, Judgemental, Selfishness, Aggression, Vengeance"}
+    [pscustomobject]@{Trait = "Neuroticism"; High = "Emotional Sensitivity, Stressed, Unstable moods"; Low = "Emotionally resilient, Stability, Even-tempered"}
+
+)
+
+#Low Conscientiousness + low Agreeableness = "Machiavellianism" - Narcotic production/distribution/use, sexual assault, theft, burglary, assault or murder, especially violent crime, especially homicide,in which the perpetrator commits the act against someone because of sudden strong impulse such as anger or jealousy. Anti-social. Criminal behavior. stealing and physical attack or noncriminal behaviours such as lying and manipulation. Aggression, hostility.
+#High Extraversion + high Neuroticism experience high levels of both positive and negative emotional states, a kind of "emotional roller coaster".
+#High Extraversion + low Agreeableness + varying Neuroticism = Narcissism
+
+#region HEXACO
+
+$HEXACO = @(
+
+    [pscustomobject]@{Trait = "Honesty-humility"; Key = "H"; Facets = "Sincerity, fairness, greed avoidance, modesty"; High = "sincere, honest, faithful, loyal, modest/unassuming"; Low = "sly, deceitful, greedy, pretentious, hypocritical, boastful, pompous"}
+    [pscustomobject]@{Trait = "Emotionality"; Key = "E"; Facets = "Fearfulness, Anxiety, Dependence, Sentimentality"; High = "emotional, oversensitive, sentimental, fearful, anxious, vulnerable"; Low = "brave, tough, independent, self-assured, stable"}
+    [pscustomobject]@{Trait = "Extraversion"; Key = "X"; Facets = "Social self-esteem, social boldness, sociability, liveliness"; High = "outgoing, lively, extraverted, sociable, talkative, cheerful, active"; Low = "shy, passive, withdrawn, introverted, quiet, reserved"}
+    [pscustomobject]@{Trait = "Agreeableness"; Key = "A"; Facets = "Forgivingness, gentleness, flexibility, patience"; High = "patient, tolerant, peaceful, mild, agreeable, lenient, gentle"; Low = "ill-tempered, quarrelsome, stubborn, choleric"}
+    [pscustomobject]@{Trait = "Conscientiousness"; Key = "C"; Facets = "Organization, diligence, perfectionism, prudence"; High = "organized, disciplined, diligent, careful, thorough, precise"; Low = "sloppy, negligent, reckless, lazy, irresponsible, absent-minded"}
+    [pscustomobject]@{Trait = "Openness to experience"; Key = "O"; Facets = "Aesthetic appreciation, inquisitiveness, creativity, unconventionality"; High = "intellectual, creative, unconventional, innovative, ironic"; Low = "shallow, unimaginative, conventional"}
+
+)
+
+$HEXACODispositions = @(
+
+    [pscustomobject]@{Disposition = "Warm"; H = "+"; E = "+"; A = "+"}
+    [pscustomobject]@{Disposition = "Delicate"; H = "+"; E = "+"; A = "-"}
+    [pscustomobject]@{Disposition = "Steadfast"; H = "+"; E = "-"; A = "+"}
+    [pscustomobject]@{Disposition = "Principled"; H = "+"; E = "-"; A = "-"}
+    [pscustomobject]@{Disposition = "Passionate"; H = "-"; E = "+"; A = "+"}
+    [pscustomobject]@{Disposition = "Intense"; H = "-"; E = "+"; A = "-"}
+    [pscustomobject]@{Disposition = "Seasoned"; H = "-"; E = "-"; A = "+"}
+    [pscustomobject]@{Disposition = "Sharp"; H = "-"; E = "-"; A = "-"}
+
+)
+
+$HEXACORoles = @(
+
+    [pscustomobject]@{Disposition = "Leader"; X = "+"; C = "+"; O = "+"}
+    [pscustomobject]@{Disposition = "Manager"; X = "+"; C = "+"; O = "-"}
+    [pscustomobject]@{Disposition = "Explorer"; X = "+"; C = "-"; O = "+"}
+    [pscustomobject]@{Disposition = "Entertainer"; X = "+"; C = "-"; O = "-"}
+    [pscustomobject]@{Disposition = "Craftsman"; X = "-"; C = "+"; O = "+"}
+    [pscustomobject]@{Disposition = "Analyst"; X = "-"; C = "+"; O = "-"}
+    [pscustomobject]@{Disposition = "Dreamer"; X = "-"; C = "-"; O = "+"}
+    [pscustomobject]@{Disposition = "Wanderer"; X = "-"; C = "-"; O = "-"}
+
+)
+
+$HEXACOPersonalityTypes = @(
+
+    [pscustomobject]@{Type = "Warm Leader"; Tagline = "A charismatic leader who embraces everyone"; Traits = "Empathy, Vision, Care, Leadership, Inspiration"}
+	[pscustomobject]@{Type = "Warm Manager"; Tagline = "The caretaker responsible for organizational harmony"; Traits = "Harmony, Stability, Care, Practice, Mediation"}
+	[pscustomobject]@{Type = "Warm Explorer"; Tagline = "An adventurer who opens new worlds together"; Traits = "Adventure, Empathy, Discovery, Passion, Sharing"}
+	[pscustomobject]@{Type = "Warm Entertainer"; Tagline = "The mood maker who brings smiles to everyone"; Traits = "Cheerful, Friendly, Joy, Social, Connection"}
+	[pscustomobject]@{Type = "Warm Craftsman"; Tagline = "Creates works filled with delicate care"; Traits = "Craftsmanship, Care, Quality, Dedication, User-focused"}
+	[pscustomobject]@{Type = "Warm Analyst"; Tagline = "A warm perspective that seeks to understand people"; Traits = "Insight, Empathy, Analysis, Understanding, Balance"}
+	[pscustomobject]@{Type = "Warm Dreamer"; Tagline = "A sensitive soul dreaming of a beautiful world"; Traits = "Sensitivity, Imagination, Ideals, Purity, Inspiration"}
+	[pscustomobject]@{Type = "Warm Wanderer"; Tagline = "A healer who accepts things as they are"; Traits = "Acceptance, Healing, Peace, Freedom, Presence"}
+	[pscustomobject]@{Type = "Delicate Leader"; Tagline = "A perfectionist leader who leads with high standards"; Traits = "Standards, Perfection, Vision, Strictness, Quality"}
+	[pscustomobject]@{Type = "Delicate Manager"; Tagline = "A meticulous operator who misses nothing"; Traits = "Thorough, Systematic, Error-free, Management, Prevention"}
+	[pscustomobject]@{Type = "Delicate Explorer"; Tagline = "A sensitive antenna for new things"; Traits = "Senses, Exploration, Intuition, Change, Trend"}
+	[pscustomobject]@{Type = "Delicate Entertainer"; Tagline = "An artist who expresses emotions delicately"; Traits = "Expression, Emotion, Authenticity, Art, Empathy"}
+	[pscustomobject]@{Type = "Delicate Craftsman"; Tagline = "A sensitive expert strong in details"; Traits = "Precision, Expertise, Detail, Quality, Sensitivity"}
+	[pscustomobject]@{Type = "Delicate Analyst"; Tagline = "A sharp perspective that pierces the core"; Traits = "Insight, Core, Analysis, Accuracy, Directness"}
+	[pscustomobject]@{Type = "Delicate Dreamer"; Tagline = "Owner of a deep and rich inner world"; Traits = "Inner world, Depth, Sensitivity, Solitude, Imagination"}
+	[pscustomobject]@{Type = "Delicate Wanderer"; Tagline = "A sensitive free spirit living in their own world"; Traits = "Freedom, Sensitivity, Independence, Individuality, Wandering"}
+	[pscustomobject]@{Type = "Steadfast Leader"; Tagline = "An unwavering, cool-headed leader"; Traits = "Stability, Trust, Composure, Principles, Persistence"}
+	[pscustomobject]@{Type = "Steadfast Manager"; Tagline = "A reliable operator strong in crisis"; Traits = "Stability, Crisis management, Practical, Trust, Persistence"}
+	[pscustomobject]@{Type = "Steadfast Explorer"; Tagline = "A bold pioneer who advances fearlessly"; Traits = "Bold, Pioneer, Courage, Challenge, Overcoming"}
+	[pscustomobject]@{Type = "Steadfast Entertainer"; Tagline = "A relaxed entertainer with natural charm"; Traits = "Ease, Naturalness, Charm, Stability, Comfort"}
+	[pscustomobject]@{Type = "Steadfast Craftsman"; Tagline = "A quiet but strong, steadfast expert"; Traits = "Steadfast, Expertise, Persistence, Depth, Trust"}
+	[pscustomobject]@{Type = "Steadfast Analyst"; Tagline = "A calm strategist with an objective perspective"; Traits = "Objective, Composure, Strategy, Analysis, Rational"}
+	[pscustomobject]@{Type = "Steadfast Dreamer"; Tagline = "A quiet contemplator lost in deep thought"; Traits = "Contemplation, Quiet, Depth, Insight, Inner"}
+	[pscustomobject]@{Type = "Steadfast Wanderer"; Tagline = "A detached free spirit unbound by the world"; Traits = "Detachment, Freedom, Independence, Peace, Ease"}
+	[pscustomobject]@{Type = "Principled Leader"; Tagline = "A principled leader who leads with justice"; Traits = "Justice, Principles, Directness, Courage, Fairness"}
+	[pscustomobject]@{Type = "Principled Manager"; Tagline = "A strict operator who thoroughly follows rules"; Traits = "Rules, Thoroughness, Fairness, Strictness, Order"}
+	[pscustomobject]@{Type = "Principled Explorer"; Tagline = "An honest pioneer who seeks the right path"; Traits = "Honesty, Exploration, Truth, Pioneer, Transparency"}
+	[pscustomobject]@{Type = "Principled Entertainer"; Tagline = "An honest artist who shows their true self"; Traits = "Honesty, Authenticity, Unaffected, Expression, Directness"}
+	[pscustomobject]@{Type = "Principled Craftsman"; Tagline = "A stubborn perfectionist who doesn't compromise on quality"; Traits = "Quality, Stubbornness, Principles, Completion, Standards"}
+	[pscustomobject]@{Type = "Principled Analyst"; Tagline = "Owner of a sharp critical perspective"; Traits = "Criticism, Sharpness, Accuracy, Directness, Objectivity"}
+	[pscustomobject]@{Type = "Principled Dreamer"; Tagline = "An idealist with lofty ideals"; Traits = "Ideals, Principles, Purity, Vision, Justice"}
+	[pscustomobject]@{Type = "Principled Wanderer"; Tagline = "A lonely seeker walking their own path"; Traits = "Seeker, Solitude, Principles, Independence, Truth"}
+	[pscustomobject]@{Type = "Passionate Leader"; Tagline = "A charismatic leader who leads with intense vision"; Traits = "Passion, Vision, Charisma, Inspiration, Immersion"}
+	[pscustomobject]@{Type = "Passionate Manager"; Tagline = "A dedicated operator who runs toward goals"; Traits = "Dedication, Goals, Passion, Drive, Results"}
+	[pscustomobject]@{Type = "Passionate Explorer"; Tagline = "A passionate adventurer who pioneers with fire"; Traits = "Passion, Adventure, Challenge, Energy, Pioneering"}
+	[pscustomobject]@{Type = "Passionate Entertainer"; Tagline = "A born star who commands the stage"; Traits = "Stage, Charm, Passion, Star"}
+	[pscustomobject]@{Type = "Passionate Craftsman"; Tagline = "An immersive expert who pours passion into work"; Traits = "Immersion, Passion, Expertise, Focus"}
+	[pscustomobject]@{Type = "Passionate Analyst"; Tagline = "Owner of insight who digs deep"; Traits = "Insight, Passion, Depth, Exploration"}
+	[pscustomobject]@{Type = "Passionate Dreamer"; Tagline = "A romantic running toward dreams"; Traits = "Dreams, Romance, Passion, Imagination"}
+	[pscustomobject]@{Type = "Passionate Wanderer"; Tagline = "A free spirit living by passion"; Traits = "Freedom, Passion, Wandering, Moment"}
+	[pscustomobject]@{Type = "Intense Leader"; Tagline = "A revolutionary who shakes the world"; Traits = "Revolution, Change, Charisma, Challenge"}
+	[pscustomobject]@{Type = "Intense Manager"; Tagline = "A competitor who proves through results"; Traits = "Results, Competition, Drive, Performance"}
+	[pscustomobject]@{Type = "Intense Explorer"; Tagline = "A reckless challenger who tests limits"; Traits = "Limits, Challenge, Overcome, Recklessness"}
+	[pscustomobject]@{Type = "Intense Entertainer"; Tagline = "A wild artist with intense presence"; Traits = "Intense, Wild, Art, Presence"}
+	[pscustomobject]@{Type = "Intense Craftsman"; Tagline = "An obsessive with flame-like passion"; Traits = "Obsession, Flame, Perfection, Immersion"}
+	[pscustomobject]@{Type = "Intense Analyst"; Tagline = "A sharp critic who analyzes directly"; Traits = "Direct, Sharp, Criticism, Analysis"}
+	[pscustomobject]@{Type = "Intense Dreamer"; Tagline = "A tormented artist in inner storms"; Traits = "Torment, Storm, Art, Inner world"}
+	[pscustomobject]@{Type = "Intense Wanderer"; Tagline = "A stormy free spirit riding waves of emotion"; Traits = "Storm, Emotion, Freedom, Intensity"}
+	[pscustomobject]@{Type = "Seasoned Leader"; Tagline = "A master strategist who sees one step ahead"; Traits = "Strategy, Experience, Insight, Leadership"}
+	[pscustomobject]@{Type = "Seasoned Manager"; Tagline = "A skilled operator who knows the ways of the world"; Traits = "Experience, Practice, Balance, Operations"}
+	[pscustomobject]@{Type = "Seasoned Explorer"; Tagline = "A seasoned navigator who adventures safely"; Traits = "Navigation, Experience, Balance, Adventure"}
+	[pscustomobject]@{Type = "Seasoned Entertainer"; Tagline = "A veteran artist who reads the audience"; Traits = "Veteran, Audience, Experience, Charm"}
+	[pscustomobject]@{Type = "Seasoned Craftsman"; Tagline = "A skilled expert with experience-born mastery"; Traits = "Skill, Experience, Know-how, Expertise"}
+	[pscustomobject]@{Type = "Seasoned Analyst"; Tagline = "A cold strategist of calculated moves"; Traits = "Calculation, Cold, Strategy, Analysis"}
+	[pscustomobject]@{Type = "Seasoned Dreamer"; Tagline = "A wise sage of deep insight"; Traits = "Wisdom, Insight, Sage, Contemplation"}
+	[pscustomobject]@{Type = "Seasoned Wanderer"; Tagline = "A wandering sage drifting through the world"; Traits = "Wanderer, Wisdom, Freedom, Experience"}
+	[pscustomobject]@{Type = "Sharp Leader"; Tagline = "An iron-willed leader who charges toward goals"; Traits = "Iron will, Goals, Charge, Charisma"}
+	[pscustomobject]@{Type = "Sharp Manager"; Tagline = "A thorough operator who tolerates no gaps"; Traits = "Thorough, Gap-free, Efficiency, Management"}
+	[pscustomobject]@{Type = "Sharp Explorer"; Tagline = "A conqueror who claims new territories"; Traits = "Conquest, Ambition, Expansion, Dominance"}
+	[pscustomobject]@{Type = "Sharp Entertainer"; Tagline = "A charismatic villain with dark charm"; Traits = "Villain, Charm, Darkness, Charisma"}
+	[pscustomobject]@{Type = "Sharp Craftsman"; Tagline = "A ruthless expert pursuing only perfection"; Traits = "Ruthless, Perfection, Standards, Expertise"}
+	[pscustomobject]@{Type = "Sharp Analyst"; Tagline = "A cold strategist who judges without emotion"; Traits = "Cold, Judgment, Strategy, Calculation"}
+	[pscustomobject]@{Type = "Sharp Dreamer"; Tagline = "A dark contemplator who peers into the abyss"; Traits = "Abyss, Darkness, Contemplation, Depth"}
+	[pscustomobject]@{Type = "Sharp Wanderer"; Tagline = "A dark lone wolf, free in solitude"; Traits = "Lone wolf, Solitude, Freedom, Independence"}
+
+
+)
+
+#endregion
 
 $Locus = @("Specific Individual","Dead human (ancestor or prophet)","Saint/Demi-god","Location/Region","Alignment/Value","Concept")
 
@@ -264,6 +437,9 @@ $Aggression = @("Pacifism","Holy war")
 
 ##########
 
-$NewArray = @()
+$GodPersonality = @()
+
+$HEXACO | %{$GodPersonality += [pscustomobject]@{Trait = $_.Trait;Score = Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)"}}
+$BigFive | %{$GodPersonality += [pscustomobject]@{Trait = $_.Trait;Score = Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)"}}
 
 $GregoryIVirtuesAndVices | %{$SD='';$SD=Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)";if(($SD -ge 1) -or ($SD -ge -1)){$NewArray += [pscustomobject]@{Virtue=if($SD -ge 1){$_.Virtue}elseif($SD -le -1){$_.Vice};SD=$SD}}}
