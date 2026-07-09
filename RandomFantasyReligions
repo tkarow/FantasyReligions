@@ -1,3 +1,102 @@
+function Get-Personality{
+
+    $Personality = @()
+
+    $HEXACO | %{$Score = Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)";$Personality += [pscustomobject]@{Trait = $_.Trait; Key = $_.Key; Score = $Score; Descriptors = ''; PN = "$(if($Score -lt 0){'-'}elseif($Score -gt 0){'+'}else{if((Get-Random -Minimum 1 -Maximum 3) -eq 1){"-"}else{"+"}})"}}
+
+    $HEXACODisposition = "$(($HEXACODispositions | ?{($_.H -eq ($Personality | ?{$_.Key -eq "H"}).PN -and $_.E -eq ($Personality | ?{$_.Key -eq "E"}).PN -and $_.A -eq ($Personality | ?{$_.Key -eq "A"}).PN)}).Disposition)"
+
+    $HEXACORole = "$(($HEXACORoles | ?{($_.X -eq ($Personality | ?{$_.Key -eq "X"}).PN -and $_.C -eq ($Personality | ?{$_.Key -eq "C"}).PN -and $_.O -eq ($Personality | ?{$_.Key -eq "O"}).PN)}).Disposition)"
+
+    $HEXACOPersonalityType = $HEXACOPersonalityTypes | ?{$_.Type -like "$($HEXACODisposition) $($HEXACORole)"}
+
+    $Description = @()
+    
+    foreach($Trait in $Personality){
+        
+        if($Trait.Score -lt 0){
+        
+            $Trait.Descriptors = ($HEXACO | ?{$_.Trait -like "$($Trait.Trait)"}).Low -split ', '
+
+        }
+
+        if($Trait.Score -gt 0){
+        
+            $Trait.Descriptors = ($HEXACO | ?{$_.Trait -like "$($Trait.Trait)"}).High -split ', '
+
+        }
+
+        if($Trait.Score -ne 0){
+
+            $AlreadyChosen = ""
+
+            $Number = ''
+            $Number = [Math]::Abs($Trait.Score)
+            
+            $Trait.Descriptors[(Get-Random -Minimum 0 -Maximum $(Get-ArrayCount $Trait.Descriptors))] | %{$Description += $_; $AlreadyChosen = $_}
+
+            if($Number -gt 1){
+            
+                $Remaining = $Trait.Descriptors | ?{$_ -notlike "$($AlreadyChosen)"}
+                
+                $Remaining[(Get-Random -Minimum 0 -Maximum $(Get-ArrayCount $Remaining))] | %{$Description += $_}
+                
+            }
+
+        }
+        
+    }
+
+    if(($Description | Measure).Count -gt 0){$Description = $Description -join ', '}else{$Description = "balanced"}
+
+    [pscustomobject]@{
+    
+        Personality = $HEXACOPersonalityType.Type
+        Tagline = $HEXACOPersonalityType.Tagline
+        Traits = $HEXACOPersonalityType.Traits
+        'Honesty-humility' = [int]"$(($Personality | ?{$_.Trait -like "Honesty-humility"}).Score)"
+        'Emotionality' = [int]"$(($Personality | ?{$_.Trait -like "Emotionality"}).Score)"
+        'Extraversion' = [int]"$(($Personality | ?{$_.Trait -like "Extraversion"}).Score)"
+        'Agreeableness' = [int]"$(($Personality | ?{$_.Trait -like "Agreeableness"}).Score)"
+        'Conscientiousness' = [int]"$(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score)"
+        'Openness to experience' = [int]"$(($Personality | ?{$_.Trait -like "Openness to experience"}).Score)"
+        Description = $Description
+    
+    }
+
+}
+
+function Get-PersonalityDisorder{
+
+    Param(
+        [Parameter(Mandatory=$true)]
+        $HEXACOPersonality
+    )
+
+    $Disorder = ""
+
+    if(($HEXACOPersonality.'Honesty-humility' -le -2) -and ($HEXACOPersonality.Agreeableness -le -2) -and ($HEXACOPersonality.Conscientiousness -le -1)){$Disorder = "Psychopathy"}
+
+    if(($HEXACOPersonality.Emotionality -ge 2) -and ($HEXACOPersonality.Extraversion -le -1) -and ($HEXACOPersonality.Conscientiousness -le 1)){$Disorder = "Borderline Personality Disorder"}
+
+    if(($HEXACOPersonality.'Honesty-humility' -le -2) -and ($HEXACOPersonality.Extraversion -ge 1)){$Disorder = "Narcissism"}
+
+    if(($HEXACOPersonality.Emotionality -ge 2) -and ($HEXACOPersonality.Extraversion -le -2)){$Disorder = "Avoidant Personality Disorder"}
+
+    if(($HEXACOPersonality.Emotionality -ge 1) -and ($HEXACOPersonality.Extraversion -eq -1)){$Disorder = "Dependent Personality Disorder"}
+
+    if(($HEXACOPersonality.Conscientiousness -ge 2) -and ($HEXACOPersonality.Agreeableness -le -1)){$Disorder = "Obsessive-Compulsive Disorder"}
+
+    if(($HEXACOPersonality.'Honesty-humility' -le -1) -and ($HEXACOPersonality.Emotionality -le -1) -and ($HEXACOPersonality.Agreeableness -le -1) -and ($HEXACOPersonality.Conscientiousness -le -1)){$Disorder = "Psychopathy"}
+
+    if(($HEXACOPersonality.'Honesty-humility' -le -1) -and ($HEXACOPersonality.Emotionality -le -1) -and ($HEXACOPersonality.Agreeableness -le -1) -and ($HEXACOPersonality.Extraversion -ge 1)){$Disorder = "Sociopathy"}
+
+    if($Disorder -like ''){$Disorder = "None"}
+
+    $Disorder
+
+}
+
 function Get-God{
     
     Param(
@@ -6,51 +105,12 @@ function Get-God{
         $Alignment
     )
 
-    $GodPersonality = @()
-
-    $HEXACO | %{$Score = Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)";$GodPersonality += [pscustomobject]@{Trait = $_.Trait; Key = $_.Key; Score = $Score; PN = "$(if($Score -lt 0){'-'}elseif($Score -gt 0){'+'}else{if((Get-Random -Minimum 1 -Maximum 3) -eq 1){"-"}else{"+"}})"}}
-
-    $Extremes = @()
-    $GodPersonality | ?{$_.Score -ne 0} | %{$Extremes += [pscustomobject]@{Trait = $_.Trait; Score = $_.Score}}
-
-    $HEXACODisposition = "$(($HEXACODispositions | ?{($_.H -eq ($GodPersonality | ?{$_.Key -eq "H"}).PN -and $_.E -eq ($GodPersonality | ?{$_.Key -eq "E"}).PN -and $_.A -eq ($GodPersonality | ?{$_.Key -eq "A"}).PN)}).Disposition)"
-
-    $HEXACORole = "$(($HEXACORoles | ?{($_.X -eq ($GodPersonality | ?{$_.Key -eq "X"}).PN -and $_.C -eq ($GodPersonality | ?{$_.Key -eq "C"}).PN -and $_.O -eq ($GodPersonality | ?{$_.Key -eq "O"}).PN)}).Disposition)"
-
-    $HEXACOPersonalityType = $HEXACOPersonalityTypes | ?{$_.Type -like "$($HEXACODisposition) $($HEXACORole)"}
-
-    $Descriptors = ''
-    
-    foreach($Extreme in $Extremes){
-    
-        if($Extreme.Score -lt 0){
-        
-            $HEXACO | ?{$_.Trait -like "$($Extreme.Trait)"} | %{$Descriptors = "$($Descriptors, $($_.Low.trim())) | "}
-
-        }
-
-        if($Extreme.Score -gt 0){
-        
-            $HEXACO | ?{$_.Trait -like "$($Extreme.Trait)"} | %{$Descriptors = "$($Descriptors, $($_.High.trim())) | "}
-
-        }
-
-    }
-
-    if($Descriptors -notlike ""){$Descriptors = "$($Descriptors)".Substring(0, $Descriptors.Length - 3);$Descriptors = $Descriptors.trim();$Descriptors = $Descriptors.Replace('  ',' ')}
+    $GodPersonality = Get-Personality
 
     [pscustomobject]@{
     
-        Personality = $HEXACOPersonalityType.Type
-        Tagline = $HEXACOPersonalityType.Tagline
-        Traits = $HEXACOPersonalityType.Traits
-        'Honesty-humility' = "$(($GodPersonality | ?{$_.Trait -like "Honesty-humility"}).Score)"
-        'Emotionality' = "$(($GodPersonality | ?{$_.Trait -like "Emotionality"}).Score)"
-        'Extraversion' = "$(($GodPersonality | ?{$_.Trait -like "Extraversion"}).Score)"
-        'Agreeableness' = "$(($GodPersonality | ?{$_.Trait -like "Agreeableness"}).Score)"
-        'Conscientiousness' = "$(($GodPersonality | ?{$_.Trait -like "Conscientiousness"}).Score)"
-        'Openness to experience' = "$(($GodPersonality | ?{$_.Trait -like "Openness to experience"}).Score)"
-        Adjectives = $Descriptors
+        Personality = $GodPersonality
+        PersonalityDisorder = Get-PersonalityDisorder -HEXACOPersonality $GodPersonality
     
     }
 
@@ -190,7 +250,7 @@ $BigFive = @(
 
 $HEXACO = @(
 
-    [pscustomobject]@{Trait = "Honesty-humility"; Key = "H"; Facets = "Sincerity, fairness, greed avoidance, modesty"; High = "sincere, honest, faithful, loyal, modest/unassuming"; Low = "sly, deceitful, greedy, pretentious, hypocritical, boastful, pompous"}
+    [pscustomobject]@{Trait = "Honesty-humility"; Key = "H"; Facets = "Sincerity, fairness, greed avoidance, modesty"; High = "sincere, honest, faithful, loyal, modest, unassuming"; Low = "sly, deceitful, greedy, pretentious, hypocritical, boastful, pompous"}
     [pscustomobject]@{Trait = "Emotionality"; Key = "E"; Facets = "Fearfulness, Anxiety, Dependence, Sentimentality"; High = "emotional, oversensitive, sentimental, fearful, anxious, vulnerable"; Low = "brave, tough, independent, self-assured, stable"}
     [pscustomobject]@{Trait = "Extraversion"; Key = "X"; Facets = "Social self-esteem, social boldness, sociability, liveliness"; High = "outgoing, lively, extraverted, sociable, talkative, cheerful, active"; Low = "shy, passive, withdrawn, introverted, quiet, reserved"}
     [pscustomobject]@{Trait = "Agreeableness"; Key = "A"; Facets = "Forgivingness, gentleness, flexibility, patience"; High = "patient, tolerant, peaceful, mild, agreeable, lenient, gentle"; Low = "ill-tempered, quarrelsome, stubborn, choleric"}
@@ -441,5 +501,7 @@ $GodPersonality = @()
 
 $HEXACO | %{$GodPersonality += [pscustomobject]@{Trait = $_.Trait;Score = Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)"}}
 $BigFive | %{$GodPersonality += [pscustomobject]@{Trait = $_.Trait;Score = Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)"}}
+
+$NewArray = @()
 
 $GregoryIVirtuesAndVices | %{$SD='';$SD=Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)";if(($SD -ge 1) -or ($SD -ge -1)){$NewArray += [pscustomobject]@{Virtue=if($SD -ge 1){$_.Virtue}elseif($SD -le -1){$_.Vice};SD=$SD}}}
