@@ -107,10 +107,13 @@ function Get-God{
 
     $GodPersonality = Get-Personality
 
+    $GodSphere = $OfficialTwoCombined[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $OfficialTwoCombined))]
+
     [pscustomobject]@{
     
         Personality = $GodPersonality
         PersonalityDisorder = Get-PersonalityDisorder -HEXACOPersonality $GodPersonality
+        Sphere = $GodSphere
     
     }
 
@@ -451,7 +454,13 @@ $OfficialTwoSpheresTCPH = @(
 
 )
 
-$OfficialThreeFiveDomains = @(
+$OfficialTwoCombined = @()
+$OfficialTwoCombined += $OfficialTwoSpheresBySpells
+$OfficialTwoCombined += $OfficialTwoSpheresTCPH
+$OfficialTwoCombined = $OfficialTwoCombined | sort | Get-Unique
+
+#https://forums.giantitp.com/showthread.php?331217-Complete-Cleric-Domain-List-3-5
+$DragonsFootThreeFiveDomains = @(
 
 	 "Abyss",
 	 "Air",
@@ -668,162 +677,182 @@ $OfficialThreeFiveDomains = @(
 
 )
 
-.split("`n") | %{$string = "$($String),`n`t `"$($_.trim())`""};$string | Set-Clipboard
+#https://www.realmshelps.net/deities/all-domains.shtml
+$FRDomains = @(
 
-$Domains = @("
+	 "FR Air",
+	 "Ancestor (Shaman)",
+	 "FR Animal",
+	 "Arborea",
+	 "FR Army",
+	 "FR Avarice",
+	 "Baator",
+	 "FR Balance",
+	 "Beastmaster",
+	 "Bestial",
+	 "Blackwater",
+	 "Blightbringer",
+	 "Cavern",
+	 "Celerity",
+	 "Celestia",
+	 "Celestial (Shaman)",
+	 "FR Chaos",
+	 "FR Charity",
+	 "FR Charm",
+	 "FR Chastity",
+	 "Chromatic Dragon",
+	 "FR City",
+	 "FR Cold",
+	 "Community",
+	 "Community (Shaman)",
+	 "Competition",
+	 "Corruption",
+	 "Courage",
+	 "FR Craft",
+	 "Creation",
+	 "FR Darkness",
+	 "FR Darkness(2)",
+	 "FR Death",
+	 "Demonic",
+	 "FR Demonic(2)",
+	 "FR Destiny",
+	 "FR Destruction",
+	 "Diabolic",
+	 "FR Diabolic(2)",
+	 "Divination",
+	 "Divination (Shaman)",
+	 "Domination",
+	 "FR Dragon",
+	 "Dream",
+	 "FR Drow",
+	 "FR Dwarf",
+	 "FR Earth",
+	 "FR Elf",
+	 "Elysium",
+	 "Emotion",
+	 "Entropy",
+	 "FR Envy",
+	 "FR Evil",
+	 "Exorcism",
+	 "FR Family",
+	 "FR Fate",
+	 "FR Fire",
+	 "Flame (Shaman)",
+	 "Force",
+	 "Fortune (Shaman)",
+	 "Fury",
+	 "Fury (Shaman)",
+	 "Gem Dragon",
+	 "FR Generosity",
+	 "Ghost",
+	 "Glory",
+	 "FR Gluttony",
+	 "FR Gnome",
+	 "FR Good",
+	 "Grave (Shaman)",
+	 "Greed",
+	 "Guardian (Shaman)",
+	 "Hades",
+	 "FR Halfling",
+	 "FR Hatred",
+	 "FR Healing",
+	 "Healing (Shaman)",
+	 "Hero (Shaman)",
+	 "Hope",
+	 "FR Humility",
+	 "Hunger",
+	 "Hunt",
+	 "FR Illusion",
+	 "FR Knowledge",
+	 "Knowledge (Shaman)",
+	 "FR Law",
+	 "Liberation",
+	 "Limbo",
+	 "FR Luck",
+	 "Lung Dragon",
+	 "FR Lust",
+	 "Madness",
+	 "FR Magic",
+	 "Mechanus",
+	 "FR Mentalism",
+	 "FR Metal",
+	 "Metallic Dragon",
+	 "Metal (Shaman)",
+	 "Mind",
+	 "FR Moon",
+	 "Mysticism",
+	 "Nature (Shaman)",
+	 "Night",
+	 "FR Nobility",
+	 "FR Ocean",
+	 "Ooze",
+	 "Oracle",
+	 "FR Orc",
+	 "Pact",
+	 "Pain",
+	 "FR Patience",
+	 "Pestilence",
+	 "FR Planning",
+	 "FR Plant",
+	 "FR Portal",
+	 "FR Portal (Alt)",
+	 "FR Pride",
+	 "FR Protection",
+	 "Purification",
+	 "FR Radiance",
+	 "FR Renewal",
+	 "FR Repose",
+	 "Repose(2)",
+	 "FR Retribution",
+	 "River (Shaman)",
+	 "FR Rune",
+	 "Sand",
+	 "FR Scalykind",
+	 "Seafolk",
+	 "Sky",
+	 "FR Slime",
+	 "FR Sloth",
+	 "FR Spell",
+	 "FR Spider",
+	 "Spirit",
+	 "Spite",
+	 "Stone (Shaman)",
+	 "FR Storm",
+	 "Storm(2)",
+	 "FR Strength",
+	 "FR Suffering",
+	 "Summer",
+	 "Summoning",
+	 "FR Sun",
+	 "FR Temperance",
+	 "Temptation",
+	 "The Abyss",
+	 "Thirst",
+	 "FR Time",
+	 "FR Trade",
+	 "FR Travel",
+	 "Travel (Shaman)",
+	 "FR Trickery",
+	 "Trickery (Shaman)",
+	 "FR Tyranny",
+	 "Undead",
+	 "FR Undeath",
+	 "Vile Darkness",
+	 "FR War",
+	 "War (Shaman)",
+	 "FR Water",
+	 "FR Watery Death",
+	 "Wealth",
+	 "Weather",
+	 "Wood (Shaman)",
+	 "FR Wrath",
+	 "FR Zeal"
+    
+)
 
-    FR Air
-    Ancestor (Shaman)
-    FR Animal
-    Arborea
-    FR Army
-    FR Avarice
-    Baator
-    FR Balance
-    Beastmaster
-    Bestial
-    Blackwater
-    Blightbringer
-    Cavern
-    Celerity
-    Celestia
-    Celestial (Shaman)
-    FR Chaos
-    FR Charity
-    FR Charm
-    FR Chastity
-    Chromatic Dragon
-    FR City
-    FR Cold
-    Community
-    Community (Shaman)
-    Competition
-    Corruption
-    Courage
-    FR Craft
-    Creation
-    FR Darkness
-    FR Darkness(2)
-    FR Death
-    Demonic
-    FR Demonic(2)
-    FR Destiny
-    FR Destruction
-    Diabolic
-    FR Diabolic(2)
-    Divination
-    Divination (Shaman)
-    Domination
-    FR Dragon
-    Dream
-    FR Drow
-    FR Dwarf
-    FR Earth
-    FR Elf
-    Elysium
-    Emotion
-    Entropy
-    FR Envy
-    FR Evil
-    Exorcism
-    FR Family
-    FR Fate
-    FR Fire
-    Flame (Shaman)
-    Force
-    Fortune (Shaman)
-    Fury
-    Generosity
-    Ghost
-    Glory
-    Gluttony
-    Good
-    Grave (Shaman)
-    Greed
-    Guardian (Shaman)
-    Hades
-    Hatred
-    Healing
-    Healing (Shaman)
-    Hero (Shaman)
-    Hope
-    Humility
-    Hunger
-    Hunt
-    Illusion
-    Knowledge
-    Law
-    Liberation
-    Limbo
-    Luck
-    Lust
-    Madness
-    Magic
-    Mechanus
-    Mentalism
-    Metal (Shaman)
-    Mind
-    Moon
-    Mysticism
-    Nature (Shaman)
-    Night
-    Nobility
-    Ocean
-    Oracle
-    Pact
-    Pain
-    Patience
-    Pestilence
-    Planning
-    Plant
-    Portal
-    Pride
-    Protection
-    Purification
-    Radiance
-    Renewal
-    Repose
-    Retribution
-    River (Shaman)
-    Rune
-    Sand
-    Seafolk
-    Sky
-    Slime
-    Sloth
-    Spell
-    Spider
-    Spirit
-    Spite
-    Stone (Shaman)
-    Storm
-    Strength
-    Suffering
-    Summer
-    Summoning
-    Sun
-    Temperance
-    Temptation
-    The Abyss
-    Thirst
-    Time
-    Trade
-    Travel
-    Travel (Shaman)
-    Trickery
-    Tyranny
-    Undead
-    Undeath
-    Vile Darkness
-    War
-    War (Shaman)
-    Water
-    Watery Death
-    Wealth
-    Weather
-    Wood (Shaman)
-    Wrath
-    Zeal")
+#.split("`n") | %{$string = "$($String),`n`t `"$($_.trim())`""};$string | Set-Clipboard
+
+#regions my attempt
 
 $Domains = @(
 
@@ -847,6 +876,8 @@ $SubDomains = @{
     sports = "jousting", "wrestling", "bandyball", "wrestling", "dog fighting", "horseracing","archery"
 
 }
+
+#endregion
 
 #endregion
 
@@ -984,10 +1015,23 @@ $Heirarchy = @()
 
 $Aggression = @("Pacifism","Holy war")
 
+<#
+Two standard deviation rolls. The first one determines how much the God cares about a given topic. If the God cares, one or greater than the second rule is given on a valuation. For example, how much does a God care about dress? If he does then modesty would be the virtue and a negative score in that would be extreme non-conformative whereas an extreme high would be extremely conservative.
+Spectra:
+Iconoclasty literal representations 
+Oral tradition to libraries of work
+Aggression indices one for insiders and one for outsiders- This casts the God as either a Shepherd, a teacher, a father, an avenger, a judge, or a punisher. Being positive is different than being negative or a trait or it's opposite.
+Really loves or hates the natural world, human civilizations, human life.
+
+Incorporate the tenants of the satanic Bible?
+
+
+#>
+
 #Emphasis on afterlife? None? Martyrdom?
 #Iconography
-
-
+##Tools (specific to interests?)
+##Abstract: A great eye or disembodied voice
 ##########
 
 $GodPersonality = @()
