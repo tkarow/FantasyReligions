@@ -355,9 +355,32 @@ $HEXACOPersonalityTypes = @(
 
 )
 
+$Domains = @(
+
+    [pscustomobject]@{Type = "time, space, the mind, the soul, dreams, mysteries, existence"}
+    [pscustomobject]@{Type = "science, magic"},
+    [pscustomobject]@{Type = "humanity, civilization, society, family, a specific region, military, law"},
+    [pscustomobject]@{Type = "labor, wealth, trade, travel, life"},
+    [pscustomobject]@{Type = "art, comfort, music, sports, literature, pleasure"}
+
+)
+
+$SubDomains = @{
+
+    existence = "Nature", "Mountains", "Forests", "The Ocean", "The Outer Planes", "An element"
+    science = "mathematics", "logic", "physics", "astronomy", "biology", "chemistry"
+    language = "language", "writing"
+    military = "horsemen","infantry", "foot soldiers", "victory", "honor", "espionage","archery"
+    labor = "farming", "woodcutting", "smithing", "brewing", "cooking", "building", "carpentry", "clothes-making", "fishing", "toolmaking", "accounting", "bookkeeping", "ploughing", "stabling", "hunting"
+    wealth = "wealth", "coins", "gold", "silver", "treasure"
+    art = "architecture", "sculpture", "painting", "textiles"
+    sports = "jousting", "wrestling", "bandyball", "wrestling", "dog fighting", "horseracing","archery"
+
+}
+
 #endregion
 
-$Locus = @("Specific Individual","Dead human (ancestor or prophet)","Saint/Demi-god","Location/Region","Alignment/Value","Concept")
+$Locus = @("Individual human (ancestor, saint, hero, prophet, demi-god)","Location/Region","Alignment/Value","Concept")
 
 $Secrecy = @()
 
