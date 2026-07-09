@@ -355,6 +355,476 @@ $HEXACOPersonalityTypes = @(
 
 )
 
+$OfficialTwoSpheresBySpells = @(
+
+	 "All",
+	 "Animal",
+	 "Astral",
+	 "Chaos",
+	 "Charm",
+	 "Combat",
+	 "Creation",
+	 "Divination",
+	 "Elemental",
+	 "Elemental Air",
+	 "Elemental Earth",
+	 "Elemental Fire",
+	 "Elemental Water",
+	 "Guardian",
+	 "Healing",
+	 "Law",
+	 "Necromantic",
+	 "Numbers",
+	 "Plant",
+	 "Protection",
+	 "Summoning",
+	 "Sun",
+	 "Thought",
+	 "Time",
+	 "Travelers",
+	 "War",
+	 "Wards",
+	 "Weather"
+
+)
+
+$OfficialTwoSpheresTCPH = @(
+
+	 "Agriculture",
+	 "Ancestors",
+	 "Arts",
+	 "Birth, Children",
+	 "Community",
+	 "Competition",
+	 "Crafts",
+	 "Culture (Bringing Of)",
+	 "Darkness, Night",
+	 "Dawn",
+	 "Death",
+	 "Disease",
+	 "Divinity of Mankind (Philosophy)",
+	 "Druid",
+	 "Earth",
+	 "Elemental Forces (Force)",
+	 "Everything",
+	 "Evil (Philosophy)",
+	 "Fate, Destiny",
+	 "Fertility",
+	 "Fire",
+	 "Fortune, Luck",
+	 "Good (Philosophy)",
+	 "Guardianship",
+	 "Hunting",
+	 "Justice, Revenge",
+	 "Life-Death-Rebirth Cycle (Force)",
+	 "Light",
+	 "Lightning",
+	 "Literature, Poetry",
+	 "Love",
+	 "Magic",
+	 "Marriage",
+	 "Messengers",
+	 "Metalwork",
+	 "Mischief, Trickery",
+	 "Moon",
+	 "Music, Dance",
+	 "Nature",
+	 "Oceans, Rivers",
+	 "Oracles, Prophecy",
+	 "Peace",
+	 "Prosperity",
+	 "Race",
+	 "Redemption",
+	 "Rulership, Kingship",
+	 "Seasons",
+	 "Sites",
+	 "Sky, Weather",
+	 "Strength",
+	 "Sun",
+	 "Thunder",
+	 "Time",
+	 "Trade",
+	 "Vegetation",
+	 "War",
+	 "Wind",
+	 "Wisdom"
+
+)
+
+$OfficialThreeFiveDomains = @(
+
+	 "Abyss",
+	 "Air",
+	 "Alteration",
+	 "Animal",
+	 "Arborea",
+	 "Army",
+	 "Artifice",
+	 "Assassination",
+	 "Avarice",
+	 "Baator",
+	 "Balance",
+	 "Beastmaster",
+	 "Beguilement",
+	 "Bestial",
+	 "Blackwater",
+	 "Blightbringer",
+	 "Builder",
+	 "Cavern",
+	 "Celerity",
+	 "Celestia",
+	 "Celestial",
+	 "Chaos",
+	 "Charity",
+	 "Charm",
+	 "Chastity",
+	 "Chill",
+	 "Chromatic Dragon",
+	 "City",
+	 "Cold",
+	 "Commerce",
+	 "Community",
+	 "Competition",
+	 "Corruption",
+	 "Courage",
+	 "Craft",
+	 "Creation",
+	 "Darkness",
+	 "Death",
+	 "Deathbound",
+	 "Deathless",
+	 "Decay",
+	 "Demonic",
+	 "Destiny",
+	 "Destruction",
+	 "Diabolic",
+	 "Divination",
+	 "Domination",
+	 "Dragon",
+	 "Dragon Below",
+	 "Dream",
+	 "Drow",
+	 "Dwarf",
+	 "Earth",
+	 "Elemental",
+	 "Elf",
+	 "Elysium",
+	 "Emotion",
+	 "Endurance",
+	 "Entropy",
+	 "Envy",
+	 "Ethics",
+	 "Evil",
+	 "Exorcism",
+	 "Expressive",
+	 "Family",
+	 "Fate",
+	 "Feast",
+	 "Ferocity",
+	 "Fey",
+	 "Fire",
+	 "Fizban's Gift",
+	 "Force",
+	 "Forge",
+	 "Fury",
+	 "Gem Dragon",
+	 "Generosity",
+	 "Ghost",
+	 "Glory",
+	 "Gluttony",
+	 "Gnome",
+	 "Good",
+	 "Greed",
+	 "Guarding",
+	 "Hades",
+	 "Halfling",
+	 "Hatred",
+	 "Healing",
+	 "Herald",
+	 "Home",
+	 "Hope",
+	 "Humility",
+	 "Hunger",
+	 "Hunt",
+	 "Hunting",
+	 "Illusion",
+	 "Injustice",
+	 "Inquisition",
+	 "Insight",
+	 "Inspiration",
+	 "Invigoration",
+	 "Journey",
+	 "Joy",
+	 "Knowledge",
+	 "Kobold",
+	 "Law",
+	 "Liberation",
+	 "Life",
+	 "Limbo",
+	 "Locust",
+	 "Love",
+	 "Luck",
+	 "Lung Dragon",
+	 "Lust",
+	 "Madness",
+	 "Magic",
+	 "Mechanus",
+	 "Meditation",
+	 "Mentalism",
+	 "Mercy",
+	 "Metal",
+	 "Metallic Dragon",
+	 "Mind",
+	 "Misfortune",
+	 "Moon",
+	 "Mysticism",
+	 "Nature",
+	 "Necromancer",
+	 "Necromancy",
+	 "Night",
+	 "Nobility",
+	 "Oblivion",
+	 "Observation",
+	 "Ocean",
+	 "Ooze",
+	 "Oppression",
+	 "Oracle",
+	 "Orc",
+	 "Pact",
+	 "Passion",
+	 "Pain",
+	 "Patience",
+	 "Pestilence",
+	 "Planning",
+	 "Plant",
+	 "Pleasure",
+	 "Pondering",
+	 "Portal",
+	 "Pride",
+	 "Profit",
+	 "Protection",
+	 "Purification",
+	 "Raconteur",
+	 "Radiance",
+	 "Renewal",
+	 "Repose",
+	 "Restoration",
+	 "Retribution",
+	 "Revered Ancestor",
+	 "Rune",
+	 "Sagacity",
+	 "Sand",
+	 "Scalykind",
+	 "Scorn",
+	 "Seafolk",
+	 "Seduction",
+	 "Sentinel",
+	 "Shadow",
+	 "Sky",
+	 "Slime",
+	 "Sloth",
+	 "Spell",
+	 "Spider",
+	 "Spite",
+	 "Stealth",
+	 "Storm",
+	 "Strategy",
+	 "Strength",
+	 "Suffering",
+	 "Summer",
+	 "Summoner",
+	 "Sun",
+	 "Temperence",
+	 "Tempest",
+	 "Temptation",
+	 "Terror",
+	 "Thirst",
+	 "Time",
+	 "Timing",
+	 "Trade",
+	 "Transformation",
+	 "Travel",
+	 "Treachery",
+	 "Trickery",
+	 "Truth",
+	 "Tyranny",
+	 "Undeath",
+	 "Underworld",
+	 "Valiant",
+	 "Vice",
+	 "Vile Darkness",
+	 "Void",
+	 "War",
+	 "Warding",
+	 "Warforged",
+	 "Water",
+	 "Watery Death",
+	 "Wealth",
+	 "Weather",
+	 "Windstorm",
+	 "Winter",
+	 "Wrath",
+	 "Zeal"
+
+)
+
+.split("`n") | %{$string = "$($String),`n`t `"$($_.trim())`""};$string | Set-Clipboard
+
+$Domains = @("
+
+    FR Air
+    Ancestor (Shaman)
+    FR Animal
+    Arborea
+    FR Army
+    FR Avarice
+    Baator
+    FR Balance
+    Beastmaster
+    Bestial
+    Blackwater
+    Blightbringer
+    Cavern
+    Celerity
+    Celestia
+    Celestial (Shaman)
+    FR Chaos
+    FR Charity
+    FR Charm
+    FR Chastity
+    Chromatic Dragon
+    FR City
+    FR Cold
+    Community
+    Community (Shaman)
+    Competition
+    Corruption
+    Courage
+    FR Craft
+    Creation
+    FR Darkness
+    FR Darkness(2)
+    FR Death
+    Demonic
+    FR Demonic(2)
+    FR Destiny
+    FR Destruction
+    Diabolic
+    FR Diabolic(2)
+    Divination
+    Divination (Shaman)
+    Domination
+    FR Dragon
+    Dream
+    FR Drow
+    FR Dwarf
+    FR Earth
+    FR Elf
+    Elysium
+    Emotion
+    Entropy
+    FR Envy
+    FR Evil
+    Exorcism
+    FR Family
+    FR Fate
+    FR Fire
+    Flame (Shaman)
+    Force
+    Fortune (Shaman)
+    Fury
+    Generosity
+    Ghost
+    Glory
+    Gluttony
+    Good
+    Grave (Shaman)
+    Greed
+    Guardian (Shaman)
+    Hades
+    Hatred
+    Healing
+    Healing (Shaman)
+    Hero (Shaman)
+    Hope
+    Humility
+    Hunger
+    Hunt
+    Illusion
+    Knowledge
+    Law
+    Liberation
+    Limbo
+    Luck
+    Lust
+    Madness
+    Magic
+    Mechanus
+    Mentalism
+    Metal (Shaman)
+    Mind
+    Moon
+    Mysticism
+    Nature (Shaman)
+    Night
+    Nobility
+    Ocean
+    Oracle
+    Pact
+    Pain
+    Patience
+    Pestilence
+    Planning
+    Plant
+    Portal
+    Pride
+    Protection
+    Purification
+    Radiance
+    Renewal
+    Repose
+    Retribution
+    River (Shaman)
+    Rune
+    Sand
+    Seafolk
+    Sky
+    Slime
+    Sloth
+    Spell
+    Spider
+    Spirit
+    Spite
+    Stone (Shaman)
+    Storm
+    Strength
+    Suffering
+    Summer
+    Summoning
+    Sun
+    Temperance
+    Temptation
+    The Abyss
+    Thirst
+    Time
+    Trade
+    Travel
+    Travel (Shaman)
+    Trickery
+    Tyranny
+    Undead
+    Undeath
+    Vile Darkness
+    War
+    War (Shaman)
+    Water
+    Watery Death
+    Wealth
+    Weather
+    Wood (Shaman)
+    Wrath
+    Zeal")
+
 $Domains = @(
 
     [pscustomobject]@{Type = "time, space, the mind, the soul, dreams, mysteries, existence"}
