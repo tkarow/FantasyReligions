@@ -47,19 +47,47 @@ function Get-Personality{
         
     }
 
+    $Traits = @()
+
+    $t = 0
+
+    $Personality.Score | %{[Math]::Abs($_)} | %{$t = $t + $_}
+
+    if($t -gt 0){
+
+        $TraitOptions = $HEXACOPersonalityType.Traits.Split(",") | %{$_.trim()}
+
+        if($t -gt $TraitOptions.Count){$t = $TraitOptions.Count}
+
+        $NumberArray = 1..$t
+
+        $AlreadyChosen = @()
+
+        foreach($Number in ($NumberArray)){
+
+            $ToChoose = $TraitOptions | ?{$AlreadyChosen -notcontains $_}
+
+            if(($ToChoose | Measure).Count -gt 1){$ToChoose[(Get-Random -Minimum 0 -Maximum $(Get-ArrayCount $ToChoose))] | %{$Traits += $_; $AlreadyChosen += $_}}else{$Traits += $ToChoose}
+
+        }
+
+    }
+
+    if(($Traits | Measure).Count -gt 0){$Traits = $Traits -join ', '}else{$Traits = "balanced"}
     if(($Description | Measure).Count -gt 0){$Description = $Description -join ', '}else{$Description = "balanced"}
 
     [pscustomobject]@{
     
         Personality = $HEXACOPersonalityType.Type
         Tagline = $HEXACOPersonalityType.Tagline
-        Traits = $HEXACOPersonalityType.Traits
+        #PossibleTraits = $HEXACOPersonalityType.Traits
         'Honesty-humility' = [int]"$(($Personality | ?{$_.Trait -like "Honesty-humility"}).Score)"
         'Emotionality' = [int]"$(($Personality | ?{$_.Trait -like "Emotionality"}).Score)"
         'Extraversion' = [int]"$(($Personality | ?{$_.Trait -like "Extraversion"}).Score)"
         'Agreeableness' = [int]"$(($Personality | ?{$_.Trait -like "Agreeableness"}).Score)"
         'Conscientiousness' = [int]"$(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score)"
         'Openness to experience' = [int]"$(($Personality | ?{$_.Trait -like "Openness to experience"}).Score)"
+        Traits = $Traits
         Description = $Description
     
     }
@@ -107,7 +135,7 @@ function Get-God{
 
     $GodPersonality = Get-Personality
 
-    $GodSphere = $OfficialTwoCombined[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $OfficialTwoCombined))]
+    $GodSphere = $CuratedDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $CuratedDNDDomains))]
 
     [pscustomobject]@{
     
@@ -358,6 +386,20 @@ $HEXACOPersonalityTypes = @(
 
 )
 
+####################
+####################
+## Divine Domains ##
+####################
+####################
+
+#https://1d6chan.miraheze.org/wiki/Cleric_Domain
+
+#####################
+#2nd Edition Spheres#
+#####################
+
+#region 2nd Edition
+
 $OfficialTwoSpheresBySpells = @(
 
 	 "All",
@@ -458,6 +500,14 @@ $OfficialTwoCombined = @()
 $OfficialTwoCombined += $OfficialTwoSpheresBySpells
 $OfficialTwoCombined += $OfficialTwoSpheresTCPH
 $OfficialTwoCombined = $OfficialTwoCombined | sort | Get-Unique
+
+#endregion
+
+#####################
+#3rd Edition Spheres#
+#####################
+
+#region 3rd Edition
 
 #https://forums.giantitp.com/showthread.php?331217-Complete-Cleric-Domain-List-3-5
 $DragonsFootThreeFiveDomains = @(
@@ -643,7 +693,7 @@ $DragonsFootThreeFiveDomains = @(
 	 "Summer",
 	 "Summoner",
 	 "Sun",
-	 "Temperence",
+	 "Temperance",
 	 "Tempest",
 	 "Temptation",
 	 "Terror",
@@ -680,177 +730,280 @@ $DragonsFootThreeFiveDomains = @(
 #https://www.realmshelps.net/deities/all-domains.shtml
 $FRDomains = @(
 
-	 "FR Air",
-	 "Ancestor (Shaman)",
-	 "FR Animal",
-	 "Arborea",
-	 "FR Army",
-	 "FR Avarice",
-	 "Baator",
-	 "FR Balance",
-	 "Beastmaster",
-	 "Bestial",
-	 "Blackwater",
-	 "Blightbringer",
-	 "Cavern",
-	 "Celerity",
-	 "Celestia",
-	 "Celestial (Shaman)",
-	 "FR Chaos",
-	 "FR Charity",
-	 "FR Charm",
-	 "FR Chastity",
-	 "Chromatic Dragon",
-	 "FR City",
-	 "FR Cold",
-	 "Community",
-	 "Community (Shaman)",
-	 "Competition",
-	 "Corruption",
-	 "Courage",
-	 "FR Craft",
-	 "Creation",
-	 "FR Darkness",
-	 "FR Darkness(2)",
-	 "FR Death",
-	 "Demonic",
-	 "FR Demonic(2)",
-	 "FR Destiny",
-	 "FR Destruction",
-	 "Diabolic",
-	 "FR Diabolic(2)",
-	 "Divination",
-	 "Divination (Shaman)",
-	 "Domination",
-	 "FR Dragon",
-	 "Dream",
-	 "FR Drow",
-	 "FR Dwarf",
-	 "FR Earth",
-	 "FR Elf",
-	 "Elysium",
-	 "Emotion",
-	 "Entropy",
-	 "FR Envy",
-	 "FR Evil",
-	 "Exorcism",
-	 "FR Family",
-	 "FR Fate",
-	 "FR Fire",
-	 "Flame (Shaman)",
-	 "Force",
-	 "Fortune (Shaman)",
-	 "Fury",
-	 "Fury (Shaman)",
-	 "Gem Dragon",
-	 "FR Generosity",
-	 "Ghost",
-	 "Glory",
-	 "FR Gluttony",
-	 "FR Gnome",
-	 "FR Good",
-	 "Grave (Shaman)",
-	 "Greed",
-	 "Guardian (Shaman)",
-	 "Hades",
-	 "FR Halfling",
-	 "FR Hatred",
-	 "FR Healing",
-	 "Healing (Shaman)",
-	 "Hero (Shaman)",
-	 "Hope",
-	 "FR Humility",
-	 "Hunger",
-	 "Hunt",
-	 "FR Illusion",
-	 "FR Knowledge",
-	 "Knowledge (Shaman)",
-	 "FR Law",
-	 "Liberation",
-	 "Limbo",
-	 "FR Luck",
-	 "Lung Dragon",
-	 "FR Lust",
-	 "Madness",
-	 "FR Magic",
-	 "Mechanus",
-	 "FR Mentalism",
-	 "FR Metal",
-	 "Metallic Dragon",
-	 "Metal (Shaman)",
-	 "Mind",
-	 "FR Moon",
-	 "Mysticism",
-	 "Nature (Shaman)",
-	 "Night",
-	 "FR Nobility",
-	 "FR Ocean",
-	 "Ooze",
-	 "Oracle",
-	 "FR Orc",
-	 "Pact",
-	 "Pain",
-	 "FR Patience",
-	 "Pestilence",
-	 "FR Planning",
-	 "FR Plant",
-	 "FR Portal",
-	 "FR Portal (Alt)",
-	 "FR Pride",
-	 "FR Protection",
-	 "Purification",
-	 "FR Radiance",
-	 "FR Renewal",
-	 "FR Repose",
-	 "Repose(2)",
-	 "FR Retribution",
-	 "River (Shaman)",
-	 "FR Rune",
-	 "Sand",
-	 "FR Scalykind",
-	 "Seafolk",
-	 "Sky",
-	 "FR Slime",
-	 "FR Sloth",
-	 "FR Spell",
-	 "FR Spider",
-	 "Spirit",
-	 "Spite",
-	 "Stone (Shaman)",
-	 "FR Storm",
-	 "Storm(2)",
-	 "FR Strength",
-	 "FR Suffering",
-	 "Summer",
-	 "Summoning",
-	 "FR Sun",
-	 "FR Temperance",
-	 "Temptation",
-	 "The Abyss",
-	 "Thirst",
-	 "FR Time",
-	 "FR Trade",
-	 "FR Travel",
-	 "Travel (Shaman)",
-	 "FR Trickery",
-	 "Trickery (Shaman)",
-	 "FR Tyranny",
-	 "Undead",
-	 "FR Undeath",
-	 "Vile Darkness",
-	 "FR War",
-	 "War (Shaman)",
-	 "FR Water",
-	 "FR Watery Death",
-	 "Wealth",
-	 "Weather",
-	 "Wood (Shaman)",
-	 "FR Wrath",
-	 "FR Zeal"
+    "Air",
+    "Animal",
+    "Army",
+    "Avarice",
+    "Balance",
+    "Chaos",
+    "Charity",
+    "Charm",
+    "Chastity",
+    "City",
+    "Cold",
+    "Craft",
+    "Darkness",
+    "Death",
+    "Demonic",
+    "Destiny",
+    "Destruction",
+    "Diabolic",
+    "Dragon",
+    "Drow",
+    "Dwarf",
+    "Earth",
+    "Elf",
+    "Envy",
+    "Evil",
+    "Family",
+    "Fate",
+    "Fire",
+    "Generosity",
+    "Gluttony",
+    "Gnome",
+    "Good",
+    "Halfling",
+    "Hatred",
+    "Healing",
+    "Humility",
+    "Illusion",
+    "Knowledge",
+    "Law",
+    "Luck",
+    "Lust",
+    "Magic",
+    "Mentalism",
+    "Metal",
+    "Moon",
+    "Nobility",
+    "Ocean",
+    "Orc",
+    "Patience",
+    "Planning",
+    "Plant",
+    "Portal",
+    "Pride",
+    "Protection",
+    "Radiance",
+    "Renewal",
+    "Repose",
+    "Retribution",
+    "Rune",
+    "Scalykind",
+    "Slime",
+    "Sloth",
+    "Spell",
+    "Spider",
+    "Storm",
+    "Strength",
+    "Suffering",
+    "Sun",
+    "Temperance",
+    "Time",
+    "Trade",
+    "Travel",
+    "Trickery",
+    "Tyranny",
+    "Undeath",
+    "War",
+    "Water",
+    "Watery Death",
+    "Wrath",
+    "Zeal"
+
+)
+
+$FRShamanDomains = @(
+
+    "Ancestor",
+    "Celestial",
+    "Community",
+    "Divination",
+    "Flame",
+    "Fortune",
+    "Fury",
+    "Grave",
+    "Guardian",
+    "Healing",
+    "Hero",
+    "Knowledge",
+    "Metal",
+    "Nature",
+    "River",
+    "Stone",
+    "Travel",
+    "Trickery",
+    "War",
+    "Wood"
+
+)
+
+$NonFRDomains = @(
+
+    "Arborea",
+    "Baator",
+    "Beastmaster",
+    "Bestial",
+    "Blackwater",
+    "Blightbringer",
+    "Cavern",
+    "Celerity",
+    "Celestia",
+    "Chromatic Dragon",
+    "Community",
+    "Competition",
+    "Corruption",
+    "Courage",
+    "Creation",
+    "Demonic",
+    "Diabolic",
+    "Divination",
+    "Domination",
+    "Dream",
+    "Elysium",
+    "Emotion",
+    "Entropy",
+    "Exorcism",
+    "Force",
+    "Fury",
+    "Gem Dragon",
+    "Ghost",
+    "Glory",
+    "Greed",
+    "Hades",
+    "Hope",
+    "Hunger",
+    "Hunt",
+    "Liberation",
+    "Limbo",
+    "Lung Dragon",
+    "Madness",
+    "Mechanus",
+    "Metallic Dragon",
+    "Mind",
+    "Mysticism",
+    "Night",
+    "Ooze",
+    "Oracle",
+    "Pact",
+    "Pain",
+    "Pestilence",
+    "Purification",
+    "Repose",
+    "Sand",
+    "Seafolk",
+    "Sky",
+    "Spirit",
+    "Spite",
+    "Storm",
+    "Summer",
+    "Summoning",
+    "Temptation",
+    "The Abyss",
+    "Thirst",
+    "Undead",
+    "Vile Darkness",
+    "Wealth",
+    "Weather"
     
 )
 
-#.split("`n") | %{$string = "$($String),`n`t `"$($_.trim())`""};$string | Set-Clipboard
+$AllFRDomains = @()
+$AllFRDomains += $FRDomains
+$AllFRDomains += $FRShamanDomains
+$AllFRDomains += $NonFRDomains
+$AllFRDomains = $AllFRDomains | sort | Get-Unique
+
+$AllThreeDomains = @()
+$AllThreeDomains += $DragonsFootThreeFiveDomains
+$AllThreeDomains += $AllFRDomains
+$AllThreeDomains = $AllThreeDomains | sort | Get-Unique
+
+#endregion
+
+#####################
+#4th Edition Domains#
+#####################
+
+$FourDomains = @(
+
+    "Arcana",
+    "Change",
+    "Civilization",
+    "Creation",
+    "Darkness",
+    "Death",
+    "Destruction",
+    "Earth",
+    "Fate",
+    "Freedom",
+    "Hope",
+    "Justice",
+    "Knowledge",
+    "Life",
+    "Love",
+    "Luck",
+    "Madness",
+    "Moon",
+    "Poison",
+    "Protection",
+    "Sea",
+    "Skill",
+    "Storm",
+    "Strength",
+    "Strife",
+    "Sun",
+    "Torment",
+    "Trickery",
+    "Tyranny",
+    "Undeath",
+    "Vengeance",
+    "War",
+    "Wilderness",
+    "Winter"
+
+)
+
+#####################
+#5th Edition Domains#
+#####################
+
+#region
+
+$FiveAllDomains = @(
+
+    "Knowledge",
+    "Life",
+    "Light",
+    "Nature",
+    "Tempest",
+    "Trickery",
+    "War",
+    "Death",
+    "Forge",
+    "Grave",
+    "Ambition",
+    "Solidarity",
+    "Strength",
+    "Zeal",
+    "Beauty",
+    "Darkness",
+    "Destruction"
+
+)
+
+#endregion
+
+$AllDNDDomains = @()
+$AllDNDDomains += $OfficialTwoCombined
+$AllDNDDomains += $AllThreeDomains
+$AllDNDDomains += $FourDomains
+$AllDNDDomains += $FiveAllDomains
+$AllDNDDomains = $AllDNDDomains | sort | Get-Unique
+
+$CuratedDNDDomains = $AllDNDDomains | ?{$_ -notlike "*dragon*"} | ?{$_ -notlike "*watery*"} | ?{$_ -notlike "*warforged*"} | ?{$_ -notlike "*spider*"} | ?{$_ -notlike "*scalykind*"} | ?{$_ -notlike "orc"} | ?{$_ -notlike "*ooze*"} | ?{$_ -notlike "*necromancer*"} | ?{$_ -notlike "*locust*"} | ?{$_ -notlike "*hunting*"} | ?{$_ -notlike "*guardianship*"} | ?{$_ -notlike "*gnome*"} | ?{$_ -notlike "*fizban*"} | ?{$_ -notlike "fey"} | ?{$_ -notlike "*fate,*"} | ?{$_ -notlike "*evil (*"} | ?{$_ -notlike "elf"} | ?{$_ -notlike "elemental"} | ?{$_ -notlike "*dwarf*"} | ?{$_ -notlike "*deathbound*"} | ?{$_ -notlike "*darkness,*"} | ?{$_ -notlike "*crafts"} | ?{$_ -notlike "*cavern*"} | ?{$_ -notlike "*blackwater*"} | ?{$_ -notlike "*ancestor"} | ?{$_ -notlike "race"}
+
+#$x.split("`n") | %{$string = "$($String.trim()),`n`t `"$($_.trim())`""};$string | Set-Clipboard
 
 #regions my attempt
 
