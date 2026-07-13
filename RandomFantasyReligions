@@ -76,6 +76,19 @@ function Get-Personality{
     if(($Traits | Measure).Count -gt 0){$Traits = $Traits -join ', '}else{$Traits = "balanced"}
     if(($Description | Measure).Count -gt 0){$Description = $Description -join ', '}else{$Description = "balanced"}
 
+    $Likes = @()
+
+    if(($Personality | ?{$_.Trait -like "Agreeableness"}).Score -lt -1){$Likes += "Wrath"}
+    if(($Personality | ?{$_.Trait -like "Agreeableness"}).Score -gt 1){$Likes += "Patience"}
+    if(($Personality | ?{$_.Trait -like "Honesty-Humility"}).Score -lt -1){$Likes += "Lust","Envy","Pride"}
+    if(($Personality | ?{$_.Trait -like "Honesty-Humility"}).Score -gt 1){$Likes += "Chastity","Kindness","Humility"}
+    if(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score -lt -1){$Likes += "Sloth","Gluttony"}
+    if(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score -gt 1){$Likes += "Diligence","Temperance"}
+    if(($Personality | ?{$_.Trait -like "Emotionality"}).Score -gt 1){if($likes -notcontains "Lust"){$Likes += "Lust"};if($likes -notcontains "Envy"){$Likes += "Envy"}}
+    if(($Personality | ?{$_.Trait -like "Emotionality"}).Score -lt -1){if($likes -notcontains "Chastity"){$Likes += "Chastity"};if($likes -notcontains "Kindness"){$Likes += "Kindness"}}
+
+    if(($Likes | Measure).Count -gt 0){$Likes = $Likes -join ', '}
+
     [pscustomobject]@{
     
         Personality = $HEXACOPersonalityType.Type
@@ -89,6 +102,7 @@ function Get-Personality{
         'Openness to experience' = [int]"$(($Personality | ?{$_.Trait -like "Openness to experience"}).Score)"
         Traits = $Traits
         Description = $Description
+        Likes = $Likes
     
     }
 
@@ -125,6 +139,20 @@ function Get-PersonalityDisorder{
 
 }
 
+function Get-Locus{
+
+    $GodLocus = $Locus[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Locus))]
+
+    if($GodLocus -like "human"){$GodLocus = $Humans[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Humans))]}
+
+    #if($GodLocus -like "location"){$GodLocus = $Locations[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Locations))]}
+
+    if((Get-Random -Minimum 1 -Maximum 21) -eq 20){$GodLocus = "The concept of"}
+
+    $GodLocus
+
+}
+
 function Get-God{
     
     Param(
@@ -137,11 +165,15 @@ function Get-God{
 
     $GodSphere = $CuratedDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $CuratedDNDDomains))]
 
+    $GodLocus = Get-Locus
+
     [pscustomobject]@{
     
         Personality = $GodPersonality
         PersonalityDisorder = Get-PersonalityDisorder -HEXACOPersonality $GodPersonality
         Sphere = $GodSphere
+        Locus = $GodLocus
+        Description = "$($GodLocus) of $($GodSphere)"
     
     }
 
@@ -1001,7 +1033,7 @@ $AllDNDDomains += $FourDomains
 $AllDNDDomains += $FiveAllDomains
 $AllDNDDomains = $AllDNDDomains | sort | Get-Unique
 
-$CuratedDNDDomains = $AllDNDDomains | ?{$_ -notlike "*dragon*"} | ?{$_ -notlike "*watery*"} | ?{$_ -notlike "*warforged*"} | ?{$_ -notlike "*spider*"} | ?{$_ -notlike "*scalykind*"} | ?{$_ -notlike "orc"} | ?{$_ -notlike "*ooze*"} | ?{$_ -notlike "*necromancer*"} | ?{$_ -notlike "*locust*"} | ?{$_ -notlike "*hunting*"} | ?{$_ -notlike "*guardianship*"} | ?{$_ -notlike "*gnome*"} | ?{$_ -notlike "*fizban*"} | ?{$_ -notlike "fey"} | ?{$_ -notlike "*fate,*"} | ?{$_ -notlike "*evil (*"} | ?{$_ -notlike "elf"} | ?{$_ -notlike "elemental"} | ?{$_ -notlike "*dwarf*"} | ?{$_ -notlike "*deathbound*"} | ?{$_ -notlike "*darkness,*"} | ?{$_ -notlike "*crafts"} | ?{$_ -notlike "*cavern*"} | ?{$_ -notlike "*blackwater*"} | ?{$_ -notlike "*ancestor"} | ?{$_ -notlike "race"}
+$CuratedDNDDomains = $AllDNDDomains | ?{$_ -notlike "*dragon*"} | ?{$_ -notlike "*watery*"} | ?{$_ -notlike "*warforged*"} | ?{$_ -notlike "*spider*"} | ?{$_ -notlike "*scalykind*"} | ?{$_ -notlike "orc"} | ?{$_ -notlike "*ooze*"} | ?{$_ -notlike "*necromancer*"} | ?{$_ -notlike "*locust*"} | ?{$_ -notlike "*hunting*"} | ?{$_ -notlike "*guardianship*"} | ?{$_ -notlike "*gnome*"} | ?{$_ -notlike "*fizban*"} | ?{$_ -notlike "fey"} | ?{$_ -notlike "*fate,*"} | ?{$_ -notlike "*evil (*"} | ?{$_ -notlike "elf"} | ?{$_ -notlike "elemental"} | ?{$_ -notlike "*dwarf*"} | ?{$_ -notlike "*deathbound*"} | ?{$_ -notlike "*darkness,*"} | ?{$_ -notlike "*crafts"} | ?{$_ -notlike "*cavern*"} | ?{$_ -notlike "*blackwater*"} | ?{$_ -notlike "*ancestor"} | ?{$_ -notlike "race"} | ?{$_ -notlike "sites"} | ?{$_ -notlike "halfling"} | ?{$_ -notlike "sand"}
 
 #$x.split("`n") | %{$string = "$($String.trim()),`n`t `"$($_.trim())`""};$string | Set-Clipboard
 
@@ -1034,7 +1066,18 @@ $SubDomains = @{
 
 #endregion
 
-$Locus = @("Individual human (ancestor, saint, hero, prophet, demi-god)","Location/Region","Alignment/Value","Concept")
+$Locus = @("Human","God")
+
+$Humans = @(
+
+    "ancestor",
+    "saint",
+    "hero",
+    "prophet",
+    "demi-god",
+    "ruler"
+
+)
 
 $Secrecy = @()
 
