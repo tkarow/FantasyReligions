@@ -147,7 +147,7 @@ function Get-Locus{
 
     #if($GodLocus -like "location"){$GodLocus = $Locations[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Locations))]}
 
-    if((Get-Random -Minimum 1 -Maximum 21) -eq 20){$GodLocus = "The concept of"}
+    if((Get-Random -Minimum 1 -Maximum 26) -eq 25){$GodLocus = "The concept of"}
 
     $GodLocus
 
@@ -158,12 +158,23 @@ function Get-God{
     Param(
         [Parameter(Mandatory=$False)]
         [string]
-        $Alignment
+        $Alignment,
+        [Parameter(Mandatory=$False)]
+        [ValidateSet('2e', '3e', '4e', '5e', 'All', 'Curated')]
+        [string]
+        $SphereSet
     )
+
+
 
     $GodPersonality = Get-Personality
 
-    $GodSphere = $CuratedDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $CuratedDNDDomains))]
+    if($SphereSet -like "2e"){$GodSphere = $OfficialTwoCombined[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $OfficialTwoCombined))]}
+    if($SphereSet -like "3e"){$GodSphere = $AllThreeDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $AllThreeDomains))]}
+    if($SphereSet -like "4e"){$GodSphere = $FourDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FourDomains))]}
+    if($SphereSet -like "5e"){$GodSphere = $FiveAllDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FiveAllDomains))]}
+    if($SphereSet -like "All"){$GodSphere = $AllDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $AllDNDDomains))]}
+    if(($SphereSet -like "Curated") -or ($SphereSet -like $null)){$GodSphere = $CuratedDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $CuratedDNDDomains))]}
 
     $GodLocus = Get-Locus
 
@@ -313,12 +324,12 @@ $BigFive = @(
 
 $HEXACO = @(
 
-    [pscustomobject]@{Trait = "Honesty-humility"; Key = "H"; Facets = "Sincerity, fairness, greed avoidance, modesty"; High = "sincere, honest, faithful, loyal, modest, unassuming"; Low = "sly, deceitful, greedy, pretentious, hypocritical, boastful, pompous"}
-    [pscustomobject]@{Trait = "Emotionality"; Key = "E"; Facets = "Fearfulness, Anxiety, Dependence, Sentimentality"; High = "emotional, oversensitive, sentimental, fearful, anxious, vulnerable"; Low = "brave, tough, independent, self-assured, stable"}
-    [pscustomobject]@{Trait = "Extraversion"; Key = "X"; Facets = "Social self-esteem, social boldness, sociability, liveliness"; High = "outgoing, lively, extraverted, sociable, talkative, cheerful, active"; Low = "shy, passive, withdrawn, introverted, quiet, reserved"}
-    [pscustomobject]@{Trait = "Agreeableness"; Key = "A"; Facets = "Forgivingness, gentleness, flexibility, patience"; High = "patient, tolerant, peaceful, mild, agreeable, lenient, gentle"; Low = "ill-tempered, quarrelsome, stubborn, choleric"}
-    [pscustomobject]@{Trait = "Conscientiousness"; Key = "C"; Facets = "Organization, diligence, perfectionism, prudence"; High = "organized, disciplined, diligent, careful, thorough, precise"; Low = "sloppy, negligent, reckless, lazy, irresponsible, absent-minded"}
-    [pscustomobject]@{Trait = "Openness to experience"; Key = "O"; Facets = "Aesthetic appreciation, inquisitiveness, creativity, unconventionality"; High = "intellectual, creative, unconventional, innovative, ironic"; Low = "shallow, unimaginative, conventional"}
+    [pscustomobject]@{Trait = "Honesty-humility"; Key = "H"; Facets = "Sincerity, fairness, greed avoidance, modesty"; High = "sincere, truthful, genuine, honest, faithful, loyal, modest, unassuming, just, fair, principled, generous, humble"; Low = "sly, deceitful, greedy, pretentious, hypocritical, boastful, pompous, manipulative, false, exploitative, selfish, materialistic"}
+    [pscustomobject]@{Trait = "Emotionality"; Key = "E"; Facets = "Fearfulness, Anxiety, Dependence, Sentimentality, empathetic"; High = "emotional, oversensitive, sentimental, fearful, anxious, vulnerable, needy, insecure"; Low = "brave, tough, independent, self-assured, stable, calm, collected, cold, detached"}
+    [pscustomobject]@{Trait = "Extraversion"; Key = "X"; Facets = "Social self-esteem, social boldness, sociability, liveliness"; High = "outgoing, lively, extraverted, sociable, talkative, cheerful, active, enthusiastic"; Low = "shy, passive, withdrawn, introverted, quiet, reserved, subdued"}
+    [pscustomobject]@{Trait = "Agreeableness"; Key = "A"; Facets = "Forgivingness, gentleness, flexibility, patience"; High = "patient, tolerant, peaceful, mild, agreeable, lenient, gentle, trusting, forgiving, compassionate, meek, harmonious"; Low = "ill-tempered, quarrelsome, stubborn, choleric, harsh, critical, unforgiving"}
+    [pscustomobject]@{Trait = "Conscientiousness"; Key = "C"; Facets = "Organization, diligence, perfectionism, prudence"; High = "organized, disciplined, diligent, careful, thorough, precise, neat, structured, hardworking, cautious, exacting"; Low = "sloppy, negligent, reckless, lazy, irresponsible, absent-minded, chaotic, impulsive"}
+    [pscustomobject]@{Trait = "Openness to experience"; Key = "O"; Facets = "Aesthetic appreciation, inquisitiveness, creativity, unconventionality"; High = "intellectual, creative, unconventional, innovative, aesthetic, innovative, curious, imaginative, weird"; Low = "shallow, unimaginative, conventional, focused, traditional, obedient"}
 
 )
 
@@ -418,11 +429,15 @@ $HEXACOPersonalityTypes = @(
 
 )
 
+#endregion
+
 ####################
 ####################
 ## Divine Domains ##
 ####################
 ####################
+
+#region Domains
 
 #https://1d6chan.miraheze.org/wiki/Cleric_Domain
 
