@@ -192,7 +192,7 @@ function Get-Locus{
     }
 
 
-    if((Get-Random -Minimum 1 -Maximum 31) -eq 25){$GodLocus = "The concept"}
+    #if((Get-Random -Minimum 1 -Maximum 31) -eq 25){$GodLocus = "The concept"}
 
     "$(if($Descriptor -notlike ''){"$($Descriptor) "})$($GodLocus)"
 
@@ -210,9 +210,11 @@ function Get-God{
         $SphereSet
     )
 
+    while(([Math]::Abs($GodPersonality.Agreeableness) + [Math]::Abs($GodPersonality.Conscientiousness) + [Math]::Abs($GodPersonality.Emotionality) + [Math]::Abs($GodPersonality.Extraversion) + [Math]::Abs($GodPersonality.'Honesty-humility') + [Math]::Abs($GodPersonality.'Openness to experience')) -lt 3){
 
+        $GodPersonality = Get-Personality
 
-    $GodPersonality = Get-Personality
+    }
 
     if($SphereSet -like "2e"){$GodSphere = $OfficialTwoCombined[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $OfficialTwoCombined))]}
     if($SphereSet -like "3e"){$GodSphere = $AllThreeDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $AllThreeDomains))]}
