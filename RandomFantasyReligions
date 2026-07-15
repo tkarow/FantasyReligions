@@ -139,17 +139,62 @@ function Get-PersonalityDisorder{
 
 }
 
+function Get-WeightedResult{
+
+    Param(
+        [Parameter(Mandatory=$true)]
+        $Array
+    )
+
+    $NewArray = @()
+
+    $PriorWeight = 0
+
+    foreach($Item in $Array){
+
+        $Min = ''
+        $Min = $PriorWeight + 1
+
+        $Max = ''
+        $Max = $Item.Weight + $PriorWeight
+
+        $NewArray += [pscustomobject]@{Min = $Min;Max = $Max;Entry = $Item}
+
+        $PriorWeight = $Max
+
+    }
+
+    $Roll = ''
+    $Roll = Get-Random -Minimum 1 -Maximum ($NewArray[-1].Max + 1)
+
+    $NewArray | ?{($Roll -ge $_.Min) -and ($Roll -le $_.Max)}
+
+}
+
 function Get-Locus{
 
-    $GodLocus = $Locus[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Locus))]
+    $Descriptor = ''
 
-    if($GodLocus -like "human"){$GodLocus = $Humans[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Humans))]}
+    $GodLocus = (Get-WeightedResult $Locus).Entry.Type
 
-    #if($GodLocus -like "location"){$GodLocus = $Locations[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Locations))]}
+    if($GodLocus -like "Human"){
+    
+        $GodLocus = (Get-WeightedResult $Humans).Entry.Type
 
-    if((Get-Random -Minimum 1 -Maximum 26) -eq 25){$GodLocus = "The concept of"}
+        $Descriptor = $HumanDescriptors[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $HumanDescriptors))]
+        
+    }
 
-    $GodLocus
+    if($GodLocus -like "God"){
+    
+        $GodLocus = (Get-WeightedResult $Gods).Entry.Type
+        
+    }
+
+
+    if((Get-Random -Minimum 1 -Maximum 31) -eq 25){$GodLocus = "The concept"}
+
+    "$(if($Descriptor -notlike ''){"$($Descriptor) "})$($GodLocus)"
 
 }
 
@@ -174,7 +219,7 @@ function Get-God{
     if($SphereSet -like "4e"){$GodSphere = $FourDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FourDomains))]}
     if($SphereSet -like "5e"){$GodSphere = $FiveAllDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FiveAllDomains))]}
     if($SphereSet -like "All"){$GodSphere = $AllDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $AllDNDDomains))]}
-    if(($SphereSet -like "Curated") -or ($SphereSet -like $null)){$GodSphere = $CuratedDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $CuratedDNDDomains))]}
+    if(($SphereSet -like "Curated") -or ($SphereSet -like $null)){$GodSphere = $UltraCuratedDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $UltraCuratedDNDDomains))]}
 
     $GodLocus = Get-Locus
 
@@ -184,7 +229,7 @@ function Get-God{
         PersonalityDisorder = Get-PersonalityDisorder -HEXACOPersonality $GodPersonality
         Sphere = $GodSphere
         Locus = $GodLocus
-        Description = "$($GodLocus) of $($GodSphere)"
+        Description = "$($GodLocus) of $($GodSphere.Domain)"
     
     }
 
@@ -1048,7 +1093,163 @@ $AllDNDDomains += $FourDomains
 $AllDNDDomains += $FiveAllDomains
 $AllDNDDomains = $AllDNDDomains | sort | Get-Unique
 
-$CuratedDNDDomains = $AllDNDDomains | ?{$_ -notlike "*dragon*"} | ?{$_ -notlike "*watery*"} | ?{$_ -notlike "*warforged*"} | ?{$_ -notlike "*spider*"} | ?{$_ -notlike "*scalykind*"} | ?{$_ -notlike "orc"} | ?{$_ -notlike "*ooze*"} | ?{$_ -notlike "*necromancer*"} | ?{$_ -notlike "*locust*"} | ?{$_ -notlike "*hunting*"} | ?{$_ -notlike "*guardianship*"} | ?{$_ -notlike "*gnome*"} | ?{$_ -notlike "*fizban*"} | ?{$_ -notlike "fey"} | ?{$_ -notlike "*fate,*"} | ?{$_ -notlike "*evil (*"} | ?{$_ -notlike "elf"} | ?{$_ -notlike "elemental"} | ?{$_ -notlike "*dwarf*"} | ?{$_ -notlike "*deathbound*"} | ?{$_ -notlike "*darkness,*"} | ?{$_ -notlike "*crafts"} | ?{$_ -notlike "*cavern*"} | ?{$_ -notlike "*blackwater*"} | ?{$_ -notlike "*ancestor"} | ?{$_ -notlike "race"} | ?{$_ -notlike "sites"} | ?{$_ -notlike "halfling"} | ?{$_ -notlike "sand"}
+$CuratedDNDDomains = $AllDNDDomains | ?{$_ -notlike "*dragon*"} | ?{$_ -notlike "*watery*"} | ?{$_ -notlike "*warforged*"} | ?{$_ -notlike "*spider*"} | ?{$_ -notlike "*scalykind*"} | ?{$_ -notlike "orc"} | ?{$_ -notlike "*ooze*"} | ?{$_ -notlike "*necromancer*"} | ?{$_ -notlike "*locust*"} | ?{$_ -notlike "*hunting*"} | ?{$_ -notlike "*guardianship*"} | ?{$_ -notlike "*gnome*"} | ?{$_ -notlike "*fizban*"} | ?{$_ -notlike "fey"} | ?{$_ -notlike "*fate,*"} | ?{$_ -notlike "*evil (*"} | ?{$_ -notlike "elf"} | ?{$_ -notlike "elemental"} | ?{$_ -notlike "*dwarf*"} | ?{$_ -notlike "*deathbound*"} | ?{$_ -notlike "*darkness,*"} | ?{$_ -notlike "*crafts"} | ?{$_ -notlike "*cavern*"} | ?{$_ -notlike "*blackwater*"} | ?{$_ -notlike "*ancestor"} | ?{$_ -notlike "race"} | ?{$_ -notlike "sites"} | ?{$_ -notlike "halfling"} | ?{$_ -notlike "sand"} | ?{$_ -notlike "guarding"}
+
+$UltraCuratedDNDDomains = @(
+
+	[pscustomobject]@{Domain="the Abyss";Iconography=""}
+	[pscustomobject]@{Domain="Agriculture";Iconography=""}
+	[pscustomobject]@{Domain="Air";Iconography=""}
+	[pscustomobject]@{Domain="Change";Iconography=""}
+	[pscustomobject]@{Domain="Ambition";Iconography=""}
+	[pscustomobject]@{Domain="Animals";Iconography=""}
+	[pscustomobject]@{Domain="Arcana";Iconography=""}
+	[pscustomobject]@{Domain="War";Iconography=""}
+	[pscustomobject]@{Domain="Artifice";Iconography=""}
+	[pscustomobject]@{Domain="the Arts";Iconography=""}
+	[pscustomobject]@{Domain="Assassination";Iconography=""}
+	[pscustomobject]@{Domain="the Stars";Iconography=""}
+	[pscustomobject]@{Domain="Balance";Iconography=""}
+	[pscustomobject]@{Domain="Beastmastery";Iconography=""}
+	[pscustomobject]@{Domain="Beauty";Iconography=""}
+	[pscustomobject]@{Domain="Beguilement";Iconography=""}
+	[pscustomobject]@{Domain="Ferocity";Iconography=""}
+	[pscustomobject]@{Domain="Fertility";Iconography=""}
+	[pscustomobject]@{Domain="Creation";Iconography=""}
+	[pscustomobject]@{Domain="Celerity";Iconography=""}
+	[pscustomobject]@{Domain="the Heavens";Iconography=""}
+	[pscustomobject]@{Domain="Chaos";Iconography=""}
+	[pscustomobject]@{Domain="Charity";Iconography=""}
+	[pscustomobject]@{Domain="Charm";Iconography=""}
+	[pscustomobject]@{Domain="Chastity";Iconography=""}
+	[pscustomobject]@{Domain="the Cold";Iconography=""}
+	[pscustomobject]@{Domain="Civilization";Iconography=""}
+	[pscustomobject]@{Domain="Commerce";Iconography=""}
+	[pscustomobject]@{Domain="Community";Iconography=""}
+	[pscustomobject]@{Domain="Competition";Iconography=""}
+	[pscustomobject]@{Domain="Courage";Iconography=""}
+	[pscustomobject]@{Domain="Crafting";Iconography=""}
+	[pscustomobject]@{Domain="Darkness";Iconography=""}
+	[pscustomobject]@{Domain="Dawn";Iconography=""}
+	[pscustomobject]@{Domain="Death";Iconography=""}
+	[pscustomobject]@{Domain="Immortality";Iconography=""}
+	[pscustomobject]@{Domain="Destiny";Iconography=""}
+	[pscustomobject]@{Domain="Destruction";Iconography=""}
+	[pscustomobject]@{Domain="Disease";Iconography=""}
+	[pscustomobject]@{Domain="Divination";Iconography=""}
+	[pscustomobject]@{Domain="Domination";Iconography=""}
+	[pscustomobject]@{Domain="Dreams";Iconography=""}
+	[pscustomobject]@{Domain="Earth";Iconography=""}
+	[pscustomobject]@{Domain="Air";Iconography=""}
+	[pscustomobject]@{Domain="Fire";Iconography=""}
+	[pscustomobject]@{Domain="Water";Iconography=""}
+	[pscustomobject]@{Domain="Emotions";Iconography=""}
+	[pscustomobject]@{Domain="Endurance";Iconography=""}
+	[pscustomobject]@{Domain="Ethics";Iconography=""}
+	[pscustomobject]@{Domain="Evil";Iconography=""}
+	[pscustomobject]@{Domain="Exorcism";Iconography=""}
+	[pscustomobject]@{Domain="Expression";Iconography=""}
+	[pscustomobject]@{Domain="Family";Iconography=""}
+	[pscustomobject]@{Domain="Fate";Iconography=""}
+	[pscustomobject]@{Domain="Plenty";Iconography=""}
+	[pscustomobject]@{Domain="the Flame";Iconography=""}
+	[pscustomobject]@{Domain="the Forge";Iconography=""}
+	[pscustomobject]@{Domain="Fortune";Iconography=""}
+	[pscustomobject]@{Domain="Luck";Iconography=""}
+	[pscustomobject]@{Domain="Freedom";Iconography=""}
+	[pscustomobject]@{Domain="Fury";Iconography=""}
+	[pscustomobject]@{Domain="Glory";Iconography=""}
+	[pscustomobject]@{Domain="Protection";Iconography=""}
+	[pscustomobject]@{Domain="the Afterlife";Iconography=""}
+	[pscustomobject]@{Domain="Hatred";Iconography=""}
+	[pscustomobject]@{Domain="Healing";Iconography=""}
+	[pscustomobject]@{Domain="Heroics";Iconography=""}
+	[pscustomobject]@{Domain="the Home";Iconography=""}
+	[pscustomobject]@{Domain="Hope";Iconography=""}
+	[pscustomobject]@{Domain="the Hunt";Iconography=""}
+	[pscustomobject]@{Domain="Insight";Iconography=""}
+	[pscustomobject]@{Domain="Inspiration";Iconography=""}
+	[pscustomobject]@{Domain="Invigoration";Iconography=""}
+	[pscustomobject]@{Domain="the Journey";Iconography=""}
+	[pscustomobject]@{Domain="Joy";Iconography=""}
+	[pscustomobject]@{Domain="Justice";Iconography=""}
+	[pscustomobject]@{Domain="Revenge";Iconography=""}
+	[pscustomobject]@{Domain="Knowledge";Iconography=""}
+	[pscustomobject]@{Domain="Law";Iconography=""}
+	[pscustomobject]@{Domain="Liberation";Iconography=""}
+	[pscustomobject]@{Domain="Life";Iconography=""}
+	[pscustomobject]@{Domain="Reincarnation";Iconography=""}
+	[pscustomobject]@{Domain="Light";Iconography=""}
+	[pscustomobject]@{Domain="Lightning";Iconography=""}
+	[pscustomobject]@{Domain="Poetry";Iconography=""}
+	[pscustomobject]@{Domain="Love";Iconography=""}
+	[pscustomobject]@{Domain="Madness";Iconography=""}
+	[pscustomobject]@{Domain="Magic";Iconography=""}
+	[pscustomobject]@{Domain="Marriage";Iconography=""}
+	[pscustomobject]@{Domain="Mercy";Iconography=""}
+	[pscustomobject]@{Domain="Messengers";Iconography=""}
+	[pscustomobject]@{Domain="Metal";Iconography=""}
+	[pscustomobject]@{Domain="Metalwork";Iconography=""}
+	[pscustomobject]@{Domain="the Mind";Iconography=""}
+	[pscustomobject]@{Domain="Mischief";Iconography=""}
+	[pscustomobject]@{Domain="Trickery";Iconography=""}
+	[pscustomobject]@{Domain="the Moon";Iconography=""}
+	[pscustomobject]@{Domain="Music";Iconography=""}
+	[pscustomobject]@{Domain="Nature";Iconography=""}
+	[pscustomobject]@{Domain="Necromancy";Iconography=""}
+	[pscustomobject]@{Domain="the Night";Iconography=""}
+	[pscustomobject]@{Domain="Observation";Iconography=""}
+	[pscustomobject]@{Domain="the Sea";Iconography=""}
+	[pscustomobject]@{Domain="Pain";Iconography=""}
+	[pscustomobject]@{Domain="Passion";Iconography=""}
+	[pscustomobject]@{Domain="Patience";Iconography=""}
+	[pscustomobject]@{Domain="Peace";Iconography=""}
+	[pscustomobject]@{Domain="Plants";Iconography=""}
+	[pscustomobject]@{Domain="Pleasure";Iconography=""}
+	[pscustomobject]@{Domain="Thought";Iconography=""}
+	[pscustomobject]@{Domain="Profit";Iconography=""}
+	[pscustomobject]@{Domain="Prosperity";Iconography=""}
+	[pscustomobject]@{Domain="Protection";Iconography=""}
+	[pscustomobject]@{Domain="Radiance";Iconography=""}
+	[pscustomobject]@{Domain="Redemption";Iconography=""}
+	[pscustomobject]@{Domain="Renewal";Iconography=""}
+	[pscustomobject]@{Domain="Retribution";Iconography=""}
+	[pscustomobject]@{Domain="Kingship";Iconography=""}
+	[pscustomobject]@{Domain="Runes";Iconography=""}
+	[pscustomobject]@{Domain="Sagacity";Iconography=""}
+	[pscustomobject]@{Domain="Seafolk";Iconography=""}
+    [pscustomobject]@{Domain="the Seasons";Iconography=""}
+	[pscustomobject]@{Domain="Vigilance";Iconography=""}
+	[pscustomobject]@{Domain="Shadows";Iconography=""}
+	[pscustomobject]@{Domain="Skill";Iconography=""}
+	[pscustomobject]@{Domain="the Sky";Iconography=""}
+	[pscustomobject]@{Domain="Weather";Iconography=""}
+	[pscustomobject]@{Domain="Rest";Iconography=""}
+	[pscustomobject]@{Domain="Solidarity";Iconography=""}
+	[pscustomobject]@{Domain="the Spirit";Iconography=""}
+	[pscustomobject]@{Domain="Stealth";Iconography=""}
+	[pscustomobject]@{Domain="the Storm";Iconography=""}
+	[pscustomobject]@{Domain="Strategy";Iconography=""}
+	[pscustomobject]@{Domain="Strength";Iconography=""}
+	[pscustomobject]@{Domain="Summoning";Iconography=""}
+	[pscustomobject]@{Domain="the Sun";Iconography=""}
+	[pscustomobject]@{Domain="Terror";Iconography=""}
+	[pscustomobject]@{Domain="Thunder";Iconography=""}
+	[pscustomobject]@{Domain="Time";Iconography=""}
+	[pscustomobject]@{Domain="Trade";Iconography=""}
+	[pscustomobject]@{Domain="Transformation";Iconography=""}
+    [pscustomobject]@{Domain="Travel";Iconography=""}
+	[pscustomobject]@{Domain="Travelers";Iconography=""}
+    [pscustomobject]@{Domain="Truth";Iconography=""}
+	[pscustomobject]@{Domain="War";Iconography=""}
+    [pscustomobject]@{Domain="Wealth";Iconography=""}
+	[pscustomobject]@{Domain="the Wilderness";Iconography=""}
+	[pscustomobject]@{Domain="the Winds";Iconography=""}
+	[pscustomobject]@{Domain="Wisdom";Iconography=""}
+	[pscustomobject]@{Domain="Wrath";Iconography=""}
+	[pscustomobject]@{Domain="Zeal";Iconography=""}
+
+)
 
 #$x.split("`n") | %{$string = "$($String.trim()),`n`t `"$($_.trim())`""};$string | Set-Clipboard
 
@@ -1081,16 +1282,45 @@ $SubDomains = @{
 
 #endregion
 
-$Locus = @("Human","God")
+$Locus = @(
+
+    [pscustomobject]@{Type = "Human"; Weight = 30}
+    [pscustomobject]@{Type = "God"; Weight = 70}
+    
+)
 
 $Humans = @(
 
-    "ancestor",
-    "saint",
-    "hero",
-    "prophet",
-    "demi-god",
-    "ruler"
+    [pscustomobject]@{Type = "Saint"; Weight = 40}
+    [pscustomobject]@{Type = "Hero"; Weight = 10}
+    [pscustomobject]@{Type = "Champion"; Weight = 20}
+    [pscustomobject]@{Type = "Prophet"; Weight = 10}
+    [pscustomobject]@{Type = "Demigod"; Weight = 30}
+    [pscustomobject]@{Type = "King"; Weight = 20}
+    [pscustomobject]@{Type = "Emperor"; Weight = 5}
+
+)
+
+$HumanDescriptors = @(
+
+    "Living"
+    "Martyred"
+    "Departed"
+    "Late"
+    "Ancestral"
+
+)
+
+$Gods = @(
+
+    [pscustomobject]@{Type = "God"; Weight = 30}
+    [pscustomobject]@{Type = "Archon"; Weight = 4}
+    [pscustomobject]@{Type = "Aeon"; Weight = 2}
+    [pscustomobject]@{Type = "The Embodiment"; Weight = 1}
+    [pscustomobject]@{Type = "Aspect"; Weight = 1}
+    [pscustomobject]@{Type = "Primordial"; Weight = 1}
+    [pscustomobject]@{Type = "Titan"; Weight = 1}
+    [pscustomobject]@{Type = "Avatar"; Weight = 2}
 
 )
 
@@ -1245,11 +1475,4 @@ Incorporate the tenants of the satanic Bible?
 ##Abstract: A great eye or disembodied voice
 ##########
 
-$GodPersonality = @()
-
-$HEXACO | %{$GodPersonality += [pscustomobject]@{Trait = $_.Trait;Score = Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)"}}
-$BigFive | %{$GodPersonality += [pscustomobject]@{Trait = $_.Trait;Score = Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)"}}
-
-$NewArray = @()
-
-$GregoryIVirtuesAndVices | %{$SD='';$SD=Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)";if(($SD -ge 1) -or ($SD -ge -1)){$NewArray += [pscustomobject]@{Virtue=if($SD -ge 1){$_.Virtue}elseif($SD -le -1){$_.Vice};SD=$SD}}}
+$x=get-god;$x.personality;$x.personalitydisorder;$x.description
