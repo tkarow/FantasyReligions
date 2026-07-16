@@ -1099,42 +1099,39 @@ $CuratedDNDDomains = $AllDNDDomains | ?{$_ -notlike "*dragon*"} | ?{$_ -notlike 
 
 $UltraCuratedDNDDomains = @(
 
-	[pscustomobject]@{Domain="the Abyss";Iconography=""}
-	[pscustomobject]@{Domain="Agriculture";Iconography=""}
-	[pscustomobject]@{Domain="Air";Iconography=""}
-	[pscustomobject]@{Domain="Change";Iconography=""}
-	[pscustomobject]@{Domain="Ambition";Iconography=""}
-	[pscustomobject]@{Domain="Animals";Iconography=""}
-	[pscustomobject]@{Domain="Arcana";Iconography=""}
-	[pscustomobject]@{Domain="War";Iconography=""}
-	[pscustomobject]@{Domain="Artifice";Iconography=""}
-	[pscustomobject]@{Domain="the Arts";Iconography=""}
-	[pscustomobject]@{Domain="Assassination";Iconography=""}
-	[pscustomobject]@{Domain="the Stars";Iconography=""}
-	[pscustomobject]@{Domain="Balance";Iconography=""}
-	[pscustomobject]@{Domain="Beastmastery";Iconography=""}
-	[pscustomobject]@{Domain="Beauty";Iconography=""}
-	[pscustomobject]@{Domain="Beguilement";Iconography=""}
-	[pscustomobject]@{Domain="Ferocity";Iconography=""}
-	[pscustomobject]@{Domain="Fertility";Iconography=""}
-	[pscustomobject]@{Domain="Creation";Iconography=""}
-	[pscustomobject]@{Domain="Celerity";Iconography=""}
-	[pscustomobject]@{Domain="the Heavens";Iconography=""}
-	[pscustomobject]@{Domain="Chaos";Iconography=""}
-	[pscustomobject]@{Domain="Charity";Iconography=""}
-	[pscustomobject]@{Domain="Charm";Iconography=""}
-	[pscustomobject]@{Domain="Chastity";Iconography=""}
-	[pscustomobject]@{Domain="the Cold";Iconography=""}
-	[pscustomobject]@{Domain="Civilization";Iconography=""}
-	[pscustomobject]@{Domain="Commerce";Iconography=""}
-	[pscustomobject]@{Domain="Community";Iconography=""}
-	[pscustomobject]@{Domain="Competition";Iconography=""}
-	[pscustomobject]@{Domain="Courage";Iconography=""}
-	[pscustomobject]@{Domain="Crafting";Iconography=""}
-	[pscustomobject]@{Domain="Darkness";Iconography=""}
-	[pscustomobject]@{Domain="Dawn";Iconography=""}
-	[pscustomobject]@{Domain="Death";Iconography=""}
-	[pscustomobject]@{Domain="Immortality";Iconography=""}
+	[pscustomobject]@{Domain="the Abyss";Iconography=@("A whirlpool","A spiral","An X","A large chalice")}
+	[pscustomobject]@{Domain="Agriculture";Iconography=@("A plow","Wheat","A windmill","A sickle")}
+	[pscustomobject]@{Domain="Air";Iconography=@("Clouds","Swirling lines","Wings")}
+	[pscustomobject]@{Domain="Change";Iconography=@("A snake","The Sun and Moon","A butterfly")}
+	[pscustomobject]@{Domain="Ambition";Iconography=@("A mountain","An arrow","A ladder")}
+	[pscustomobject]@{Domain="Animals";Iconography=@("Animal(s)")}
+	[pscustomobject]@{Domain="Arcana";Iconography=@("A pentagram","A sigil","A tome")}
+	[pscustomobject]@{Domain="War";Iconography=@("A weapon","A battle horn","A horseman")}
+	[pscustomobject]@{Domain="Artifice";Iconography=@("Gears","A clock","A wheel")}
+	[pscustomobject]@{Domain="the Arts";Iconography=@("Theater masks","A quill","A musical instrument")}
+	[pscustomobject]@{Domain="Assassination";Iconography=@("A dagger","A poisonous plant","An overturned crown")}
+	[pscustomobject]@{Domain="the Stars";Iconography=@("Stars","A pentagram")}
+	[pscustomobject]@{Domain="Balance";Iconography=@("Scales","Yin/yang")}
+	[pscustomobject]@{Domain="Beastmastery";Iconography=@("A leash","A saddle","A falconer's glove")}
+	[pscustomobject]@{Domain="Beauty";Iconography=@("A flower","A swan")}
+	[pscustomobject]@{Domain="Beguilement";Iconography=@("A mask","A cloak")}
+	[pscustomobject]@{Domain="Ferocity";Iconography=@("A lion","A dragon")}
+	[pscustomobject]@{Domain="Fertility";Iconography=@("The stylized female form","A flower")}
+	[pscustomobject]@{Domain="Creation";Iconography=@("A cosmic egg","A tree")}
+	[pscustomobject]@{Domain="Celerity";Iconography=@("A hare","Wings","A simple line","A sprinter")}
+	[pscustomobject]@{Domain="the Heavens";Iconography=@("Clouds","The Sun and Moon","Stars")}
+	[pscustomobject]@{Domain="Chaos";Iconography=@("Arrows pointing away from each other","Squiggly lines")}
+	[pscustomobject]@{Domain="the Cold";Iconography=@("A snowflake","A pine tree")}
+	[pscustomobject]@{Domain="Civilization";Iconography="A temple","A tome","A crown"}
+	[pscustomobject]@{Domain="Commerce";Iconography=@("Coins","Ships")}
+	[pscustomobject]@{Domain="Community";Iconography=@("A temple","A circle")}
+	[pscustomobject]@{Domain="Competition";Iconography=@("Lances","An archery target")}
+	[pscustomobject]@{Domain="Courage";Iconography=@("A weapon","A candle")}
+	[pscustomobject]@{Domain="Crafting";Iconography=@("Artisan's tools")}
+	[pscustomobject]@{Domain="Darkness";Iconography=@("Stars","The Moon")}
+	[pscustomobject]@{Domain="Dawn";Iconography=@("The rising sun")}
+	[pscustomobject]@{Domain="Death";Iconography=@("A skull")}
+	[pscustomobject]@{Domain="Immortality";Iconography=@("An inverted skull","An ankh")}
 	[pscustomobject]@{Domain="Destiny";Iconography=""}
 	[pscustomobject]@{Domain="Destruction";Iconography=""}
 	[pscustomobject]@{Domain="Disease";Iconography=""}
@@ -1284,6 +1281,8 @@ $SubDomains = @{
 
 #endregion
 
+#region Objects of Worship
+
 $Locus = @(
 
     [pscustomobject]@{Type = "Human"; Weight = 30}
@@ -1325,6 +1324,8 @@ $Gods = @(
     [pscustomobject]@{Type = "Avatar"; Weight = 2}
 
 )
+
+#endregion
 
 $Secrecy = @()
 
