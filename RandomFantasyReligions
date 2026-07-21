@@ -1099,14 +1099,14 @@ $CuratedDNDDomains = $AllDNDDomains | ?{$_ -notlike "*dragon*"} | ?{$_ -notlike 
 
 $UltraCuratedDNDDomains = @(
 
-	[pscustomobject]@{Domain="the Abyss";Iconography=@("A whirlpool","A spiral","An X","A large chalice")}
+	[pscustomobject]@{Domain="the Abyss";Iconography=@("A whirlpool","A spiral","An X","A chalice")}
 	[pscustomobject]@{Domain="Agriculture";Iconography=@("A plow","Wheat","A windmill","A sickle")}
 	[pscustomobject]@{Domain="Air";Iconography=@("Clouds","Swirling lines","Wings")}
-	[pscustomobject]@{Domain="Change";Iconography=@("A snake","The Sun and Moon","A butterfly")}
+	[pscustomobject]@{Domain="Change";Iconography=@("A snake","The Sun and the Moon","A butterfly")}
 	[pscustomobject]@{Domain="Ambition";Iconography=@("A mountain","An arrow","A ladder")}
 	[pscustomobject]@{Domain="Animals";Iconography=@("Animal(s)")}
 	[pscustomobject]@{Domain="Arcana";Iconography=@("A pentagram","A sigil","A tome")}
-	[pscustomobject]@{Domain="War";Iconography=@("A weapon","A battle horn","A horseman")}
+	[pscustomobject]@{Domain="War";Iconography=@("A weapon","A horn","A horseman")}
 	[pscustomobject]@{Domain="Artifice";Iconography=@("Gears","A clock","A wheel")}
 	[pscustomobject]@{Domain="the Arts";Iconography=@("Theater masks","A quill","A musical instrument")}
 	[pscustomobject]@{Domain="Assassination";Iconography=@("A dagger","A poisonous plant","An overturned crown")}
@@ -1114,12 +1114,11 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Balance";Iconography=@("Scales","Yin/yang")}
 	[pscustomobject]@{Domain="Beastmastery";Iconography=@("A leash","A saddle","A falconer's glove")}
 	[pscustomobject]@{Domain="Beauty";Iconography=@("A flower","A swan")}
-	[pscustomobject]@{Domain="Beguilement";Iconography=@("A mask","A cloak")}
 	[pscustomobject]@{Domain="Ferocity";Iconography=@("A lion","A dragon")}
 	[pscustomobject]@{Domain="Fertility";Iconography=@("The stylized female form","A flower")}
 	[pscustomobject]@{Domain="Creation";Iconography=@("A cosmic egg","A tree")}
-	[pscustomobject]@{Domain="Celerity";Iconography=@("A hare","Wings","A simple line","A sprinter")}
-	[pscustomobject]@{Domain="the Heavens";Iconography=@("Clouds","The Sun and Moon","Stars")}
+	[pscustomobject]@{Domain="Celerity";Iconography=@("A hare","Wings","A line","A sprinter")}
+	[pscustomobject]@{Domain="the Heavens";Iconography=@("Clouds","The Sun and the Moon","Stars")}
 	[pscustomobject]@{Domain="Chaos";Iconography=@("Arrows pointing away from each other","Squiggly lines")}
 	[pscustomobject]@{Domain="the Cold";Iconography=@("A snowflake","A pine tree")}
 	[pscustomobject]@{Domain="Civilization";Iconography="A temple","A tome","A crown"}
@@ -1130,111 +1129,93 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Crafting";Iconography=@("Artisan's tools")}
 	[pscustomobject]@{Domain="Darkness";Iconography=@("Stars","The Moon")}
 	[pscustomobject]@{Domain="Dawn";Iconography=@("The rising sun")}
-	[pscustomobject]@{Domain="Death";Iconography=@("A skull")}
-	[pscustomobject]@{Domain="Immortality";Iconography=@("An inverted skull","An ankh")}
-	[pscustomobject]@{Domain="Destiny";Iconography=""}
-	[pscustomobject]@{Domain="Destruction";Iconography=""}
-	[pscustomobject]@{Domain="Disease";Iconography=""}
-	[pscustomobject]@{Domain="Divination";Iconography=""}
-	[pscustomobject]@{Domain="Domination";Iconography=""}
-	[pscustomobject]@{Domain="Dreams";Iconography=""}
-	[pscustomobject]@{Domain="Earth";Iconography=""}
-	[pscustomobject]@{Domain="Air";Iconography=""}
-	[pscustomobject]@{Domain="Fire";Iconography=""}
-	[pscustomobject]@{Domain="Water";Iconography=""}
-	[pscustomobject]@{Domain="Emotions";Iconography=""}
-	[pscustomobject]@{Domain="Endurance";Iconography=""}
-	[pscustomobject]@{Domain="Ethics";Iconography=""}
-	[pscustomobject]@{Domain="Evil";Iconography=""}
-	[pscustomobject]@{Domain="Exorcism";Iconography=""}
-	[pscustomobject]@{Domain="Expression";Iconography=""}
-	[pscustomobject]@{Domain="Family";Iconography=""}
-	[pscustomobject]@{Domain="Fate";Iconography=""}
-	[pscustomobject]@{Domain="Plenty";Iconography=""}
-	[pscustomobject]@{Domain="the Flame";Iconography=""}
-	[pscustomobject]@{Domain="the Forge";Iconography=""}
-	[pscustomobject]@{Domain="Fortune";Iconography=""}
-	[pscustomobject]@{Domain="Luck";Iconography=""}
-	[pscustomobject]@{Domain="Freedom";Iconography=""}
-	[pscustomobject]@{Domain="Fury";Iconography=""}
-	[pscustomobject]@{Domain="Glory";Iconography=""}
-	[pscustomobject]@{Domain="Protection";Iconography=""}
-	[pscustomobject]@{Domain="the Afterlife";Iconography=""}
-	[pscustomobject]@{Domain="Hatred";Iconography=""}
-	[pscustomobject]@{Domain="Healing";Iconography=""}
-	[pscustomobject]@{Domain="Heroics";Iconography=""}
-	[pscustomobject]@{Domain="the Home";Iconography=""}
-	[pscustomobject]@{Domain="Hope";Iconography=""}
-	[pscustomobject]@{Domain="the Hunt";Iconography=""}
-	[pscustomobject]@{Domain="Insight";Iconography=""}
-	[pscustomobject]@{Domain="Inspiration";Iconography=""}
-	[pscustomobject]@{Domain="Invigoration";Iconography=""}
-	[pscustomobject]@{Domain="the Journey";Iconography=""}
-	[pscustomobject]@{Domain="Joy";Iconography=""}
-	[pscustomobject]@{Domain="Justice";Iconography=""}
-	[pscustomobject]@{Domain="Revenge";Iconography=""}
-	[pscustomobject]@{Domain="Knowledge";Iconography=""}
-	[pscustomobject]@{Domain="Law";Iconography=""}
-	[pscustomobject]@{Domain="Liberation";Iconography=""}
-	[pscustomobject]@{Domain="Life";Iconography=""}
-	[pscustomobject]@{Domain="Reincarnation";Iconography=""}
-	[pscustomobject]@{Domain="Light";Iconography=""}
-	[pscustomobject]@{Domain="Lightning";Iconography=""}
-	[pscustomobject]@{Domain="Poetry";Iconography=""}
-	[pscustomobject]@{Domain="Love";Iconography=""}
-	[pscustomobject]@{Domain="Madness";Iconography=""}
-	[pscustomobject]@{Domain="Magic";Iconography=""}
-	[pscustomobject]@{Domain="Marriage";Iconography=""}
-	[pscustomobject]@{Domain="Mercy";Iconography=""}
-	[pscustomobject]@{Domain="Messengers";Iconography=""}
-	[pscustomobject]@{Domain="Metal";Iconography=""}
-	[pscustomobject]@{Domain="Metalwork";Iconography=""}
-	[pscustomobject]@{Domain="the Mind";Iconography=""}
-	[pscustomobject]@{Domain="Mischief";Iconography=""}
-	[pscustomobject]@{Domain="Trickery";Iconography=""}
-	[pscustomobject]@{Domain="the Moon";Iconography=""}
-	[pscustomobject]@{Domain="Music";Iconography=""}
-	[pscustomobject]@{Domain="Nature";Iconography=""}
-	[pscustomobject]@{Domain="Necromancy";Iconography=""}
-	[pscustomobject]@{Domain="the Night";Iconography=""}
-	[pscustomobject]@{Domain="Observation";Iconography=""}
-	[pscustomobject]@{Domain="the Sea";Iconography=""}
-	[pscustomobject]@{Domain="Pain";Iconography=""}
-	[pscustomobject]@{Domain="Passion";Iconography=""}
-	[pscustomobject]@{Domain="Patience";Iconography=""}
-	[pscustomobject]@{Domain="Peace";Iconography=""}
-	[pscustomobject]@{Domain="Plants";Iconography=""}
-	[pscustomobject]@{Domain="Pleasure";Iconography=""}
-	[pscustomobject]@{Domain="Thought";Iconography=""}
-	[pscustomobject]@{Domain="Profit";Iconography=""}
-	[pscustomobject]@{Domain="Prosperity";Iconography=""}
-	[pscustomobject]@{Domain="Protection";Iconography=""}
-	[pscustomobject]@{Domain="Radiance";Iconography=""}
-	[pscustomobject]@{Domain="Redemption";Iconography=""}
-	[pscustomobject]@{Domain="Renewal";Iconography=""}
-	[pscustomobject]@{Domain="Retribution";Iconography=""}
-	[pscustomobject]@{Domain="Kingship";Iconography=""}
-	[pscustomobject]@{Domain="Runes";Iconography=""}
-	[pscustomobject]@{Domain="Sagacity";Iconography=""}
-	[pscustomobject]@{Domain="Seafolk";Iconography=""}
-    [pscustomobject]@{Domain="the Seasons";Iconography=""}
-	[pscustomobject]@{Domain="Vigilance";Iconography=""}
-	[pscustomobject]@{Domain="Shadows";Iconography=""}
-	[pscustomobject]@{Domain="Skill";Iconography=""}
-	[pscustomobject]@{Domain="the Sky";Iconography=""}
-	[pscustomobject]@{Domain="Weather";Iconography=""}
-	[pscustomobject]@{Domain="Rest";Iconography=""}
-	[pscustomobject]@{Domain="Solidarity";Iconography=""}
-	[pscustomobject]@{Domain="the Spirit";Iconography=""}
-	[pscustomobject]@{Domain="Stealth";Iconography=""}
-	[pscustomobject]@{Domain="the Storm";Iconography=""}
-	[pscustomobject]@{Domain="Strategy";Iconography=""}
-	[pscustomobject]@{Domain="Strength";Iconography=""}
-	[pscustomobject]@{Domain="Summoning";Iconography=""}
-	[pscustomobject]@{Domain="the Sun";Iconography=""}
-	[pscustomobject]@{Domain="Terror";Iconography=""}
-	[pscustomobject]@{Domain="Thunder";Iconography=""}
-	[pscustomobject]@{Domain="Time";Iconography=""}
+	[pscustomobject]@{Domain="Death";Iconography=@("A skull","A sickle","An hourglass")}
+	[pscustomobject]@{Domain="Immortality";Iconography=@("An inverted skull","An ankh","A Phoenix")}
+	[pscustomobject]@{Domain="Fate";Iconography="A web","A clock","Gears","Needle and thread"}
+	[pscustomobject]@{Domain="Destruction";Iconography="Fire","An inverted castle","A falling star"}
+	[pscustomobject]@{Domain="Disease";Iconography="A rat","A skull","A plague mask","A caladrius"}
+	[pscustomobject]@{Domain="Divination";Iconography="An eye","A pendulum","Stars"}
+	[pscustomobject]@{Domain="Domination";Iconography="A dragon","A crown","A banner","Chains"}
+	[pscustomobject]@{Domain="Dreams";Iconography="A third eye","Stars","The moon"}
+	[pscustomobject]@{Domain="Earth";Iconography="A rock","A gem","An inverted triangle with a line through the bottom"}
+	[pscustomobject]@{Domain="Air";Iconography="Clouds","Swirling lines","A triangle with a line through the top"}
+	[pscustomobject]@{Domain="Fire";Iconography="Fire","A triangle","A mouth","A Phoenix"}
+	[pscustomobject]@{Domain="Water";Iconography="Parallel wavy lines","An inverted triangle","A chalice"}
+	[pscustomobject]@{Domain="Emotions";Iconography="A heart","An exclamation mark"}
+	[pscustomobject]@{Domain="Endurance";Iconography="A tree","Eihwaz","Two parallel lines bisected by a perpendicular line"}
+	[pscustomobject]@{Domain="Ethics";Iconography="Scales","The Sun","A slain serpent"}
+	[pscustomobject]@{Domain="Evil";Iconography="A serpent","A slain sun","The Moon with an eye"}
+	[pscustomobject]@{Domain="Exorcism";Iconography="The flower of life","A hexafoil"}
+	[pscustomobject]@{Domain="Expression";Iconography="A musical instrument","A mouth","A quill"}
+	[pscustomobject]@{Domain="Family";Iconography="A shield with coat of arms","The trinity knot","The triskelion"}
+	[pscustomobject]@{Domain="the Flame";Iconography="Fire","A brand"}
+	[pscustomobject]@{Domain="the Forge";Iconography="Tongs","A hammer","An anvil","Bellows"}
+	[pscustomobject]@{Domain="Fortune";Iconography="A horseshoe","A ladybug","A four-leaf clover","A star"}
+	[pscustomobject]@{Domain="Freedom";Iconography="Broken chains","An inverted crown","A peasant's shoe","A key"}
+	[pscustomobject]@{Domain="Fury";Iconography="A fist","Fire with an eye"}
+	[pscustomobject]@{Domain="Glory";Iconography="A banner","The Sun","A sword"}
+	[pscustomobject]@{Domain="Protection";Iconography="A shield","Armor","A castle","A key"}
+	[pscustomobject]@{Domain="the Afterlife";Iconography="An inverted skull","An ankh"}
+	[pscustomobject]@{Domain="Healing";Iconography="Mortar and pestle","The Rod of Asclepius","The Caduceus","A leaf"}
+	[pscustomobject]@{Domain="Heroics";Iconography="A lance","A sword","A banner"}
+	[pscustomobject]@{Domain="the Home";Iconography="A hearth","A key","A heart"}
+	[pscustomobject]@{Domain="Hope";Iconography="The Sun","An anchor","A swallow","A rainbow"}
+	[pscustomobject]@{Domain="the Hunt";Iconography="A dog","A horn","A horseman"}
+	[pscustomobject]@{Domain="Insight";Iconography="An eye","Glass"}
+	[pscustomobject]@{Domain="Inspiration";Iconography="A quill","A Tome","A third eye"}
+	[pscustomobject]@{Domain="Invigoration";Iconography="A tree","A sword","Flowers"}
+	[pscustomobject]@{Domain="the Journey";Iconography="A sign post","A walking stick","A Scrip","An ampulla"}
+	[pscustomobject]@{Domain="Justice";Iconography="Scales","A closed eye","A sword","A tome"}
+	[pscustomobject]@{Domain="Revenge";Iconography="A fist with an eye","Scales","A lash"}
+	[pscustomobject]@{Domain="Knowledge";Iconography="A tome","An owl","An armillary sphere","A torch"}
+	[pscustomobject]@{Domain="Law";Iconography="Scales","A tome","A crown"}
+	[pscustomobject]@{Domain="Life";Iconography="A tree","Flowers","The Sun"}
+	[pscustomobject]@{Domain="Reincarnation";Iconography="Yin/yang","The ouroboros"}
+	[pscustomobject]@{Domain="Light";Iconography="The Sun","A torch","An eye"}
+	[pscustomobject]@{Domain="Lightning";Iconography="A lightning bolt"}
+	[pscustomobject]@{Domain="Poetry";Iconography="A quill","Flowers"}
+	[pscustomobject]@{Domain="Love";Iconography="A heart","An exclamation mark"}
+	[pscustomobject]@{Domain="Madness";Iconography="A closed eye","Tipped scales","A burning book"}
+	[pscustomobject]@{Domain="Magic";Iconography="A pentagram","A tome","A magic circle","A sigil"}
+	[pscustomobject]@{Domain="Marriage";Iconography="A heart","Joined hands","A ring"}
+	[pscustomobject]@{Domain="Mercy";Iconography="A bent sword","An open hand","A feather"}
+	[pscustomobject]@{Domain="Messengers";Iconography="A winged foot","A trumpet","A scroll"}
+	[pscustomobject]@{Domain="Metal";Iconography="Iron","Bronze","Gold"}
+	[pscustomobject]@{Domain="Deception";Iconography="A mask","A cloak","A closed eye"}
+	[pscustomobject]@{Domain="the Moon";Iconography="The Moon"}
+	[pscustomobject]@{Domain="Music";Iconography="A musical instrument","A musical note"}
+	[pscustomobject]@{Domain="Nature";Iconography="A tree","Animal(s)","An inverted castle"}
+	[pscustomobject]@{Domain="Necromancy";Iconography="A skeleton","A skull with open eyes","A bent sickle","A broken hourglass"}
+	[pscustomobject]@{Domain="the Night";Iconography="The Moon","Stars"}
+	[pscustomobject]@{Domain="Observation";Iconography="An eye","Many eyes"}
+	[pscustomobject]@{Domain="the Sea";Iconography="Parallel wavy lines","A fish","A ship","A wave"}
+	[pscustomobject]@{Domain="Pain";Iconography="A wheel","A lash","A dagger"}
+	[pscustomobject]@{Domain="Patience";Iconography="A line","Three dots","A closed eye"}
+	[pscustomobject]@{Domain="Peace";Iconography="A bent sword","A dove","Clouds"}
+	[pscustomobject]@{Domain="Plants";Iconography="A tree","A leaf","Flowers"}
+	[pscustomobject]@{Domain="Pleasure";Iconography="A heart","An exclamation mark","A chalice"}
+	[pscustomobject]@{Domain="Profit";Iconography="A coin","gold","A gem"}
+	[pscustomobject]@{Domain="Prosperity";Iconography="A coin","gold","A gem","A cornucopia","A vair"}
+	[pscustomobject]@{Domain="Radiance";Iconography="The Sun","A slain serpent"}
+	[pscustomobject]@{Domain="Redemption";Iconography="A vulning pelican","A cross","The Chi-Rho"}
+	[pscustomobject]@{Domain="Renewal";Iconography="The ouroboros","Flowers","A leaf"}
+	[pscustomobject]@{Domain="Kingship";Iconography="A crown","A scepter","A castle"}
+	[pscustomobject]@{Domain="Runes";Iconography="Runes"}
+    [pscustomobject]@{Domain="the Seasons";Iconography="Stars","A wheel","A sickle"}
+	[pscustomobject]@{Domain="Vigilance";Iconography="An eye","A tower","A torch"}
+	[pscustomobject]@{Domain="Shadows";Iconography="A clouded sun","The Moon","An inverted torch"}
+	[pscustomobject]@{Domain="Skill";Iconography="A keystone","A guild symbol"}
+	[pscustomobject]@{Domain="the Sky";Iconography="The Sun and the Moon","Stars"}
+	[pscustomobject]@{Domain="Weather";Iconography="Rain drops","A lightning bolt"}
+	[pscustomobject]@{Domain="Rest";Iconography="The Svefnthorn","The Moon"}
+	[pscustomobject]@{Domain="Solidarity";Iconography="The fasces","Joined hands","Two horsemen on one horse"}
+	[pscustomobject]@{Domain="Stealth";Iconography="A fox","A cat","An owl","A cloak","A spider"}
+	[pscustomobject]@{Domain="the Storm";Iconography="A lightning bolt"}
+	[pscustomobject]@{Domain="Strategy";Iconography="A banner with an eye","A sword with an eye"}
+	[pscustomobject]@{Domain="Strength";Iconography="An ox","A lion","A dragon","A castle"}
+	[pscustomobject]@{Domain="Summoning";Iconography="A pentagram","A magic circle"}
+	[pscustomobject]@{Domain="the Sun";Iconography="The Sun"}
+	[pscustomobject]@{Domain="Time";Iconography="A clock","Gears"}
 	[pscustomobject]@{Domain="Trade";Iconography=""}
 	[pscustomobject]@{Domain="Transformation";Iconography=""}
     [pscustomobject]@{Domain="Travel";Iconography=""}
