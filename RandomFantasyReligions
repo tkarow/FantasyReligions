@@ -1,8 +1,107 @@
 function Get-Personality{
 
+    Param(
+        [Parameter(Mandatory=$False)]
+        [ValidateSet('Lawful Good','Lawful Neutral','Lawful Evil','Neutral Good','True Neutral','Neutral Evil','Chaotic Good','Chaotic Neutral','Chaotic Evil')]
+        [string]
+        $Alignment
+    )
+
     $Personality = @()
 
-    $HEXACO | %{$Score = Get-ApproximateSD -Number "$(Get-Random -Minimum 1 -Maximum 101)";$Personality += [pscustomobject]@{Trait = $_.Trait; Key = $_.Key; Score = $Score; Descriptors = ''; PN = "$(if($Score -lt 0){'-'}elseif($Score -gt 0){'+'}else{if((Get-Random -Minimum 1 -Maximum 3) -eq 1){"-"}else{"+"}})"}}
+    $HEXACO | %{$Score = Get-ApproximateSD -HundoNumber "$(Get-Random -Minimum 1 -Maximum 101)";$Personality += [pscustomobject]@{Trait = $_.Trait; Key = $_.Key; Score = $Score; Descriptors = ''; PN = "$(if($Score -lt 0){'-'}elseif($Score -gt 0){'+'}else{if((Get-Random -Minimum 1 -Maximum 3) -eq 1){"-"}else{"+"}})"}}
+
+    if($Alignment -like "*Good*"){
+    
+        $Personality | ?{$_.Trait -like 'Honesty-humility'} | %{$_.Score = "$(if([Math]::Abs((Get-ApproximateSD -HundoNumber "$(Get-Random -Minimum 1 -Maximum 101)")) -eq 2){2}else{1})"}
+        $Personality | ?{$_.Trait -like 'Honesty-humility'} | %{$_.PN = '+'}
+
+    }
+    
+    if($Alignment -like "*Evil*"){
+    
+        $Personality | ?{$_.Trait -like 'Honesty-humility'} | %{$_.Score = "$(if([Math]::Abs((Get-ApproximateSD -HundoNumber "$(Get-Random -Minimum 1 -Maximum 101)")) -eq -2){2}else{-1})"}
+        $Personality | ?{$_.Trait -like 'Honesty-humility'} | %{$_.PN = '-'}
+
+    }
+
+    if($Alignment -like "*Lawful*"){
+    
+        $Personality | ?{$_.Trait -like 'Conscientiousness'} | %{$_.Score = "$(if([Math]::Abs((Get-ApproximateSD -HundoNumber "$(Get-Random -Minimum 1 -Maximum 101)")) -eq 2){2}else{1})"}
+        $Personality | ?{$_.Trait -like 'Conscientiousness'} | %{$_.PN = '+'}
+
+    }
+
+    if($Alignment -like "*Chaotic*"){
+    
+        $Personality | ?{$_.Trait -like 'Conscientiousness'} | %{$_.Score = "$(if([Math]::Abs((Get-ApproximateSD -HundoNumber "$(Get-Random -Minimum 1 -Maximum 101)")) -eq -2){2}else{-1})"}
+        $Personality | ?{$_.Trait -like 'Conscientiousness'} | %{$_.PN = '-'}
+
+    }
+
+    <#
+
+    if($Alignment -like "*True Neutral*"){
+    
+
+
+    }
+
+    #>
+
+    #Good/Evil
+    if(($Alignment -like "") -or ($Alignment -eq $null)){
+
+        if(($Personality | ?{$_.Trait -eq 'Honesty-humility'}).Score -gt 0){
+    
+            $GEAlignment = "Good"
+
+        }elseif(($Personality | ?{$_.Trait -eq 'Honesty-humility'}).Score -lt 0){
+    
+            $GEAlignment = "Evil"
+
+        }else{
+    
+            $GEAlignment = "Neutral"
+
+        }
+
+    }
+
+    #Law/Chaos
+    if(($Alignment -like "") -or ($Alignment -eq $null)){
+
+        if(($Personality | ?{$_.Trait -eq 'Conscientiousness'}).Score -gt 0){
+    
+            $LCAlignment = "Lawful"
+
+        }elseif(($Personality | ?{$_.Trait -eq 'Conscientiousness'}).Score -lt 0){
+    
+            $LCAlignment = "Chaotic"
+
+        }else{
+    
+            $LCAlignment = "Neutral"
+
+        }
+
+    }
+
+    #Format alignment
+    if(($Alignment -like "") -or ($Alignment -eq $null)){
+    
+        $DisplayAlignment = ''
+        $DisplayAlignment = "$($LCAlignment) $($GEAlignment)"
+
+        if($DisplayAlignment -eq "Neutral Neutral"){
+        
+            $DisplayAlignment = "True Neutral"
+
+        }
+
+        $Alignment = $DisplayAlignment
+
+    }
 
     $HEXACODisposition = "$(($HEXACODispositions | ?{($_.H -eq ($Personality | ?{$_.Key -eq "H"}).PN -and $_.E -eq ($Personality | ?{$_.Key -eq "E"}).PN -and $_.A -eq ($Personality | ?{$_.Key -eq "A"}).PN)}).Disposition)"
 
@@ -14,19 +113,19 @@ function Get-Personality{
     
     foreach($Trait in $Personality){
         
-        if($Trait.Score -lt 0){
+        if([int]$Trait.Score -lt 0){
         
             $Trait.Descriptors = ($HEXACO | ?{$_.Trait -like "$($Trait.Trait)"}).Low -split ', '
 
         }
 
-        if($Trait.Score -gt 0){
+        if([int]$Trait.Score -gt 0){
         
             $Trait.Descriptors = ($HEXACO | ?{$_.Trait -like "$($Trait.Trait)"}).High -split ', '
 
         }
 
-        if($Trait.Score -ne 0){
+        if([int]$Trait.Score -ne 0){
 
             $AlreadyChosen = ""
 
@@ -80,14 +179,21 @@ function Get-Personality{
 
     if(($Personality | ?{$_.Trait -like "Agreeableness"}).Score -lt -1){$Likes += "Wrath"}
     if(($Personality | ?{$_.Trait -like "Agreeableness"}).Score -gt 1){$Likes += "Patience"}
-    if(($Personality | ?{$_.Trait -like "Honesty-Humility"}).Score -lt -1){$Likes += "Lust","Envy","Pride"}
-    if(($Personality | ?{$_.Trait -like "Honesty-Humility"}).Score -gt 1){$Likes += "Chastity","Kindness","Humility"}
-    if(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score -lt -1){$Likes += "Sloth","Gluttony"}
-    if(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score -gt 1){$Likes += "Diligence","Temperance"}
+    if(($Personality | ?{$_.Trait -like "Honesty-Humility"}).Score -lt -1){$Likes += ("Lust","Envy","Pride")[(Get-Random -Minimum 0 -Maximum 3)]}
+    if(($Personality | ?{$_.Trait -like "Honesty-Humility"}).Score -lt -2){if($Likes -notcontains "Lust"){$Likes += "Lust"};if($Likes -notcontains "Envy"){$Likes += "Envy"};if($Likes -notcontains "Pride"){$Likes += "Pride"}}
+    if(($Personality | ?{$_.Trait -like "Honesty-Humility"}).Score -gt 1){$Likes += ("Chastity","Kindness","Humility")[(Get-Random -Minimum 0 -Maximum 3)]}
+    if(($Personality | ?{$_.Trait -like "Honesty-Humility"}).Score -gt 2){if($Likes -notcontains "Chastity"){$Likes += "Chastity"};if($Likes -notcontains "Kindness"){$Likes += "Kindness"};if($Likes -notcontains "Humility"){$Likes += "Humility"}}
+    if(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score -lt -1){$Likes += ("Sloth","Gluttony")[(Get-Random -Minimum 0 -Maximum 2)]}
+    if(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score -lt -2){if($Likes -notcontains "Sloth"){$Likes += "Sloth"};if($Likes -notcontains "Gluttony"){$Likes += "Gluttony"}}
+    if(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score -gt 1){$Likes += ("Diligence","Temperance")[(Get-Random -Minimum 0 -Maximum 2)]}
+    if(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score -gt 2){if($Likes -notcontains "Diligence"){$Likes += "Diligence"};if($Likes -notcontains "Temperance"){$Likes += "Temperance"}}
     if(($Personality | ?{$_.Trait -like "Emotionality"}).Score -gt 1){if($likes -notcontains "Lust"){$Likes += "Lust"};if($likes -notcontains "Envy"){$Likes += "Envy"}}
     if(($Personality | ?{$_.Trait -like "Emotionality"}).Score -lt -1){if($likes -notcontains "Chastity"){$Likes += "Chastity"};if($likes -notcontains "Kindness"){$Likes += "Kindness"}}
 
     if(($Likes | Measure).Count -gt 0){$Likes = $Likes -join ', '}
+
+    $PD = ''
+    $PD = [pscustomobject]@{'Honesty-humility' = [int]"$(($Personality | ?{$_.Trait -like "Honesty-humility"}).Score)";Emotionality = [int]"$(($Personality | ?{$_.Trait -like "Emotionality"}).Score)";'Agreeableness' = [int]"$(($Personality | ?{$_.Trait -like "Agreeableness"}).Score)";'Extraversion' = [int]"$(($Personality | ?{$_.Trait -like "Extraversion"}).Score)";Conscientiousness = [int]"$(($Personality | ?{$_.Trait -like "Conscientiousness"}).Score)";'Openness to experience' = [int]"$(($Personality | ?{$_.Trait -like "Openness to experience"}).Score)"}
 
     [pscustomobject]@{
     
@@ -102,7 +208,9 @@ function Get-Personality{
         'Openness to experience' = [int]"$(($Personality | ?{$_.Trait -like "Openness to experience"}).Score)"
         Traits = $Traits
         Description = $Description
+        PersonalityDisorder = Get-PersonalityDisorder -HEXACOPersonality $PD
         Likes = $Likes
+        Alignment = $Alignment
     
     }
 
@@ -202,17 +310,24 @@ function Get-God{
     
     Param(
         [Parameter(Mandatory=$False)]
-        [string]
+        [ValidateSet('Lawful Good','Lawful Neutral','Lawful Evil','Neutral Good','True Neutral','Neutral Evil','Chaotic Good','Chaotic Neutral','Chaotic Evil')]
         $Alignment,
         [Parameter(Mandatory=$False)]
         [ValidateSet('2e', '3e', '4e', '5e', 'All', 'Curated')]
-        [string]
         $SphereSet
     )
 
     while(([Math]::Abs($GodPersonality.Agreeableness) + [Math]::Abs($GodPersonality.Conscientiousness) + [Math]::Abs($GodPersonality.Emotionality) + [Math]::Abs($GodPersonality.Extraversion) + [Math]::Abs($GodPersonality.'Honesty-humility') + [Math]::Abs($GodPersonality.'Openness to experience')) -lt 3){
 
-        $GodPersonality = Get-Personality
+        if(($Alignment -like '') -or ($Alignment -eq $null)){
+
+            $GodPersonality = Get-Personality
+
+        }else{
+        
+            $GodPersonality = Get-Personality -Alignment "$($Alignment)"
+
+        }
 
     }
 
@@ -225,10 +340,63 @@ function Get-God{
 
     $GodLocus = Get-Locus
 
+    #Good/Evil
+    if(($Alignment -like "") -or ($Alignment -eq $null)){
+
+        if($GodPersonality.'Honesty-humility' -gt 0){
+    
+            $GEAlignment = "Good"
+
+        }elseif($GodPersonality.'Honesty-humility' -lt 0){
+    
+            $GEAlignment = "Evil"
+
+        }else{
+    
+            $GEAlignment = "Neutral"
+
+        }
+
+    }
+
+    #Law/Chaos
+    if(($Alignment -like "") -or ($Alignment -eq $null)){
+
+        if($GodPersonality.Conscientiousness -gt 0){
+    
+            $LCAlignment = "Lawful"
+
+        }elseif($GodPersonality.Conscientiousness -lt 0){
+    
+            $LCAlignment = "Chaotic"
+
+        }else{
+    
+            $LCAlignment = "Neutral"
+
+        }
+
+    }
+
+    #Format alignment
+    if(($Alignment -like "") -or ($Alignment -eq $null)){
+    
+        $DisplayAlignment = ''
+        $DisplayAlignment = "$($LCAlignment) $($GEAlignment)"
+
+        if($DisplayAlignment -eq "Neutral Neutral"){
+        
+            $DisplayAlignment = "True Neutral"
+
+        }
+
+        $Alignment = $DisplayAlignment
+
+    }
+
     [pscustomobject]@{
     
         Personality = $GodPersonality
-        PersonalityDisorder = Get-PersonalityDisorder -HEXACOPersonality $GodPersonality
         Sphere = $GodSphere
         Locus = $GodLocus
         Description = "$($GodLocus) of $($GodSphere.Domain)"
@@ -242,24 +410,24 @@ function Get-ApproximateSD{
     Param(
         [Parameter(Mandatory=$False)]
         [int16[]]
-        $Number
+        $HundoNumber
     )
 
     $SND = ''
 
-    if(($Number -le 5) -or $Number -ge 96){
+    if(($HundoNumber -le 5) -or $HundoNumber -ge 96){
     
         $SND = 2
 
-        if($Number -le 5){$SND = $SND * -1}
+        if($HundoNumber -le 5){$SND = $SND * -1}
         
-    }elseif((($Number -ge 6) -and ($Number -le 18)) -or (($Number -le 95) -and ($Number -ge 83))){
+    }elseif((($HundoNumber -ge 6) -and ($HundoNumber -le 18)) -or (($HundoNumber -le 95) -and ($HundoNumber -ge 83))){
     
         $SND = 1
 
-        if($Number -le 18){$SND = $SND * -1}
+        if($HundoNumber -le 18){$SND = $SND * -1}
     
-    }elseif(($Number -ge 19) -or $Number -le 82){$SND = 0}
+    }elseif(($HundoNumber -ge 19) -or $HundoNumber -le 82){$SND = 0}
 
     #Range from -2 to +2
 
@@ -1459,4 +1627,4 @@ Incorporate the tenants of the satanic Bible?
 ##Abstract: A great eye or disembodied voice
 ##########
 
-$x=get-god;$x.personality;$x.personalitydisorder;$x.description
+$x=get-god;$x.personality;$x.description;$x.Alignment
