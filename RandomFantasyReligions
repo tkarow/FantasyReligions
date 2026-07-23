@@ -1267,14 +1267,14 @@ $CuratedDNDDomains = $AllDNDDomains | ?{$_ -notlike "*dragon*"} | ?{$_ -notlike 
 
 $UltraCuratedDNDDomains = @(
 
-	[pscustomobject]@{Domain="the Abyss";Iconography=@("A whirlpool","A spiral","An X","A chalice")}
+	[pscustomobject]@{Domain="the Abyss";Iconography=@("A whirlpool","A spiral","An X","A chalice");AlternateNames=@();SubDomains=@();Titles=@();Opposite="";Alignments=@()}
 	[pscustomobject]@{Domain="Agriculture";Iconography=@("A plow","Wheat","A windmill","A sickle")}
 	[pscustomobject]@{Domain="Air";Iconography=@("Clouds","Swirling lines","Wings")}
 	[pscustomobject]@{Domain="Change";Iconography=@("A snake","The Sun and the Moon","A butterfly")}
 	[pscustomobject]@{Domain="Ambition";Iconography=@("A mountain","An arrow","A ladder")}
 	[pscustomobject]@{Domain="Animals";Iconography=@("Animal(s)")}
 	[pscustomobject]@{Domain="Arcana";Iconography=@("A pentagram","A sigil","A tome")}
-	[pscustomobject]@{Domain="War";Iconography=@("A weapon","A horn","A horseman")}
+	[pscustomobject]@{Domain="War";Iconography=@("A weapon","A horn","A horseman","A banner")}
 	[pscustomobject]@{Domain="Artifice";Iconography=@("Gears","A clock","A wheel")}
 	[pscustomobject]@{Domain="the Arts";Iconography=@("Theater masks","A quill","A musical instrument")}
 	[pscustomobject]@{Domain="Assassination";Iconography=@("A dagger","A poisonous plant","An overturned crown")}
@@ -1290,7 +1290,7 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Chaos";Iconography=@("Arrows pointing away from each other","Squiggly lines")}
 	[pscustomobject]@{Domain="the Cold";Iconography=@("A snowflake","A pine tree")}
 	[pscustomobject]@{Domain="Civilization";Iconography="A temple","A tome","A crown"}
-	[pscustomobject]@{Domain="Commerce";Iconography=@("Coins","Ships")}
+	[pscustomobject]@{Domain="Commerce";Iconography=@("Coins","A ship")}
 	[pscustomobject]@{Domain="Community";Iconography=@("A temple","A circle")}
 	[pscustomobject]@{Domain="Competition";Iconography=@("Lances","An archery target")}
 	[pscustomobject]@{Domain="Courage";Iconography=@("A weapon","A candle")}
@@ -1299,6 +1299,7 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Dawn";Iconography=@("The rising sun")}
 	[pscustomobject]@{Domain="Death";Iconography=@("A skull","A sickle","An hourglass")}
 	[pscustomobject]@{Domain="Immortality";Iconography=@("An inverted skull","An ankh","A Phoenix")}
+#
 	[pscustomobject]@{Domain="Fate";Iconography="A web","A clock","Gears","Needle and thread"}
 	[pscustomobject]@{Domain="Destruction";Iconography="Fire","An inverted castle","A falling star"}
 	[pscustomobject]@{Domain="Disease";Iconography="A rat","A skull","A plague mask","A caladrius"}
@@ -1384,18 +1385,8 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Summoning";Iconography="A pentagram","A magic circle"}
 	[pscustomobject]@{Domain="the Sun";Iconography="The Sun"}
 	[pscustomobject]@{Domain="Time";Iconography="A clock","Gears"}
-	[pscustomobject]@{Domain="Trade";Iconography=""}
-	[pscustomobject]@{Domain="Transformation";Iconography=""}
-    [pscustomobject]@{Domain="Travel";Iconography=""}
-	[pscustomobject]@{Domain="Travelers";Iconography=""}
-    [pscustomobject]@{Domain="Truth";Iconography=""}
-	[pscustomobject]@{Domain="War";Iconography=""}
-    [pscustomobject]@{Domain="Wealth";Iconography=""}
-	[pscustomobject]@{Domain="the Wilderness";Iconography=""}
-	[pscustomobject]@{Domain="the Winds";Iconography=""}
-	[pscustomobject]@{Domain="Wisdom";Iconography=""}
-	[pscustomobject]@{Domain="Wrath";Iconography=""}
-	[pscustomobject]@{Domain="Zeal";Iconography=""}
+    [pscustomobject]@{Domain="Truth";Iconography="A mirror","The Sun"}
+	[pscustomobject]@{Domain="Zeal";Iconography="The Sun with a sword","A mountain"}
 
 )
 
