@@ -1267,10 +1267,10 @@ $CuratedDNDDomains = $AllDNDDomains | ?{$_ -notlike "*dragon*"} | ?{$_ -notlike 
 
 $UltraCuratedDNDDomains = @(
 
-	[pscustomobject]@{Domain="the Abyss";Iconography=@("A whirlpool","A spiral","An X","A chalice");AlternateNames=@();SubDomains=@();Titles=@();Opposite="";Alignments=@()}
-	[pscustomobject]@{Domain="Agriculture";Iconography=@("A plow","Wheat","A windmill","A sickle")}
-	[pscustomobject]@{Domain="Air";Iconography=@("Clouds","Swirling lines","Wings")}
-	[pscustomobject]@{Domain="Change";Iconography=@("A snake","The Sun and the Moon","A butterfly")}
+	[pscustomobject]@{Domain="the Abyss";Iconography=@("A whirlpool","A spiral","An X","A chalice");AlternateNames=@("The Maelstrom","The Vortex","Tumult","Bedlam","Upheaval");SubDomains=@();Titles=@();Opposites=@("The Heavens","The Sacred Mountain");Alignments=@("Chaotic Neutral","Chaotic Evil");Agents=@("The Lost","The Restless")}
+	[pscustomobject]@{Domain="Agriculture";Iconography=@("A plow","Wheat","A windmill","A sickle");AlternateNames=@("Farming","Gardening","Horticulture","The Harvest","Cultivation","The Field","Crops");SubDomains=@();Titles=@("Farmer","Worker");Opposites=@("Famine","Fallow","Contamination","Pollution");Alignments=@("Lawful Good","Lawful Neutral""Lawful Evil","Neutral Good","True Neutral","Neutral Evil");Agents=@("Farmers","Gardeners","Harvesters","Reapers")}
+	[pscustomobject]@{Domain="Air";Iconography=@("Clouds","Swirling lines","Wings");AlternateNames=@("The Aether","The Winds");SubDomains=@();Titles=@("");Opposites=@("The Earth");Alignments=@("True Neutral","Chaotic Good","Chaotic Neutral","Chaotic Evil");Agents=@("Sylphs","Volitants","Ascendants")}
+	[pscustomobject]@{Domain="Change";Iconography=@("A snake","The Sun and the Moon","A butterfly");AlternateNames=@("Transformation","Transmutation","Transition");SubDomains=@();Titles=@("Agitator","Catalyst");Opposites=@("Stasis","Permanence","Stagnation");Alignments=@("True Neutral","Chaotic Good","Chaotic Neutral","Chaotic Evil");Agents=@("Catalysts")}
 	[pscustomobject]@{Domain="Ambition";Iconography=@("A mountain","An arrow","A ladder")}
 	[pscustomobject]@{Domain="Animals";Iconography=@("Animal(s)")}
 	[pscustomobject]@{Domain="Arcana";Iconography=@("A pentagram","A sigil","A tome")}
