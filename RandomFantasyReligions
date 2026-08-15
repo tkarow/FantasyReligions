@@ -571,7 +571,7 @@ function Get-GodIncidentals{
         
     }
 
-    if($Iconography -eq 'Sigils/Glyphs/Runes'){
+    if($Iconography -eq 'Glyphs/Runes/Sigils'){
     
         $NewIconography = ''
         $NewIconography = @("Sigils","Glyphs","Runes")
@@ -580,9 +580,17 @@ function Get-GodIncidentals{
 
     }
 
-    if($Iconography -eq 'A Specific Metal'){
+    if(($Iconography -eq 'A Specific Metal') -or ($Iconography -eq 'Precious Metal')){
     
-        $Iconography = $Metals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Metals))]
+        if($Iconography -eq 'Precious Metal'){
+        
+            $Iconography = $PreciousMetals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $PreciousMetals))]
+
+        }else{
+
+            $Iconography = $Metals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Metals))]
+
+        }
 
         if($DomainName -eq 'A Specific Metal'){$DomainName = $Iconography}
 
@@ -616,7 +624,7 @@ function Get-GodIncidentals{
         
     }
 
-    if($Iconography -eq 'Sigils/Glyphs/Runes'){
+    if($Iconography -eq 'Glyphs/Runes/Sigils'){
     
         $NewIconography = ''
         $NewIconography = @("Sigils","Glyphs","Runes")
@@ -625,13 +633,23 @@ function Get-GodIncidentals{
 
     }
 
-    if($Iconography -eq 'A Specific Metal'){
+    if(($Iconography -eq 'A Specific Metal') -or ($Iconography -eq 'Precious Metal')){
     
-        $Iconography = $Metals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Metals))]
+        if($Iconography -eq 'Precious Metal'){
+        
+            $Iconography = $PreciousMetals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $PreciousMetals))]
+
+        }else{
+
+            $Iconography = $Metals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Metals))]
+
+        }
 
     }
 
     #endregion
+
+    #region Set up SecondaryIconographyOptions
 
     $SecondaryIconographyOptions = ''
     $SecondaryIconographyOptions = $UltraCuratedDNDDomains.Iconography | ?{$_ -notlike ''} | ?{$_ -notlike $null} | sort | Get-Unique | ?{$_ -notlike "$($Iconography)"}
@@ -643,8 +661,28 @@ function Get-GodIncidentals{
         $SecondaryIconographyOptions += "Animal(s)"
         $SecondaryIconographyOptions += "Animal(s)"
         $SecondaryIconographyOptions += "Animal(s)"
+        $SecondaryIconographyOptions += "Animal(s)"
+        $SecondaryIconographyOptions += "Animal(s)"
+        $SecondaryIconographyOptions += "Animal(s)"
+        $SecondaryIconographyOptions += "Animal(s)"
 
     }
+
+    #Add mythical animals as an option
+    if(($SpecificDomains | ?{$_.Domain -eq 'A Specific Mythical Animal'}).Specifics -notcontains $Iconography){
+    
+        $SecondaryIconographyOptions += "A Specific Mythical Animal"
+        $SecondaryIconographyOptions += "A Specific Mythical Animal"
+
+    }
+
+    if($Metals -contains $Iconography){
+
+        $SecondaryIconographyOptions = $SecondaryIconographyOptions | ?{$_ -ne 'A Specific Metal'} | ?{$_ -ne 'Precious Metal'}
+
+    }
+
+    #endregion
 
     $SecondaryIconography = ''
     $SecondaryIconography = $SecondaryIconographyOptions[(Get-Random -Minimum 0 -Maximum $SecondaryIconographyOptions.Count)]
@@ -660,16 +698,29 @@ function Get-GodIncidentals{
         
     }
 
-    if(($SecondaryIconography -eq 'Animal(s)') -or ($SecondaryIconography -eq 'A Specific Animal')){
+    if(($SecondaryIconography -eq 'Animal(s)') -or ($SecondaryIconography -like "A Specific*Animal")){
     
-        $NewIconography = ''
-        $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Animal"}).Specifics
+        if(($SecondaryIconography -eq 'Animal(s)') -or ($SecondaryIconography -like "A Specific Animal")){
 
-        $SecondaryIconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+            $NewIconography = ''
+            $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Animal"}).Specifics
+
+            $SecondaryIconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+
+        }
+
+        if($SecondaryIconography -eq "A Specific Mythical Animal"){
+
+            $NewIconography = ''
+            $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Mythical Animal"}).Specifics
+
+            $SecondaryIconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+
+        }
         
     }
 
-    if($SecondaryIconography -eq 'Sigils/Glyphs/Runes'){
+    if($SecondaryIconography -eq 'Glyphs/Runes/Sigils'){
     
         $NewIconography = ''
         $NewIconography = @("Sigils","Glyphs","Runes")
@@ -678,9 +729,17 @@ function Get-GodIncidentals{
 
     }
 
-    if($SecondaryIconography -eq 'A Specific Metal'){
+    if(($SecondaryIconography -eq 'A Specific Metal') -or ($SecondaryIconography -eq 'Precious Metal')){
     
-        $SecondaryIconography = $Metals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Metals))]
+        if($SecondaryIconography -eq 'Precious Metal'){
+        
+            $SecondaryIconography = $PreciousMetals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $PreciousMetals))]
+
+        }else{
+
+            $SecondaryIconography = $Metals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Metals))]
+
+        }
 
     }
 
@@ -1650,12 +1709,12 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="the Hunt";Iconography=@("A dog","A horn","A horseman","A falcon");AlternateDomains=@("Nobility","The Chase");Title=@("<Hunter>[Huntress]{Hunter}","<Warden>[Wardeness]{Warden}","Forester","Marshal");Opposites=@("Poacher","Trespasser","Game");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Hunters","Noblemen","Wardens","Foresters")}
 	[pscustomobject]@{Domain="Insight";Iconography=@("An eye","Glass","Many eyes","A tower","A torch");AlternateDomains=@("Observation","Vigilance","Intuition");Title=@("<Watchman>[Watchwoman]{Watcher}","Watcher","Sentinel");Opposites=@("The Blind","Obliviousness","Ignorance","Carelessness","The Lax","Negligence");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil");Patronage=@("Watchmen","Alarms","Guardians","Keepers","Shepherds","Sentinels")}
 	[pscustomobject]@{Domain="Inspiration";Iconography=@("A quill","A tome","A third eye");AlternateDomains=@("Motivation","Vision","Creativity");Title=@("Muse","Impetus");Opposites=@("Dullards","Forgetfulness","Rejection");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Artists","Creators","Inventors","Thinkers","Tinkerers","Writers","Musicians","Poets")}
-	[pscustomobject]@{Domain="the Journey";Iconography=@("A sign post","A walking stick","A Scrip","An ampulla");AlternateDomains=@("Travel","Wanderlust","Peregrination");Title=@("Vagabond","Wanderer","Traveler");Opposites=@("Indolance","The Content","The Sedentary","Homebodies");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Nomads","Travelers","Messengers","Wanderers","The Lost","Vagabonds")}
+	[pscustomobject]@{Domain="the Journey";Iconography=@("A sign post","A walking stick","A pilgrim's scrip","An ampulla");AlternateDomains=@("Travel","Wanderlust","Peregrination");Title=@("Vagabond","Wanderer","Traveler");Opposites=@("Indolance","The Content","The Sedentary","Homebodies");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Nomads","Travelers","Messengers","Wanderers","The Lost","Vagabonds")}
 	[pscustomobject]@{Domain="Justice";Iconography=@("Scales","A closed eye","A sword","A tome","A mirror");AlternateDomains=@("Truth","Balance","Fairness");Title=@("Arbiter","Judge");Opposites=@("Inequity","Injustice","Bias","Grievance","Guilt");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good");Patronage=@("The Aggrieved","The Wronged","Civilization")}
 	[pscustomobject]@{Domain="Revenge";Iconography=@("A fist with an eye","Scales","A lash");AlternateDomains=@("Vengeance","Retaliation","Retribution","Payback");Title=@("Avenger","Nemesis","Punisher");Opposites=@("The Guilty","Wrongdoers","Sins","Offenders","Criminals","Culprits","Miscreants","Transgressors");Alignments=@("Lawful Evil","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("The Aggrieved","The Wronged")}
 	[pscustomobject]@{Domain="Knowledge";Iconography=@("A tome","An owl","An armillary sphere","A torch");AlternateDomains=@("Wisdom","Intellect","Understanding");Title=@("<Wizard>[Witch]{Wise One}","Philosopher","Wise One","Sage");Opposites=@("Ignorance","Idiocy","Foolishness","Stupidity");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Wizards","Seekers","Thinkers","Philosophers","The Learned")}
 	[pscustomobject]@{Domain="Life";Iconography=@("A tree","Flowers","The Sun");AlternateDomains=@("Vitality","Growth");Title=@("Conservationist","<Steward>[Stewardess]{Keeper}","Nurturer","Guardian");Opposites=@("Destruction","Killers","Murder","Plague","Famine");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good","Chaotic Neutral");Patronage=@("Flora","Fauna","Flora and fauna")}
-	[pscustomobject]@{Domain="Reincarnation";Iconography=@("Yin/yang","The ouroboros");AlternateDomains=@("Rebirth","The Circle of Life");Title=@("Avatar","Keeper");Opposites=@("Death","Extinction","Oblivion");Alignments=@("Lawful Neutral","True Neutral");Patronage=@("Spirit","The Lifecycle")}
+	[pscustomobject]@{Domain="Reincarnation";Iconography=@("Yin/yang","A snake eating its tail");AlternateDomains=@("Rebirth","The Circle of Life");Title=@("Avatar","Keeper");Opposites=@("Death","Extinction","Oblivion");Alignments=@("Lawful Neutral","True Neutral");Patronage=@("Spirit","The Lifecycle")}
 	[pscustomobject]@{Domain="Lightning";Iconography=@("A lightning bolt","A cloud with lightning bolt");AlternateDomains=@("The storm","Thunder","Hail");Title=@("Thunderer","Rider of the Storm","Thunderhead");Opposites=@("Tranquility","Peace","Quiet","Calm");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Berserkers","The Mighty","The Powerful")}
 	[pscustomobject]@{Domain="Love";Iconography=@("A heart","An exclamation mark");AlternateDomains=@("Lust","Passion","Courtship");Title=@("Lover","Arranger");Opposites=@("Hatred","Detachment","Disgust");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good","Chaotic Neutral");Patronage=@("The Lusty","The Lovesick","The Enamored","The Besotted")}
 	[pscustomobject]@{Domain="Madness";Iconography=@("A closed eye","Tipped scales","A burning book");AlternateDomains=@("Insanity","Lunacy","Dementia","Delirium","Hysteria");Title=@("<Madman>[Madwoman]{Mad}","Lunatic","Psychopath","Maniac","Loon");Opposites=@("Sanity","Process","Logic","Reason");Alignments=@("Chaotic Neutral","Chaotic Evil");Patronage=@("The Mad","The Moonsick","The Witless","The Deranged")}
@@ -1726,6 +1785,48 @@ $Metals = @(
     "Brass"
     "Brass"
     "Brass"
+    "Palladium"
+    "Copper"
+    "Copper"
+    "Copper"
+    "Copper"
+
+)
+
+$PreciousMetals = @(
+
+    "Gold"
+    "Gold"
+    "Gold"
+    "Gold"
+    "Silver"
+    "Silver"
+    "Silver"
+    "Silver"
+    "Orichalcum"
+    "Electrum"
+    "Platinum"
+    "Palladium"
+    "Copper"
+    "Copper"
+
+)
+
+$Gems = @(
+
+    
+
+)
+
+$Artisanstools = @(
+
+
+
+)
+
+$Weapons = @(
+
+
 
 )
 
