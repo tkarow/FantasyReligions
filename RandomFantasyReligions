@@ -553,12 +553,25 @@ function Get-GodIncidentals{
 
     #region Exceptions
 
-    if($Iconography -eq 'A Specific Musical Instrument'){
+    if(($Iconography -eq 'A Specific Musical Instrument') -or ($Iconography -eq 'A Musical Instrument')){
     
-        $NewIconography = ''
-        $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+        if($Iconography -eq 'A Specific Musical Instrument'){
 
-        $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+            $NewIconography = ''
+            $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+
+            $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+
+        }
+
+        if($Iconography -eq 'A Musical Instrument'){
+
+            $NewIconography = ''
+            $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+
+            $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+
+        }
         
     }
 
@@ -596,6 +609,24 @@ function Get-GodIncidentals{
 
     }
 
+    if($Iconography -eq 'A Weapon'){
+    
+        $Iconography = $Weapons[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Weapons))]
+
+    }
+
+    if($Iconography -eq 'A Gem'){
+    
+        $Iconography = $Gems[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Gems))]
+
+    }
+
+    if($Iconography -eq "Artisan's tools"){
+    
+        $Iconography = $Artisanstools[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Artisanstools))]
+
+    }
+
     #endregion
 
     if($Iconography -like "*specific*"){
@@ -606,12 +637,25 @@ function Get-GodIncidentals{
 
     #region Exceptions again
 
-    if($Iconography -eq 'A Specific Musical Instrument'){
+    if(($Iconography -eq 'A Specific Musical Instrument') -or ($Iconography -eq 'A Musical Instrument')){
     
-        $NewIconography = ''
-        $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+        if($Iconography -eq 'A Specific Musical Instrument'){
 
-        $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+            $NewIconography = ''
+            $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+
+            $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+
+        }
+
+        if($Iconography -eq 'A Musical Instrument'){
+
+            $NewIconography = ''
+            $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+
+            $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+
+        }
         
     }
 
@@ -644,6 +688,24 @@ function Get-GodIncidentals{
             $Iconography = $Metals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Metals))]
 
         }
+
+    }
+
+    if($Iconography -eq 'A Weapon'){
+    
+        $Iconography = $Weapons[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Weapons))]
+
+    }
+
+    if($Iconography -eq 'A Gem'){
+    
+        $Iconography = $Gems[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Gems))]
+
+    }
+
+    if($Iconography -eq "Artisan's tools"){
+    
+        $Iconography = $Artisanstools[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Artisanstools))]
 
     }
 
@@ -689,12 +751,25 @@ function Get-GodIncidentals{
 
     #region Exceptions for Secondary Iconography
 
-    if($SecondaryIconography -eq 'A Specific Musical Instrument'){
+    if(($SecondaryIconography -eq 'A Specific Musical Instrument') -or ($SecondaryIconography -eq 'A Musical Instrument')){
     
-        $NewIconography = ''
-        $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+        if($SecondaryIconography -eq 'A Specific Musical Instrument'){
 
-        $SecondaryIconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+            $NewIconography = ''
+            $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+
+            $SecondaryIconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+
+        }
+
+        if($SecondaryIconography -eq 'A Musical Instrument'){
+
+            $NewIconography = ''
+            $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+
+            $SecondaryIconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+
+        }
         
     }
 
@@ -743,6 +818,24 @@ function Get-GodIncidentals{
 
     }
 
+    if($SecondaryIconography -eq 'A Weapon'){
+    
+        $SecondaryIconography = $Weapons[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Weapons))]
+
+    }
+
+    if($SecondaryIconography -eq 'A Gem'){
+    
+        $SecondaryIconography = $Gems[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Gems))]
+
+    }
+
+    if($SecondaryIconography -eq "Artisan's tools"){
+    
+        $SecondaryIconography = $Artisanstools[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Artisanstools))]
+
+    }
+
     #endregion
 
     #region Add proper articles for iconographies
@@ -760,6 +853,42 @@ function Get-GodIncidentals{
         }
 
     }
+
+    if((($SpecificDomains | ?{$_.Domain -eq 'A Specific Animal'}).Specifics -contains $SecondaryIconography) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Wild Animal'}).Specifics -contains $SecondaryIconography) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Livestock'}).Specifics -contains $SecondaryIconography) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Mythical Animal'}).Specifics -contains $SecondaryIconography) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Cattle'}).Specifics -contains $SecondaryIconography)){
+    
+        if(($SecondaryIconography -ne 'Jabberwock') -and ($SecondaryIconography -ne 'Leviathan') -and ($SecondaryIconography -ne 'Kraken') -and ($SecondaryIconography -ne 'Tarrasque')){
+
+            $SecondaryIconography = "A$(if($('a','e','i','o','u','y') -contains $SecondaryIconography[0]){'n'}) $($SecondaryIconography.ToLower())"
+
+        }else{
+        
+            $SecondaryIconography = "The $($SecondaryIconography)"
+
+        }
+
+    }
+
+    #endregion
+
+    #region Add proper pluralization for animal domains
+
+    if((($SpecificDomains | ?{$_.Domain -eq 'A Specific Animal'}).Specifics -contains $DomainName) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Wild Animal'}).Specifics -contains $DomainName) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Livestock'}).Specifics -contains $DomainName) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Mythical Animal'}).Specifics -contains $DomainName) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Cattle'}).Specifics -contains $DomainName)){
+    
+        if(($DomainName -ne 'Jabberwock') -and ($DomainName -ne 'Leviathan') -and ($DomainName -ne 'Kraken') -and ($DomainName -ne 'Tarrasque')){
+
+            if($DomainName -eq 'Wolf'){$DomainName = "Wolve"}
+
+            $DomainName = "$($DomainName)$(if($DomainName -eq 'Ox'){'en'}elseif($DomainName -like "*s"){'es'}else{'s'})"
+
+        }else{
+        
+            $DomainName = "The $($Iconography)"
+
+        }
+
+    }
+
+    #endregion
 
     if((($SpecificDomains | ?{$_.Domain -eq 'A Specific Animal'}).Specifics -contains $SecondaryIconography) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Wild Animal'}).Specifics -contains $SecondaryIconography) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Livestock'}).Specifics -contains $SecondaryIconography) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Mythical Animal'}).Specifics -contains $SecondaryIconography) -or (($SpecificDomains | ?{$_.Domain -eq 'A Specific Cattle'}).Specifics -contains $SecondaryIconography)){
     
@@ -1814,19 +1943,53 @@ $PreciousMetals = @(
 
 $Gems = @(
 
-    
+    "Ruby"
+    "Emerald"
+    "Diamond"
+    "Garnet"
+    "Topaz"
+    "Amethyst"
+    "Sapphire"
 
 )
 
 $Artisanstools = @(
 
-
+    "Mortar and pestle"
+    "A flask"
+    "A needle and thread"
+    "A hammer"
+    "A cask"
+    "A barrel"
+    "A quill"
+    "A saw"
+    "A sextant"
+    "A compass"
+    "A pot"
+    "Kitchen utensils"
+    "Tongs"
+    "Tweezers"
+    "A brush"
+    "A spindle"
 
 )
 
 $Weapons = @(
 
-
+    "A short sword"
+    "A long sword"
+    "A two-handed sword"
+    "A mace"
+    "A morning star"
+    "An axe"
+    "A war hammer"
+    "A halberd"
+    "A bow and arrow"
+    "A glaive"
+    "A lance"
+    "A pike"
+    "A spear"
+    "A crossbow"
 
 )
 
