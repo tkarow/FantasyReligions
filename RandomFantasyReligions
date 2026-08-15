@@ -446,7 +446,7 @@ function Get-God{
         Locus = $GodLocus
         Incidentals = $Incidentals
         RootDomain = $Incidentals.RootDomain
-        Description = "$($GodLocus) of $($Incidentals.Domain)$(if($Incidentals.RootDomain -ne $Incidentals.Domain){(" ($($Incidentals.RootDomain.replace('The','the')))")})"
+        Description = "$($GodLocus) of $($Incidentals.Domain.replace('The','the'))$(if($Incidentals.RootDomain -ne $Incidentals.Domain){(" ($($Incidentals.RootDomain.replace('The','the')))")})"
         #Description = "($($Gender)) $($GodLocus) of $($Incidentals.Domain) ($($GodSphere.Domain))"
         #Iconography = $Incidentals.Iconography
         #SecondaryIconography = $Incidentals.SecondaryIconography
@@ -622,6 +622,16 @@ function Get-GodIncidentals{
     $SecondaryIconographyOptions = ''
     $SecondaryIconographyOptions = $UltraCuratedDNDDomains.Iconography | ?{$_ -notlike ''} | ?{$_ -notlike $null} | sort | Get-Unique | ?{$_ -notlike "$($Iconography)"}
 
+    #Add weight for animals if Iconography does not include one already
+    if(($SpecificDomains | ?{$_.Domain -eq 'A Specific Animal'}).Specifics -notcontains $Iconography){
+    
+        $SecondaryIconographyOptions += "Animal(s)"
+        $SecondaryIconographyOptions += "Animal(s)"
+        $SecondaryIconographyOptions += "Animal(s)"
+        $SecondaryIconographyOptions += "Animal(s)"
+
+    }
+
     $SecondaryIconography = ''
     $SecondaryIconography = $SecondaryIconographyOptions[(Get-Random -Minimum 0 -Maximum $SecondaryIconographyOptions.Count)]
 
@@ -636,7 +646,7 @@ function Get-GodIncidentals{
         
     }
 
-    if($SecondaryIconography -eq 'Animal(s)'){
+    if(($SecondaryIconography -eq 'Animal(s)') -or ($SecondaryIconography -eq 'A Specific Animal')){
     
         $NewIconography = ''
         $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Animal"}).Iconography
@@ -1672,6 +1682,7 @@ $HumanDescriptors = @(
     "Lost"
     "Martyred"
     "Missing"
+    "Mysterious"
 
 )
 
@@ -1679,15 +1690,15 @@ $HumanDescriptors = @(
 
 $Gods = @(
 
-    [pscustomobject]@{Type = "<God>[Goddess]{Divinity}"; Weight = 30}
-    [pscustomobject]@{Type = "<Archon>[Archontissa]{Sovereign}"; Weight = 4}
-    [pscustomobject]@{Type = "Aeon"; Weight = 2}
+    [pscustomobject]@{Type = "<God>[Goddess]{Divinity}"; Weight = 50}
+    [pscustomobject]@{Type = "<Archon>[Archontissa]{Sovereign}"; Weight = 10}
+    [pscustomobject]@{Type = "Aeon"; Weight = 1}
     [pscustomobject]@{Type = "The Embodiment"; Weight = 1}
     [pscustomobject]@{Type = "Aspect"; Weight = 1}
     [pscustomobject]@{Type = "Primordial"; Weight = 1}
     [pscustomobject]@{Type = "<Titan>[Titaness]{Tiresia}"; Weight = 1}
-    [pscustomobject]@{Type = "Avatar"; Weight = 2}
-    [pscustomobject]@{Type = "Spirit"; Weight = 4}
+    [pscustomobject]@{Type = "Avatar"; Weight = 1}
+    [pscustomobject]@{Type = "Spirit"; Weight = 1}
 
 )
 
