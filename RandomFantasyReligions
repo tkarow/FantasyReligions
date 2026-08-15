@@ -593,6 +593,13 @@ function Get-GodIncidentals{
 
     }
 
+    if($DomainName -eq 'A Specific Metal'){
+    
+        $Iconography = $Metals[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Metals))]
+        $DomainName = $Iconography
+
+    }
+
     if(($Iconography -eq 'A Specific Metal') -or ($Iconography -eq 'Precious Metal')){
     
         if($Iconography -eq 'Precious Metal'){
