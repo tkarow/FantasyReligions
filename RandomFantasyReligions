@@ -443,7 +443,8 @@ function Get-God{
         Gender = $Gender
         Locus = $GodLocus
         Incidentals = $Incidentals
-        Description = "$($GodLocus) of $($Incidentals.Domain) ($($GodSphere.Domain))"
+        RootDomain = $Incidentals.RootDomain
+        Description = "$($GodLocus) of $($Incidentals.Domain)$(if($Incidentals.RootDomain -ne $Incidentals.Domain){(" ($($Incidentals.RootDomain.replace('The','the')))")})"
         #Description = "($($Gender)) $($GodLocus) of $($Incidentals.Domain) ($($GodSphere.Domain))"
         #Iconography = $Incidentals.Iconography
         #SecondaryIconography = $Incidentals.SecondaryIconography
@@ -522,14 +523,8 @@ function Get-GodIncidentals{
 
     if(($GodInfo -like $null) -or ($GodInfo -like '')){$GodInfo = $UltraCuratedDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $UltraCuratedDNDDomains))]}
 
-    $Iconography = ''
-    $Iconography = if(($GodInfo.Iconography).Count -eq 1){$GodInfo.Iconography}else{$GodInfo.Iconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $GodInfo.Iconography))]}
-
-    $SecondaryIconographyOptions = ''
-    $SecondaryIconographyOptions = $UltraCuratedDNDDomains.Iconography | ?{$_ -notlike ''} | ?{$_ -notlike $null} | sort | Get-Unique | ?{$_ -notlike "$($Iconography)"}
-
-    $SecondaryIconography = ''
-    $SecondaryIconography = $SecondaryIconographyOptions[(Get-Random -Minimum 0 -Maximum $SecondaryIconographyOptions.Count)]
+    $RootDomain = ''
+    $RootDomain = $GodInfo.Domain
 
     $AlternateDomains = ''
     $AlternateDomains = $GodInfo.AlternateDomains
@@ -540,6 +535,125 @@ function Get-GodIncidentals{
     $DomainName = ''
     $DomainName = $AlternateDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $AlternateDomains))]
 
+    if($SpecificDomains.Domain -contains $DomainName){
+    
+        $GodInfo = $SpecificDomains | ?{$_.Domain -like $DomainName}
+
+        $AlternateDomains = ''
+        $AlternateDomains = $GodInfo.Specifics
+
+        $DomainName = $AlternateDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $AlternateDomains))]
+
+    }
+
+    $Iconography = ''
+    $Iconography = if(($GodInfo.Iconography).Count -eq 1){$GodInfo.Iconography}else{$GodInfo.Iconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $GodInfo.Iconography))]}
+
+    #region Exceptions
+
+    if($Iconography -eq 'A Specific Musical Instrument'){
+    
+        $NewIconography = ''
+        $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+
+        $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+        
+    }
+
+    if($Iconography -eq 'Animal(s)'){
+    
+        $NewIconography = ''
+        $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Animal"}).Iconography
+
+        $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+        
+    }
+
+    if($Iconography -eq 'Sigils/Glyphs/Runes'){
+    
+        $NewIconography = ''
+        $NewIconography = @("Sigils","Glyphs","Runes")
+
+        $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum 3)]
+
+    }
+
+    #endregion
+
+    if($Iconography -like "*specific*"){
+        
+        $Iconography = $DomainName
+        
+    }
+
+    #region Exceptions again
+
+    if($Iconography -eq 'A Specific Musical Instrument'){
+    
+        $NewIconography = ''
+        $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+
+        $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+        
+    }
+
+    if($Iconography -eq 'Animal(s)'){
+    
+        $NewIconography = ''
+        $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Animal"}).Iconography
+
+        $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+        
+    }
+
+    if($Iconography -eq 'Sigils/Glyphs/Runes'){
+    
+        $NewIconography = ''
+        $NewIconography = @("Sigils","Glyphs","Runes")
+
+        $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum 3)]
+
+    }
+
+    #endregion
+
+    $SecondaryIconographyOptions = ''
+    $SecondaryIconographyOptions = $UltraCuratedDNDDomains.Iconography | ?{$_ -notlike ''} | ?{$_ -notlike $null} | sort | Get-Unique | ?{$_ -notlike "$($Iconography)"}
+
+    $SecondaryIconography = ''
+    $SecondaryIconography = $SecondaryIconographyOptions[(Get-Random -Minimum 0 -Maximum $SecondaryIconographyOptions.Count)]
+
+    #region Exceptions for Secondary Iconography
+
+    if($SecondaryIconography -eq 'A Specific Musical Instrument'){
+    
+        $NewIconography = ''
+        $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Music*"}).Iconography
+
+        $SecondaryIconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+        
+    }
+
+    if($SecondaryIconography -eq 'Animal(s)'){
+    
+        $NewIconography = ''
+        $NewIconography = ($SpecificDomains | ?{$_.Domain -like "A Specific Animal"}).Iconography
+
+        $SecondaryIconography = $NewIconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $NewIconography))]
+        
+    }
+
+    if($SecondaryIconography -eq 'Sigils/Glyphs/Runes'){
+    
+        $NewIconography = ''
+        $NewIconography = @("Sigils","Glyphs","Runes")
+
+        $SecondaryIconography = $NewIconography[(Get-Random -Minimum 0 -Maximum 3)]
+
+    }
+
+    #endregion
+
     $Title = ''
     $Title = if($GodInfo.Title.Count -eq 1){$GodInfo.Title}else{$GodInfo.Title[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $GodInfo.Title))]}
 
@@ -548,6 +662,8 @@ function Get-GodIncidentals{
 
     $Patrons = ''
     $Patrons = if($GodInfo.Patronage.Count -eq 1){$GodInfo.Patronage}else{$GodInfo.Patronage[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $GodInfo.Patronage))]}
+
+    if($Patrons -like "*specific*"){$Patrons = $DomainName}
 
     if($Title -like "*<*"){
         
@@ -573,6 +689,7 @@ function Get-GodIncidentals{
         Title = $Title
         Opposites = $Opposites
         Patrons = $Patrons
+        RootDomain = $RootDomain
         
     }
 
@@ -1418,21 +1535,21 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Air";Iconography=@("Clouds","Swirling lines","Wings","A triangle with a line through the top");AlternateDomains=@("The Aether","The Winds");Title=@("Primordial","Aurum");Opposites=@("The Earth");Alignments=@("True Neutral","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Sylphs","Volitants","Ascendants")}
 	[pscustomobject]@{Domain="Change";Iconography=@("A snake","The Sun and the Moon","A butterfly");AlternateDomains=@("Transformation","Transmutation","Transition");Title=@("Agitator","Catalyst");Opposites=@("Stasis","Permanence","Stagnation");Alignments=@("True Neutral","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Catalysts")}
 	[pscustomobject]@{Domain="Ambition";Iconography=@("A mountain","An arrow","A ladder");AlternateDomains=@("Desire","Determination","Greed");Title=@("Muse","Whisperer");Opposites=@("Humility","Servitude");Alignments=@("Chaotic Good","True Neutral","Chaotic Neutral","Lawful Evil","Neutral Evil","Chaotic Evil");Patronage=@("Aspirants","The Hungry","The Driven","Enterprise")}
-	[pscustomobject]@{Domain="Animals";Iconography=@("A Specific Animal","Animals");AlternateDomains=@("A specific animal","Wild Animals","Livestock","Mythical Animals","Cattle");Title=@("Keeper","Guardian","Caretaker","Handler","Menagerist");Opposites=@("The Hunt","Poachers");Alignments=@("True Neutral","Chaotic Neutral");Patronage=@("A specific animal","Wild Animals","Livestock","Mythical Animals","Cattle")}
+	[pscustomobject]@{Domain="Animals";Iconography=@("A Specific Animal","Specific Animals");AlternateDomains=@("A Specific Animal","Wild Animals","A Specific Wild Animal","Livestock","A Specific Livestock","A Specific Mythical Animal","Cattle","A Specific Cattle");Title=@("Keeper","Guardian","Caretaker","Handler","Menagerist");Opposites=@("The Hunt","Poachers");Alignments=@("True Neutral","Chaotic Neutral");Patronage=@("Animals")}
 	[pscustomobject]@{Domain="Magic";Iconography=@("A pentagram","A sigil","A tome","A magic circle");AlternateDomains=@("Arcana","Abjuration","Conjuration","Divination","Enchantment","Evocation","Illusion","Necromancy","Transmutation");Title=@("Archmage","Archmagus","Magus");Opposites=@("The Mundane","Logic");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil");Patronage=@("Wizards","Sorcerors","Arcanists")}
 	[pscustomobject]@{Domain="War";Iconography=@("A weapon","A horn","A horseman","A banner");AlternateDomains=@("Battle","Strategy");Title=@("Stratego","Imperator","Warlord","Commander","General","Conqueror");Opposites=@("Peace","Cowardice","Diplomacy");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Soldiers","Generals","Kings","Veterans","The Army","Warriors")}
 	[pscustomobject]@{Domain="Artifice";Iconography=@("Gears","A clock","A wheel");AlternateDomains=@("Clockwork","Machines","Invention");Title=@("Tinkerer","Horologer","Watchmaker","Machinist","Inventor");Opposites=@("Luddites","Tradition");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil");Patronage=@("Thinkers","Tinkerers","Inventors","Artificers","Engineers")}
-	[pscustomobject]@{Domain="the Arts";Iconography=@("A mouth","Theater masks","A quill","A musical instrument");AlternateDomains=@("Poetry","Theater","Music","Sculpture","Painting","Literature","Expression");Title=@("Maestro","Muse","Patron");Opposites=@("Austerity","Asceticism","Frugality","Restrain","Inhibition");Alignments=@("Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Artists","Poets","Bards","Storytellers","Authors")}
-	[pscustomobject]@{Domain="Assassination";Iconography=@("A dagger","A poisonous plant","An overturned crown");AlternateDomains=@("Regicide","Bravo");Title=@("Assassin","Hitman","Murderer");Opposites=@("Tyranny","Corruption");Alignments=@("Chaotic Neutral","Chaotic Evil");Patronage=@("Assassins","Hitmen","Revolutionaries")}
+	[pscustomobject]@{Domain="the Arts";Iconography=@("A mouth","Theater masks","A quill","A musical instrument");AlternateDomains=@("A Specific Writing Art","A Specific Musical Art","Expression");Title=@("Maestro","Muse","Patron");Opposites=@("Austerity","Asceticism","Frugality","Restraint","Inhibition");Alignments=@("Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Artists","Poets","Bards","Storytellers","Authors")}
+	[pscustomobject]@{Domain="Assassination";Iconography=@("A dagger","A poisonous plant","An overturned crown");AlternateDomains=@("Regicide","Sicarius","Morth");Title=@("Assassin","Hitman","Murderer","Slayer");Opposites=@("Tyranny","Corruption");Alignments=@("Chaotic Neutral","Chaotic Evil");Patronage=@("Assassins","Hitmen","Revolutionaries")}
 	[pscustomobject]@{Domain="Astronomy";Iconography=@("Stars","A pentagram");AlternateDomains=@("A specific star","Falling Stars","the Stars","Astrology");Title=@("Astrologus","Seer");Opposites=@("The Sun","The Void","The Abyss","The Depths");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Astronomers","Astrologers","Navigators","Stargazers","Soothsayers","Mystics")}
 	[pscustomobject]@{Domain="Balance";Iconography=@("Scales","Yin/yang");AlternateDomains=@("Equilibrium","Symmetry","Harmony");Title=@("Stabilizer","Equalizer","Neutralizer");Opposites=@("Chaos","Agitators","Imbalance","Dissonance");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","True Neutral");Patronage=@("The Just","The Prudent","The Moderate","Stability")}
 	[pscustomobject]@{Domain="Beastmastery";Iconography=@("A leash","A saddle","A falconer's glove","A muzzle","A crook");AlternateDomains=@("Animal Mastery");Title=@("Breaker","<Master>[Mistress]{Lead}","Whisperer");Opposites=@("Wild Animals");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","True Neutral");Patronage=@("Animal Handlers","Animal Trainers","Animal Tamers","Shepherds")}
 	[pscustomobject]@{Domain="Beauty";Iconography=@("A flower","A swan");AlternateDomains=@("Aesthetics","Comeliness","Allure");Title=@("Fairest","Paragon","Gentil");Opposites=@("Ugliness","Fustilugs","Mumblecrusts","The Grotesque","Hideousness");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("The Beautiful","The Radiant","The Elf-Bright")}
 	[pscustomobject]@{Domain="Ferocity";Iconography=@("A fist","Fire with an eye","A lion","A dragon");AlternateDomains=@("Savagery","Viciousness","Fury","Brutality");Title=@("Berserker","Maniac","Hellion");Opposites=@("The Meek","The Timid","Pacifists","The Weak");Alignments=@("True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("The Savage","The Fierce","The Enraged","Berserkers")}
-	[pscustomobject]@{Domain="Fertility";Iconography=@("The stylized female form","A flower","An egg");AlternateDomains=@("New Life","Birth");Title=@("Lifegiver","<Father>[Mother]{Parent}");Opposites=@("Death","Decay","Disease");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good","Chaotic Neutral");Patronage=@("Children","<Fathers>[Mothers]{Parents}","Family")}
+    [pscustomobject]@{Domain="Fertility";Iconography=@("The stylized female form","A flower","An egg");AlternateDomains=@("New Life","Birth");Title=@("Lifegiver","<Father>[Mother]{Parent}");Opposites=@("Death","Decay","Disease");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good","Chaotic Neutral");Patronage=@("Children","<Fathers>[Mothers]{Parents}","Family")}
 	[pscustomobject]@{Domain="Creation";Iconography=@("A cosmic egg","A tree");AlternateDomains=@("Genesis","Manifestation");Title=@("Creator","Cause","Source");Opposites=@("Destruction","Annihilation");Alignments=@("True Neutral","Chaotic Neutral","Chaotic Good","Chaotic Evil","Lawful Good","Lawful Evil","Lawful Neutral");Patronage=@("All")}
     [pscustomobject]@{Domain="Speed";Iconography=@("A hare","Wings","A line","A sprinter");AlternateDomains=@("Quickness","Celerity","Alacrity");Title=@("Herald","Harbinger","Comet","Charger");Opposites=@("Torpor","Laziness","Languor","Sleep");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Messengers","Heralds","Harbingers","Travelers")}
-	[pscustomobject]@{Domain="Weather";Iconography=@("Clouds","The Sun and the Moon","Stars","Rain drops","A lightning bolt");AlternateDomains=@("The Heavens","The sky");Title=@("Chronologist","Chronicler");Opposites=@("The Depths","The Abyss");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Meteorologists","Skygazers")}
+	[pscustomobject]@{Domain="Weather";Iconography=@("Clouds","The Sun and the Moon","Stars","Rain drops","A lightning bolt");AlternateDomains=@("The Heavens","The Sky");Title=@("Chronologist","Chronicler");Opposites=@("The Depths","The Abyss");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Meteorologists","Skygazers")}
 	[pscustomobject]@{Domain="Chaos";Iconography=@("Arrows pointing away from each other","Squiggly lines");AlternateDomains=@("Discord","Pandemonium","Tumult","Disorder","Change","Havok","Mayhem","Turmoil","Entropy");Title=@("Upsetter","Changer","Disrupter","Instigator","Agitator");Opposites=@("Order","Plans","Tradition");Alignments=@("Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Changers","Disruptors","Troublemakers","Vandals","Anarchists")}
 	[pscustomobject]@{Domain="the Cold";Iconography=@("A snowflake","A pine tree");AlternateDomains=@("Frost","Ice","Winter");Title=@("Hyperborean","Primordial");Opposites=@("The Flame","Summer","Heat");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Furriers","Woodcutters","Colliers")}
 	[pscustomobject]@{Domain="Civilization";Iconography="A temple","A tome","A crown","A scepter","A castle";AlternateDomains=@("Kingship","Law","Rule");Title=@("<King>[Queen]{Monarch}","<Emperor>[Empress]{Sovereign}","Ruler");Opposites=@("Anarchy","Chaos","Lawlessness","Barbarity");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil");Patronage=@("The Civilized","Kings","Nobility")}
@@ -1482,17 +1599,17 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Messengers";Iconography=@("A winged foot","A trumpet","A scroll");AlternateDomains=@("Heralds","Couriers","Runners","Carriers","Envoys","Emissaries");Title=@("Forerunner","Nuncius","Cursor");Opposites=@("Gatekeepers","Walls","Obstructions");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Pages","Heralds","Couriers","Runners","Carriers","Envoys","Emissaries")}
 	[pscustomobject]@{Domain="Metal";Iconography=@("Precious Metal","An alchemical symbol");AlternateDomains=@("Gold","Silver","Bronze");Title=@("Blacksmith");Opposites=@("The Unskilled","Slag","Mistakes");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Blacksmiths","Whitesmiths","Goldsmiths","Silversmiths","Metalworkers")}
 	[pscustomobject]@{Domain="Deception";Iconography=@("A mask","A cloak","A closed eye");AlternateDomains=@("Trickery","Espionage","Guile","Skullduggery");Title=@("<Conman>[Conwoman]{Con}","Mountebank","Impostor","Charlatan");Opposites=@("Naivety","Artlessness","Trust");Alignments=@("Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Actors","Jesters","Spies","Fraudsters")}
-	[pscustomobject]@{Domain="Music";Iconography=@("A musical instrument","A musical note");AlternateDomains=@("Polyphony","Singing","Instrumentation","Rhythm");Title=@("Conductor","Composer","Bard");Opposites=@("Silence","Discord","Noise","Dissonance");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Troubadours","Musicians","Singers","Conductors","Minstrels","Bards")}
+	[pscustomobject]@{Domain="Music";Iconography=@("A Specific Musical Instrument","A musical note");AlternateDomains=@("Polyphony","Singing","Instrumentation","Rhythm");Title=@("Conductor","Composer","Bard");Opposites=@("Silence","Discord","Noise","Dissonance");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Troubadours","Musicians","Singers","Conductors","Minstrels","Bards")}
     [pscustomobject]@{Domain="Nature";Iconography=@("A tree","Animal(s)","An inverted castle");AlternateDomains=@("Wilderness","The Frontier","The Hinterlands");Title=@("Ranger","Hermit","Primordial");Opposites=@("Machinery","Civilization","Alchemy");Alignments=@("True Neutral","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Rangers","Woodsmen","Wardens")}
 	[pscustomobject]@{Domain="Pain";Iconography=@("A wheel","A lash","A dagger");AlternateDomains=@("Soticism","Agony","Anguish","Misery");Title=@("Torturer","Tormentor");Opposites=@("Pleasure","Joy","Euphoria","Hedonism");Alignments=@("Lawful Neutral","Lawful Evil","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Torturers","Executioners","The downtrodden","The wounded")}
 	[pscustomobject]@{Domain="Patience";Iconography=@("A line","Three dots","A closed eye");AlternateDomains=@("Grace","Forbearance","Restraint","Asceticism","Inner Peace");Title=@("Stoic","Sage","Pillar","Steady One");Opposites=@("Brashness","Impatience","Recklessness","Foolhardiness","Thoughtlessness","Emotionality");Alignments=@("True Neutral");Patronage=@("Stoics","Calm","Peace","Zen","Serenity","Tranquility","Quiet")}
 	[pscustomobject]@{Domain="Peace";Iconography=@("A bent sword","A dove","Clouds");AlternateDomains=@("Conciliation","Truces");Title=@("Peacemaker","Mediator","Intercessor");Opposites=@("War","Strife","Conflict","Battle");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good");Patronage=@("Civilization","Conscripts","Life")}
-	[pscustomobject]@{Domain="Plants";Iconography=@("A tree","A leaf","Flowers");AlternateDomains=@("Trees","Schrubs","Flowers","Vines","Fungi");Title=@("Cultivar","Herbarist","Wyrtweard");Opposites=@("Famine","Barrens","Desert");Alignments=@("True Neutral","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Herbalists","Foragers","Farmers","Gardeners")}
+	[pscustomobject]@{Domain="Plants";Iconography=@("A tree","A leaf","Flowers","A stylized plant");AlternateDomains=@("Fungi","Vines","Trees","Roots","Vegetables","Flower","A Specific Plant");Title=@("Cultivar","Herbarist","Wyrtweard");Opposites=@("Famine","Barrens","Desert");Alignments=@("True Neutral","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Herbalists","Foragers","Farmers","Gardeners")}
 	[pscustomobject]@{Domain="Pleasure";Iconography=@("A heart","An exclamation mark","A chalice");AlternateDomains=@("Debauchery","Excess","Hedonism");Title=@("Voluptuary","Profligate","Libertine");Opposites=@("Restraint","Asceticism","Puritans","Soticism");Alignments=@("Lawful Evil","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Revelry","Merrymaking","Festivity","Celebration")}
 	[pscustomobject]@{Domain="Prosperity";Iconography=@("A coin","gold","A gem","A cornucopia","A vair");AlternateDomains=@("Plenty","Wealth","Riches","Success");Title=@("<Patron>[Patroness]{Patron}","Benefactor");Opposites=@("Poverty","Need","Desperation","Want");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("The needy","The prosperous","Entrepreneurs")}
 	[pscustomobject]@{Domain="Redemption";Iconography=@("A vulning pelican","A cross","The Chi-Rho");AlternateDomains=@("Forgiveness","Vindication");Title=@("Redeemer","Savior","Messiah","Deliverer");Opposites=@("Corruption","Damnation","Perdition","Loss","Condemnation");Alignments=@("Lawful Good","Neutral Good","Chaotic Good");Patronage=@("The good","The virtuous","The worthy","True believers")}
-	[pscustomobject]@{Domain="Writing";Iconography=@("Glyphs/Runes/Sigils","A tome");AlternateDomains=@("Sigils","Glyphs","Runes");Title=@("Scribe","<Runemaster>[Runemistress]{Runmaker}","Runecarver","Glyph-binder","Sigil-crafter");Opposites=@("Censors","Erasure");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil");Patronage=@("Scribes","Literacy","Records")}
-    [pscustomobject]@{Domain="the Seasons";Iconography=@("Stars","A wheel","A sickle");AlternateDomains=@("Winter","Spring","Summer","Autumn");Title=@("Keeper","Overseer","Chronologer","Changer");Opposites=@("Stasis","Stagnation");Alignments=@("Lawful Neutral","True Neutral","Chaotic Neutral");Patronage=@("Farmers","The living","Nature")}
+	[pscustomobject]@{Domain="Writing";Iconography=@("Glyphs/Runes/Sigils","A tome","A written prayer");AlternateDomains=@("Sigils/Glyphs/Runes");Title=@("Scribe","<Runemaster>[Runemistress]{Runmaker}","Runecarver","Glyph-binder","Sigil-crafter");Opposites=@("Censors","Erasure");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil");Patronage=@("Scribes","Literacy","Records")}
+    [pscustomobject]@{Domain="The Seasons";Iconography=@("Stars","A wheel","A sickle");AlternateDomains=@("Winter","Spring","Summer","Autumn");Title=@("Keeper","Overseer","Chronologer","Changer");Opposites=@("Stasis","Stagnation");Alignments=@("Lawful Neutral","True Neutral","Chaotic Neutral");Patronage=@("Farmers","The living","Nature")}
 	[pscustomobject]@{Domain="Skill";Iconography=@("A keystone","A guild symbol");AlternateDomains=@("Ability","Mastery","Perfection");Title=@("<Master>[Mistress]{Master}","Maestro","Adept","Paragon");Opposites=@("Clumsiness","Ineptitude","Laziness","Sloth","Apathy");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Masters","Capability","Competence","Artisans","Pride")}
 	[pscustomobject]@{Domain="Solidarity";Iconography=@("The fasces","Joined hands","Two horsemen on one horse");AlternateDomains=@("Civilization","Community","Unity","Unification");Title=@("Unifier","Leader","Nexus");Opposites=@("Chaos","Division","Separation","Rebellion","Dissention");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil");Patronage=@("Allies","Members","Agents")}
 	[pscustomobject]@{Domain="Stealth";Iconography=@("A fox","A cat","An owl","A cloak","A spider");AlternateDomains=@("Secrecy","Concealment","Cunning","Espionage");Title=@("The Unseen","The Shadow","The Silhouette","Phantom");Opposites=@("Exposure","Obviousness","Quarry");Alignments=@("Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Spies","Thieves","Watchmen","Stalkers","Hunters")}
@@ -1504,34 +1621,19 @@ $UltraCuratedDNDDomains = @(
 
 )
 
-#$x.split("`n") | %{$string = "$($String.trim()),`n`t `"$($_.trim())`""};$string | Set-Clipboard
-
-#regions my attempt
-
-$Domains = @(
-
-    [pscustomobject]@{Type = "time, space, the mind, the soul, dreams, mysteries, existence"}
-    [pscustomobject]@{Type = "science, magic"},
-    [pscustomobject]@{Type = "humanity, civilization, society, family, a specific region, military, law"},
-    [pscustomobject]@{Type = "labor, wealth, trade, travel, life"},
-    [pscustomobject]@{Type = "art, comfort, music, sports, literature, pleasure"}
+$SpecificDomains =  @(
+    
+    [pscustomobject]@{Domain="A Specific Animal";Specifics=@("Ape","Auroch","Badger","Bat","Bear","Bird","Boar","Bull","Camel","Cat","Cow","Crab","Crocodile","Deer","Dinosaur","Dog","Dolphin","Eagle","Eel","Elk","Falcon","Fish","Fox","Dragonfly","Goat","Hare","Hawk","Hippopotamus","Horse","Hyena","Insect","Jackal","Leopard","Lion","Lizard","Mammoth","Moose","Octopus","Owl","Ox","Panther","Ram","Rat","Raven","Rhinoceros","Rooster","Scorpion","Seal","Shark","Snake","Spider","Squid","Stag","Swan","Tiger","Toad","Turtle","Vulture","Walrus","Weasel","Whale","Wolf","Yak");Iconography=@("A Specific Animal");Title=@("Guardian","Caretaker");Opposites=@("Persecutors");Alignments=@("True Neutral","Chaotic Neutral");Patronage=@("A Specific Animal")}
+    [pscustomobject]@{Domain="A Specific Wild Animal";Specifics=@("Ape","Auroch","Badger","Bat","Bear",,"Boar","Crab","Crocodile","Deer","Dinosaur","Dolphin","Eagle","Eel","Elk","Fish","Fox","Dragonfly","Hawk","Hippopotamus","Hyena","Insect","Jackal","Leopard","Lion","Lizard","Mammoth","Moose","Octopus","Owl","Panther","Raven","Rhinoceros","Scorpion","Seal","Shark","Snake","Spider","Squid","Tiger","Vulture","Walrus","Whale","Wolf");Iconography=@("A Specific Wild Animal");Title=@("Keeper","Guardian");Opposites=@("Hunters","Trappers");Alignments=@("True Neutral","Chaotic Neutral");Patronage=@("A Specific Wild Animal")}
+    [pscustomobject]@{Domain="A Specific Livestock";Specifics=@("Ox","Chicken","Cow","Sheep","Goat","Pig","Bull");Title=@("Keeper","Guardian","Caretaker","Handler");Iconography=@("A Specific Livestock");Opposites=@("Predators","Plague","Livestock Thieves");Alignments=@("True Neutral","Chaotic Neutral");Patronage=@("A Specific Livestock")}
+    [pscustomobject]@{Domain="A Specific Mythical Animal";Specifics=@("Dragon","Unicorn","Griffon","Basilisk","Manticore","Tarrasque","Kraken","Roc","Zaratan","Leviathan","Phoenix","Jabberwock");Iconography=@("A Specific Mythical Animal");Title=@("Keeper","Guardian","Caretaker","Handler","Menagerist");Opposites=@("Glory-Seekers","Adventurers");Alignments=@("True Neutral","Chaotic Neutral");Patronage=@("A Specific Mythical Animal")}
+    [pscustomobject]@{Domain="A Specific Cattle";Specifics=@("Cow","Ox","Bull","Auroch");Iconography=@("A Specific Cattle");Title=@("Keeper","Guardian","Caretaker","Handler","Menagerist");Opposites=@("Predators","Plague","Cattle Thieves");Alignments=@("True Neutral","Chaotic Neutral");Patronage=@("A Specific Cattle")}
+    [pscustomobject]@{Domain="A Specific Star";Specifics=@("The Great Strand","Heaven's Stinger","The Eye of Wisdom","The Arrow of the Godhead","Fate's Talon","The Brightest Beacon","The Blue Wing","The Faint Crook","The Blinking Father","The Red Spindle","The Sunken Diamond","The Flying Topaz","The Mother of Comets","Tear of the Lance","The Wildflowerof the North");Iconography=@("A five-pointed star with halo","A six-pointed star with One long ray","A seven-pointed star","An eight-pointed star encompassing a circle","A fourteen-pointed star","An asterisk","A nine-pointed star");Title=@("Astrologus","Seer");Opposites=@("The Sun","The Void","The Abyss","The Depths");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Followers of the star")}
+    [pscustomobject]@{Domain="A Specific Writing Art";Specifics=@("Poetry","Theater","Literature");Iconography=@("A quill");Title=@("Writer","Inspiration","Muse");Opposites=@("Austerity","Asceticism","Frugality","Restraint","Inhibition");Alignments=@("Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Artists","Poets","Bards","Storytellers","Authors")}
+    [pscustomobject]@{Domain="A Specific Musical Art";Specifics=@("Music");Iconography=@("A harp","A lute","Drums","Bagpipes","Bells","A bumbulum","Clappers","Cymbals","A pipe","A tamorine","A fiddle","A lyre","A trumpet","A flute","A horn");Title=@("Maestro","Muse","Conductor");Opposites=@("Austerity","Asceticism","Frugality","Restraint","Inhibition");Alignments=@("Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Bards","Performers","Musicians","The Orchestra")}
+    
 
 )
-
-$SubDomains = @{
-
-    existence = "Nature", "Mountains", "Forests", "The Ocean", "The Outer Planes", "An element"
-    science = "mathematics", "logic", "physics", "astronomy", "biology", "chemistry"
-    language = "language", "writing"
-    military = "horsemen","infantry", "foot soldiers", "victory", "honor", "espionage","archery"
-    labor = "farming", "woodcutting", "smithing", "brewing", "cooking", "building", "carpentry", "clothes-making", "fishing", "toolmaking", "accounting", "bookkeeping", "ploughing", "stabling", "hunting"
-    wealth = "wealth", "coins", "gold", "silver", "treasure"
-    art = "architecture", "sculpture", "painting", "textiles"
-    sports = "jousting", "wrestling", "bandyball", "wrestling", "dog fighting", "horseracing","archery"
-
-}
-
-#endregion
 
 #endregion
 
