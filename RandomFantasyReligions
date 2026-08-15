@@ -379,6 +379,8 @@ function Get-God{
 
     $GodLocus = Get-Locus -Gender $Gender
 
+    if(($Humans.Type -contains $GodLocus) -and ($Gender -eq "Other")){$Gender = @("Male","Female","Hermaphroditic")[(Get-Random -Minimum 0 -Maximum 3)]}
+
     #Good/Evil
     if(($Alignment -like "") -or ($Alignment -eq $null)){
 
