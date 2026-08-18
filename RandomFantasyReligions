@@ -379,7 +379,7 @@ function Get-God{
 
     $GodLocus = Get-Locus -Gender $Gender
 
-    if(($Humans.Type -contains $GodLocus) -and ($Gender -eq "Other")){$Gender = "Female"}
+    if(($Humans.Type -contains $GodLocus.split(' ')[1]) -and ($Gender -eq "Other")){$Gender = "Female"}
 
     #Good/Evil
     if(($Alignment -like "") -or ($Alignment -eq $null)){
@@ -438,6 +438,9 @@ function Get-God{
     $Incidentals = ''
     $Incidentals = Get-GodIncidentals -GodInfo $GodSphere -Gender $Gender
 
+    $Name = ''
+    $Name = Get-GodName -GodInfo $GodSphere -Gender $Gender
+
     [pscustomobject]@{
     
         Personality = $GodPersonality
@@ -445,8 +448,9 @@ function Get-God{
         Gender = $Gender
         Locus = $GodLocus
         Incidentals = $Incidentals
+        Name = $Name
         RootDomain = $Incidentals.RootDomain
-        Description = "$($GodLocus) of $($Incidentals.Domain.replace('The','the'))$(if($Incidentals.RootDomain -ne $Incidentals.Domain){(" ($($Incidentals.RootDomain.replace('The','the')))")})"
+        Description = "$($Name), $($GodLocus) of $($Incidentals.Domain.replace('The','the'))$(if($Incidentals.RootDomain -ne $Incidentals.Domain){(" ($($Incidentals.RootDomain.replace('The','the')))")})"
         #Description = "($($Gender)) $($GodLocus) of $($Incidentals.Domain) ($($GodSphere.Domain))"
         #Iconography = $Incidentals.Iconography
         #SecondaryIconography = $Incidentals.SecondaryIconography
@@ -1003,7 +1007,7 @@ function Get-GodName{
         
     }
 
-    $RandomSyllables = @("Dus","Per","Trum","Den","Vas","Ma")
+    $RandomSyllables = @("Dus","Per","Trum","Den","Vas","Ma","Din","Then","Dag","Vel","Osh","Mor","Bri","Tar","Cer")
 
     $RandomSyllable = ''
 
@@ -1038,9 +1042,13 @@ function Get-GodName{
 
     }
 
-    $Suffixes = @("ox","tis","chos","is","us","mo","nus","id","ir","gus")
+    $MaleSuffixes = @("ox","tis","chos","is","us","mo","nus","id","ir","gus")
 
-    $Name = "$($Name)$($Suffixes[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $Suffixes))])"
+    if($Gender -eq "Male"){$Name = "$($Name)$($MaleSuffixes[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $MaleSuffixes))])"}
+
+    $FemaleSuffixes = @("oxia","tisa","chosa","isa","ia","ma","nia","rid","a","gia")
+
+    if($Gender -eq "Female"){$Name = "$($Name)$($FemaleSuffixes[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FemaleSuffixes))])"}
 
     $Name = $Name.Replace('pp','p')
     $Name = $Name.Replace('aa','a')
