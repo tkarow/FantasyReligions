@@ -405,7 +405,19 @@ function Get-God{
         $TwoDomains
     )
 
-    if(($TwoDomains -like '') -or ($TwoDomains -eq $null)){if((Get-Random -Minimum 1 -Maximum 11) -eq 1){$TwoDomains = $true}}
+    if(($TwoDomains -like '') -or ($TwoDomains -eq $null)){
+    
+        if((Get-Random -Minimum 1 -Maximum 11) -eq 1){
+        
+            $TwoDomains = $true
+            
+        }else{
+        
+            $TwoDomains = $False
+            
+        }
+        
+    }
 
     if(($Gender -like '') -or ($Gender -like $null)){$Gender = Get-GodGender}
 
@@ -1013,7 +1025,7 @@ function Get-GodIncidentals{
         
         if($Gender -eq "Male"){$Patrons = $Patrons.split(">")[0].Replace("<","")}
         if($Gender -eq "Female"){$Patrons = $Patrons.split("[")[1].Split("]")[0]}
-        if(($Gender -ne "Male") -and ($Gender -ne "Female")){$Patrons = $Patrons.split("{")[1].Replace("}","")}
+        if(($Gender -ne "Male") -and ($Gender -ne "Female")){if($Patrons -like "*{*"){$Patrons = $Patrons.split("{")[1].Replace("}","")}}
 
     }
 
@@ -2028,7 +2040,7 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Pain";Iconography=@("A wheel","A lash","A dagger");AlternateDomains=@("Soticism","Agony","Anguish","Misery");Title=@("Torturer","<Tormentor>[Tormentrix]{Tormentor}");Opposites=@("Pleasure","Joy","Euphoria","Hedonism");Alignments=@("Lawful Neutral","Lawful Evil","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Torturers","Executioners","The downtrodden","The wounded");Syllables=@("Poen","Dol","Pon","Iyp")}
 	[pscustomobject]@{Domain="Patience";Iconography=@("A line","Three dots","A closed eye");AlternateDomains=@("Grace","Forbearance","Restraint","Asceticism","Inner Peace");Title=@("Stoic","Sage","Pillar","Steady One");Opposites=@("Brashness","Impatience","Recklessness","Foolhardiness","Thoughtlessness","Emotionality");Alignments=@("True Neutral");Patronage=@("Stoics","Calm","Peace","Zen","Serenity","Tranquility","Quiet");Syllables=@("Aten","Ganim","Kalo")}
 	[pscustomobject]@{Domain="Peace";Iconography=@("A bent sword","A dove","Clouds");AlternateDomains=@("Conciliation","Truces");Title=@("Peacemaker","Mediator","Intercessor");Opposites=@("War","Strife","Conflict","Battle");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good");Patronage=@("Civilization","Conscripts","Life");Syllables=@("Mono","Eirin","Pax","Anqui")}
-	[pscustomobject]@{Domain="Plants";Iconography=@("A tree","A leaf","Flowers","A stylized plant");AlternateDomains=@("Fungi","Vines","Trees","Roots","Vegetables","Flower","A Specific Plant");Title=@("Cultivar","Herbarist","Wyrtweard");Opposites=@("Famine","Barrens","Desert");Alignments=@("True Neutral","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Herbalists","Foragers","Farmers","Gardeners");Syllables=@("Lant","Fyt","Eget")}
+	[pscustomobject]@{Domain="Plants";Iconography=@("A tree","A leaf","Flowers","A stylized plant");AlternateDomains=@("Fungi","Vines","Trees","Roots","Vegetables","Flowers","A Specific Plant");Title=@("Cultivar","Herbarist","Wyrtweard");Opposites=@("Famine","Barrens","Desert");Alignments=@("True Neutral","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Herbalists","Foragers","Farmers","Gardeners");Syllables=@("Lant","Fyt","Eget")}
 	[pscustomobject]@{Domain="Pleasure";Iconography=@("A heart","An exclamation mark","A chalice");AlternateDomains=@("Debauchery","Excess","Hedonism");Title=@("Voluptuary","Profligate","Libertine");Opposites=@("Restraint","Asceticism","Puritans","Soticism");Alignments=@("Lawful Evil","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Revelry","Merrymaking","Festivity","Celebration");Syllables=@("Charis","Anap","Lupt","Elect")}
 	[pscustomobject]@{Domain="Prosperity";Iconography=@("A coin","Gold","A gem","A cornucopia","A vair");AlternateDomains=@("Plenty","Wealth","Riches","Success");Title=@("<Patron>[Patroness]{Patron}","<Benefactor>[Benefactress]{Benefactor}");Opposites=@("Poverty","Need","Desperation","Want");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("The needy","The prosperous","Entrepreneurs");Syllables=@("Cess","Profec","Evim","Akmi")}
 	[pscustomobject]@{Domain="Redemption";Iconography=@("A vulning pelican","A cross","The Chi-Rho");AlternateDomains=@("Forgiveness","Vindication");Title=@("Redeemer","<Savior>[Savioress]{Savior}","Messiah","Deliverer");Opposites=@("Corruption","Damnation","Perdition","Loss","Condemnation");Alignments=@("Lawful Good","Neutral Good","Chaotic Good");Patronage=@("The good","The virtuous","The worthy","True believers");Syllables=@("Exag","Tros","Demp","Pret")}
@@ -2507,3 +2519,5 @@ Friend of
 #Revisit human descriptors - add logic?
 
 $x=Get-God;$x.personality;$x.Gender;$x.Description;$x.Incidentals.Iconography;if($x.SecondIncidentals.Iconography){$x.SecondIncidentals.Iconography}else{$x.Incidentals.SecondaryIconography}
+
+0..100 | %{$x=Get-God;$x.SecondSphere}
