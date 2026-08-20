@@ -283,11 +283,16 @@ function Get-Locus{
 
     Param(
         [Parameter(Mandatory=$False)]
+        [ValidateSet('Lawful Good','Lawful Neutral','Lawful Evil','Neutral Good','True Neutral','Neutral Evil','Chaotic Good','Chaotic Neutral','Chaotic Evil')]
+        $Alignment,
+        [Parameter(Mandatory=$False)]
         [ValidateSet("Male","Female","Other","Hermaphroditic")]
         $Gender
     )
 
     if(($Gender -like '') -or ($Gender -like $null)){$Gender = Get-GodGender}
+
+    if(($Alignment -like '') -or ($Alignment -like $null)){$Alignment = @('Lawful Good','Lawful Neutral','Lawful Evil','Neutral Good','True Neutral','Neutral Evil','Chaotic Good','Chaotic Neutral','Chaotic Evil')[(Get-Random -Minimum 0 -Maximum 9)]}
 
     $Descriptor = ''
 
@@ -321,13 +326,47 @@ function Get-Locus{
 
     if($GodLocus -like "God"){
     
-        $GodLocus = (Get-WeightedResult $Gods).Entry.Type
+        if($Gender -eq 'Other'){$GodLocus = (Get-WeightedResult $Others).Entry.Type}else{$GodLocus = (Get-WeightedResult $Gods).Entry.Type}
 
         if($GodLocus -like "*<*"){
         
             if($Gender -eq "Male"){$GodLocus = $GodLocus.split(">")[0].Replace("<","")}
             if($Gender -eq "Female"){$GodLocus = $GodLocus.split("[")[1].Split("]")[0]}
             if(($Gender -ne "Male") -and ($Gender -ne "Female")){$GodLocus = $GodLocus.split("{")[1].Replace("}","")}
+
+        }
+
+        if($GodLocus -eq 'Outsider'){
+        
+            $Reversed = $false
+            if((Get-Random -Minimum 1 -Maximum 11) -eq 1){$Reversed = $true}
+
+            if(($Reversed -eq $true) -and ($Alignment -like "* Good")){$Descriptor = @('Redeemed','Purged','Exiled','Repentant')[(Get-Random -Minimum 0 -Maximum 4)]}
+            if(($Reversed -eq $true) -and ($Alignment -like "* Evil")){$Descriptor = @('Fallen','Corrupted','Exiled','Damned')[(Get-Random -Minimum 0 -Maximum 4)]}
+
+            if($Reversed -eq $false){
+            
+                $GodLocus = ($Outsiders | ?{$_.Alignment -eq $Alignment}).Type
+
+                $GodLocus = (Get-WeightedResult $GodLocus).Entry.Type
+                
+            }
+
+            if(($Alignment -like "* Good") -and ($Reversed -eq $true)){
+            
+                $GodLocus = ($Outsiders | ?{$_.Alignment -eq $Alignment.Replace('Good','Evil')}).Type
+
+                $GodLocus = (Get-WeightedResult $GodLocus).Entry.Type
+                
+            }
+
+            if(($Alignment -like "* Evil") -and ($Reversed -eq $true)){
+            
+                $GodLocus = ($Outsiders | ?{$_.Alignment -eq $Alignment.Replace('Evil','Good')}).Type
+
+                $GodLocus = (Get-WeightedResult $GodLocus).Entry.Type
+                
+            }
 
         }
         
@@ -369,17 +408,6 @@ function Get-God{
         }
 
     }
-
-    if($SphereSet -like "2e"){$GodSphere = $OfficialTwoCombined[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $OfficialTwoCombined))]}
-    if($SphereSet -like "3e"){$GodSphere = $AllThreeDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $AllThreeDomains))]}
-    if($SphereSet -like "4e"){$GodSphere = $FourDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FourDomains))]}
-    if($SphereSet -like "5e"){$GodSphere = $FiveAllDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FiveAllDomains))]}
-    if($SphereSet -like "All"){$GodSphere = $AllDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $AllDNDDomains))]}
-    if(($SphereSet -like "Curated") -or ($SphereSet -like $null)){$GodSphere = $UltraCuratedDNDDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $UltraCuratedDNDDomains))]}
-
-    $GodLocus = Get-Locus -Gender $Gender
-
-    if(($Humans.Type -contains $GodLocus.split(' ')[1]) -and ($Gender -eq "Other")){$Gender = "Female"}
 
     #Good/Evil
     if(($Alignment -like "") -or ($Alignment -eq $null)){
@@ -434,6 +462,14 @@ function Get-God{
         $Alignment = $DisplayAlignment
 
     }
+
+    $GodSpheres = ''
+    $GodSpheres = $UltraCuratedDNDDomains | ?{$_.Alignments -contains $Alignment}
+    $GodSphere = $GodSpheres[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $UltraCuratedDNDDomains))]
+
+    $GodLocus = Get-Locus -Gender $Gender -Alignment $Alignment
+
+    if(($Humans.Type -contains $GodLocus.split(' ')[1]) -and ($Gender -eq "Other")){$Gender = "Female"}
 
     $Incidentals = ''
     $Incidentals = Get-GodIncidentals -GodInfo $GodSphere -Gender $Gender
@@ -2093,6 +2129,9 @@ $Weapons = @(
 
 )
 
+#God of A Specific Plant
+$Plants = @()
+
 #Starstuff
 
 #endregion
@@ -2110,11 +2149,11 @@ $Humans = @(
 
     [pscustomobject]@{Type = "Saint"; Weight = 40}
     [pscustomobject]@{Type = "<Hero>[Heroine]{Hero}"; Weight = 10}
-    [pscustomobject]@{Type = "<Champion>[Championess]{Champion}"; Weight = 20}
+    [pscustomobject]@{Type = "<Champion>[Championess]{Champion}"; Weight = 10}
     [pscustomobject]@{Type = "<Prophet>[Prophetess]{Prophet}"; Weight = 10}
-    [pscustomobject]@{Type = "<Demigod>[Demigoddess]{Demigod}"; Weight = 30}
+    [pscustomobject]@{Type = "<Demigod>[Demigoddess]{Demigod}"; Weight = 20}
     [pscustomobject]@{Type = "<King>[Queen]{Monarch}"; Weight = 20}
-    [pscustomobject]@{Type = "<Emperor>[Empress]{Soverign}"; Weight = 5}
+    [pscustomobject]@{Type = "<Emperor>[Empress]{Soverign}"; Weight = 3}
     [pscustomobject]@{Type = "Messiah"; Weight = 5}
 
 )
@@ -2127,7 +2166,6 @@ $HumanDescriptors = @(
     "Departed"
     "Late"
     "Living"
-    "Lost"
     "Martyred"
     "Missing"
     "Mysterious"
@@ -2138,15 +2176,96 @@ $HumanDescriptors = @(
 
 $Gods = @(
 
-    [pscustomobject]@{Type = "<God>[Goddess]{Divinity}"; Weight = 50}
-    [pscustomobject]@{Type = "<Archon>[Archontissa]{Sovereign}"; Weight = 10}
+    [pscustomobject]@{Type = "<God>[Goddess]{Divinity}"; Weight = 60}
+    [pscustomobject]@{Type = "Outsider"; Weight = 30}
+    [pscustomobject]@{Type = "<Archon>[Archontissa]{Sovereign}"; Weight = 5}
     [pscustomobject]@{Type = "<Aeon>[Aeon]{Syzygy}"; Weight = 1}
+    [pscustomobject]@{Type = "<Titan>[Titaness]{Tiresia}"; Weight = 1}
+
+)
+
+$Outsiders = @(
+
+    [pscustomobject]@{Type = @(
+        [pscustomobject]@{Type = "Angel"; Weight = 50}
+        [pscustomobject]@{Type = "Solar"; Weight = 10}
+        [pscustomobject]@{Type = "Deva"; Weight = 10}
+        [pscustomobject]@{Type = "Ki-rin"; Weight = 5}
+        [pscustomobject]@{Type = "Unicorn"; Weight = 5}
+        [pscustomobject]@{Type = "Dragon"; Weight = 1}
+    );Alignment = "Lawful Good"}
+    [pscustomobject]@{Type = @(
+        [pscustomobject]@{Type = "Celestial"; Weight = 50}
+        [pscustomobject]@{Type = "Solar"; Weight = 10}
+        [pscustomobject]@{Type = "Arch-Lich"; Weight = 5}
+        [pscustomobject]@{Type = "Mortai"; Weight = 10}
+        [pscustomobject]@{Type = "Pyreen"; Weight = 10}
+        [pscustomobject]@{Type = "Dragon"; Weight = 1}
+    );Alignment = "Neutral Good"}
+    [pscustomobject]@{Type = @(
+        [pscustomobject]@{Type = "Guardinal"; Weight = 50}
+        [pscustomobject]@{Type = "Empyrean"; Weight = 10}
+        [pscustomobject]@{Type = "Asura"; Weight = 10}
+        [pscustomobject]@{Type = "Unicorn"; Weight = 5}
+        [pscustomobject]@{Type = "Opinicus"; Weight = 5}
+        [pscustomobject]@{Type = "Dragon"; Weight = 1}
+    );Alignment = "Chaotic Good"}
+    [pscustomobject]@{Type = @(
+        [pscustomobject]@{Type = "Inevitable"; Weight = 10}
+        [pscustomobject]@{Type = "Observer"; Weight = 10}
+        [pscustomobject]@{Type = "Vaati"; Weight = 10}
+        [pscustomobject]@{Type = "<Androsphinx>[Sphinx]{Sphinx}"; Weight = 50}
+        [pscustomobject]@{Type = "Dragon"; Weight = 1}
+    );Alignment = "Lawful Neutral"}
+    [pscustomobject]@{Type = @(
+        [pscustomobject]@{Type = "Rilmani"; Weight = 50}
+        [pscustomobject]@{Type = "Aurumach"; Weight = 10}
+        [pscustomobject]@{Type = "Dragon"; Weight = 1}
+    );Alignment = "True Neutral"}
+    [pscustomobject]@{Type = @(
+        [pscustomobject]@{Type = "Great Old One"; Weight = 40}
+        [pscustomobject]@{Type = "Outer God"; Weight = 10}
+        [pscustomobject]@{Type = "Slaad"; Weight = 5}
+        [pscustomobject]@{Type = "Protean"; Weight = 10}
+        [pscustomobject]@{Type = "Aboleth"; Weight = 5}
+        [pscustomobject]@{Type = "Beholder"; Weight = 5}
+        [pscustomobject]@{Type = "Star Spawn"; Weight = 1}
+        [pscustomobject]@{Type = "Dragon"; Weight = 1}
+    );Alignment = "Chaotic Neutral"}
+    [pscustomobject]@{Type = @(
+        [pscustomobject]@{Type = "Devil"; Weight = 50}
+        [pscustomobject]@{Type = "Archdevil"; Weight = 50}
+        [pscustomobject]@{Type = "Cambion"; Weight = 10}
+        [pscustomobject]@{Type = "Baatezu"; Weight = 10}
+        [pscustomobject]@{Type = "Aboleth"; Weight = 5}
+        [pscustomobject]@{Type = "Beholder"; Weight = 5}
+        [pscustomobject]@{Type = "Neogi"; Weight = 5}
+        [pscustomobject]@{Type = "Mind Flayer"; Weight = 5}
+        [pscustomobject]@{Type = "Lich"; Weight = 5}
+        [pscustomobject]@{Type = "Dragon"; Weight = 5}
+    );Alignment = "Lawful Evil"}
+    [pscustomobject]@{Type = @(
+        [pscustomobject]@{Type = "Fiend"; Weight = 50}
+        [pscustomobject]@{Type = "Yugoloth"; Weight = 10}
+        [pscustomobject]@{Type = "Dracolich"; Weight = 1}
+        [pscustomobject]@{Type = "Dragon"; Weight = 1}
+    );Alignment = "Neutral Evil"}
+    [pscustomobject]@{Type = @(
+        [pscustomobject]@{Type = "Demon"; Weight = 50}
+        [pscustomobject]@{Type = "Obyrith"; Weight = 5}
+        [pscustomobject]@{Type = "Loumara"; Weight = 5}
+        [pscustomobject]@{Type = "Dragon"; Weight = 1}
+    );Alignment = "Chaotic Evil"}
+
+)
+
+$Others = @(
+    
+    [pscustomobject]@{Type = "Avatar"; Weight = 1}
+    [pscustomobject]@{Type = "Spirit"; Weight = 1}
     [pscustomobject]@{Type = "The Embodiment"; Weight = 1}
     [pscustomobject]@{Type = "Aspect"; Weight = 1}
     [pscustomobject]@{Type = "Primordial"; Weight = 1}
-    [pscustomobject]@{Type = "<Titan>[Titaness]{Tiresia}"; Weight = 1}
-    [pscustomobject]@{Type = "Avatar"; Weight = 1}
-    [pscustomobject]@{Type = "Spirit"; Weight = 1}
 
 )
 
