@@ -2453,5 +2453,6 @@ Friend of
 #Star name generation function
 #Dragon type/color table
 #Revisit human descriptors - add logic?
+#Are vices working?
 
 $x=Get-God;$x.personality;$x.Gender;$x.Description;$x.Incidentals
