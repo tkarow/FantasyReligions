@@ -398,8 +398,13 @@ function Get-God{
         $SphereSet,
         [Parameter(Mandatory=$False)]
         [ValidateSet("Male","Female","Other","Hermaphroditic")]
-        $Gender
+        $Gender,
+        [Parameter(Mandatory=$False)]
+        [bool]
+        $TwoDomains
     )
+
+    if(($TwoDomains -like '') -or ($TwoDomains -eq $null)){if((Get-Random -Minimum 1 -Maximum 11) -eq 1){$TwoDomains = $true}}
 
     if(($Gender -like '') -or ($Gender -like $null)){$Gender = Get-GodGender}
 
@@ -475,9 +480,25 @@ function Get-God{
     $GodSpheres = $UltraCuratedDNDDomains | ?{$_.Alignments -contains $Alignment}
     $GodSphere = $GodSpheres[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $UltraCuratedDNDDomains))]
 
+    #If the god has an Openness to experience score greater than 1 and there is only one domain, this grants a second chance to get a second domain of 1 in 5
+    if(($TwoDomains -eq $false) -and ($GodPersonality.'Openness to experience' -gt 0)){
+    
+        if((Get-Random -Minimum 1 -Maximum 6) -eq 1){$TwoDomains = $true}
+        
+    }
+
     $GodLocus = Get-Locus -Gender $Gender -Alignment $Alignment
 
     if(($Humans.Type -contains $GodLocus.split(' ')[1]) -and ($Gender -eq "Other")){$Gender = "Female"}
+
+    $EnemyTitle = ''
+    if($GodPersonality.Agreeableness -lt 0){$EnemyTitle = $OppositionTitles[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $OppositionTitles))]}
+
+    $PatronTitle = ''
+    if($GodPersonality.Extraversion -gt 0){$PatronTitle = $PatronTitles[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $PatronTitles))]}
+
+    $Title = ''
+    if($GodPersonality.Conscientiousness -gt 0){if((Get-Random -Minimum 1 -Maximum 3) -eq 1){$Tile="Before"}else{$Title="After"}}
 
     $Incidentals = ''
     $Incidentals = Get-GodIncidentals -GodInfo $GodSphere -Gender $Gender
@@ -485,23 +506,30 @@ function Get-God{
     $Name = ''
     $Name = Get-GodName -GodInfo $GodSphere -Gender $Gender
 
+    if($TwoDomains -eq $true){
+    
+        $SecondGodSpheres = ''
+        $SecondGodSpheres = $UltraCuratedDNDDomains | ?{$_.Alignments -contains $Alignment} | ?{$_.Domain -notlike "$($Incidentals.RootDomain)"}
+        $SecondGodSphere = $SecondGodSpheres[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $UltraCuratedDNDDomains))]
+
+        $SecondIncidentals = ''
+        $SecondIncidentals = Get-GodIncidentals -GodInfo $SecondGodSphere -Gender $Gender
+
+    }
+
     [pscustomobject]@{
     
         Personality = $GodPersonality
         Sphere = $GodSphere
+        RootDomain = $Incidentals.RootDomain
+        Incidentals = $Incidentals
+        SecondSphere = $SecondGodSphere
+        SecondRootDomain = $SecondIncidentals.RootDomain
+        SecondIncidentals = $SecondIncidentals
         Gender = $Gender
         Locus = $GodLocus
-        Incidentals = $Incidentals
         Name = $Name
-        RootDomain = $Incidentals.RootDomain
-        Description = "$($Name), $($GodLocus) of $($Incidentals.Domain.replace('The','the'))$(if($Incidentals.RootDomain -ne $Incidentals.Domain){(" ($($Incidentals.RootDomain.replace('The','the')))")})"
-        #Description = "($($Gender)) $($GodLocus) of $($Incidentals.Domain) ($($GodSphere.Domain))"
-        #Iconography = $Incidentals.Iconography
-        #SecondaryIconography = $Incidentals.SecondaryIconography
-        #Domain = $Incidentals.Domain
-        #Title = $Incidentals.Title
-        #Opposites = $Incidentals.Opposites
-        #Patronage =$Incidentals.Patrons
+        Description = "$(if($Title -eq "Before"){"The $($Incidentals.Title) "})$($Name)$(if($Title -eq "After"){" the $($Incidentals.Title),"}else{","}) $($GodPersonality.Alignment) $($GodLocus) of $($Incidentals.Domain.replace('The','the'))$(if($Incidentals.RootDomain -ne $Incidentals.Domain){(" ($($Incidentals.RootDomain.replace('The','the')))")})$(if(($SecondIncidentals -ne '') -and ($SecondIncidentals -ne $null)){" and $($SecondIncidentals.Domain.replace('The','the'))"})$(if($SecondIncidentals.RootDomain -ne $SecondIncidentals.Domain){(" ($($SecondIncidentals.RootDomain.replace('The','the')))")})$(if(($EnemyTitle -ne '') -and ($EnemyTitle -ne $null)){", $($EnemyTitle.toLower()) of $($Incidentals.Opposites.toLower())"})$(if(($PatronTitle -ne '') -and ($PatronTitle -ne $null)){", $($PatronTitle.toLower()) of $($Incidentals.Patrons.toLower())"})"
     
     }
 
@@ -1977,7 +2005,7 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Glory";Iconography=@("A banner","The Sun","A sword");AlternateDomains=@("Victory","Righteousness","Majesty","Triumph","Vindication","Deliverance","Radiance","Light");Title=@("Paladin","Crusader","<Champion>[Championess]{Champion}","Avenger","Paragon");Opposites=@("Subversion","Corruption","Tyranny");Alignments=@("Lawful Good","Neutral Good","Chaotic Good");Patronage=@("The Righteous","The Good");Syllables=@("Dox","Agall","Glor","Dec")}
 	[pscustomobject]@{Domain="Protection";Iconography=@("A shield","Armor","A castle","A key");AlternateDomains=@("Refuge","Safety","Shelter");Title=@("Aegis","Bulwark","Protector","Vanguard");Opposites=@("Invasion","Marauders","Chaos");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","Chaotic Good");Patronage=@("The Weak","The Feeble","The Fearful","The Vulnerable");Syllables=@("Scut","Clyp","Aspid","Prost")}
     [pscustomobject]@{Domain="the Afterlife";Iconography=@("An inverted skull","An ankh");AlternateDomains=@("The Soul","The Hereafter","Otherworld");Title=@("Psychopomp","Soul Collector","<Shepherd>[Shepherdess]{Shepherd}");Opposites=@("Mortality","Physicality");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("The living","All souls");Syllables=@("Cael","Aur","Our","Parad")}
-	[pscustomobject]@{Domain="Healing";Iconography=@("Mortar and pestle","A serpent-entwined rod","A winged rod entwined by two serpents","A leaf","Flowers","The Svefnthorn");AlternateDomains=@("Restoration","Invogoration","Renewal");Title=@("Physician","Chirurgeon","Leech","<Wiseman>[Wisewoman]{Wise One}");Opposites=@("Sickness","Decay","Plague");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("The living","The dead","All souls");Syllables=@("Farm","Therap","Sanar","San")}
+	[pscustomobject]@{Domain="Healing";Iconography=@("Mortar and pestle","A serpent-entwined rod","A winged rod entwined by two serpents","A leaf","Flowers","The Svefnthorn");AlternateDomains=@("Restoration","Invogoration","Renewal");Title=@("Physician","Chirurgeon","Leech","<Wiseman>[Wisewoman]{Wise One}");Opposites=@("Sickness","Decay","Plague");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good","Chaotic Neutral");Patronage=@("The living","The dead","All souls");Syllables=@("Farm","Therap","Sanar","San")}
 	[pscustomobject]@{Domain="the Hunt";Iconography=@("A dog","A horn","A horseman","A falcon");AlternateDomains=@("Nobility","The Chase");Title=@("<Hunter>[Huntress]{Hunter}","<Warden>[Wardeness]{Warden}","Forester","Marshal");Opposites=@("Poacher","Trespasser","Game");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Hunters","Noblemen","Wardens","Foresters");Syllables=@("Venar","Perag","Kyn","Zit")}
 	[pscustomobject]@{Domain="Insight";Iconography=@("An eye","Glass","Many eyes","A tower","A torch");AlternateDomains=@("Observation","Vigilance","Intuition");Title=@("<Watchman>[Watchwoman]{Watcher}","Watcher","Sentinel");Opposites=@("The Blind","Obliviousness","Ignorance","Carelessness","The Lax","Negligence");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil");Patronage=@("Watchmen","Alarms","Guardians","Keepers","Shepherds","Sentinels");Syllables=@("Orat","Oxyder","Persp","Sagac")}
 	[pscustomobject]@{Domain="Inspiration";Iconography=@("A quill","A tome","A third eye");AlternateDomains=@("Motivation","Vision","Creativity");Title=@("Muse","Impetus");Opposites=@("Dullards","Forgetfulness","Rejection");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Artists","Creators","Inventors","Thinkers","Tinkerers","Writers","Musicians","Poets");Syllables=@("spir","Afflat","Empnef","Oist")}
@@ -2006,7 +2034,7 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Writing";Iconography=@("Glyphs/Runes/Sigils","A tome","A written prayer");AlternateDomains=@("Sigils/Glyphs/Runes");Title=@("<Scribe>[Scriptrix]{Scribe}","<Runemaster>[Runemistress]{Runmaker}","Runecarver","Glyph-binder","Sigil-crafter");Opposites=@("Censors","Erasure");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil");Patronage=@("Scribes","Literacy","Records","Scriveners");Syllables=@("Riben","Stil","Graps","Syng")}
     [pscustomobject]@{Domain="The Seasons";Iconography=@("Stars","A wheel","A sickle");AlternateDomains=@("Winter","Spring","Summer","Autumn");Title=@("Keeper","Overseer","Chronologer","Changer");Opposites=@("Stasis","Stagnation");Alignments=@("Lawful Neutral","True Neutral","Chaotic Neutral");Patronage=@("Farmers","The living","Nature");Syllables=@("Zon","Poch","Temp","Hiem")}
 	[pscustomobject]@{Domain="Skill";Iconography=@("A keystone","Artisan's tools");AlternateDomains=@("Ability","Mastery","Perfection","Crafting");Title=@("<Master>[Mistress]{Master}","<Maestro>[Maestra]{Maestro}","Adept","Paragon");Opposites=@("Clumsiness","Ineptitude","Laziness","Sloth","Apathy","Amateurs");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Masters","Capability","Competence","Artisans","Pride","Expertise","<Craftsmen>[Craftswomen]{Craftsmen}");Syllables=@("Pert","Ars","Epidex","Epiti")}
-	[pscustomobject]@{Domain="Solidarity";Iconography=@("The fasces","Joined hands","Two horsemen on one horse");AlternateDomains=@("Civilization","Community","Unity","Unification");Title=@("Unifier","Leader","Nexus");Opposites=@("Chaos","Division","Separation","Rebellion","Dissention");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil");Patronage=@("Allies","Members","Agents");Syllables=@("Allil","Ster","Concor","Simit")}
+	[pscustomobject]@{Domain="Solidarity";Iconography=@("The fasces","Joined hands","Two horsemen on one horse");AlternateDomains=@("Civilization","Community","Unity","Unification");Title=@("Unifier","Leader","Nexus");Opposites=@("Chaos","Division","Separation","Rebellion","Dissention");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil");Patronage=@("Allies","The Circle","Community");Syllables=@("Allil","Ster","Concor","Simit")}
 	[pscustomobject]@{Domain="Stealth";Iconography=@("A fox","A cat","An owl","A cloak","A spider");AlternateDomains=@("Secrecy","Concealment","Cunning","Espionage");Title=@("The Unseen","The Shadow","The Silhouette","Phantom");Opposites=@("Exposure","Obviousness","Quarry");Alignments=@("Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Spies","Thieves","Watchmen","Stalkers","Hunters");Syllables=@("Furtim","Occul","Klop","Kek")}
 	[pscustomobject]@{Domain="Strength";Iconography=@("An ox","A lion","A dragon","A castle");AlternateDomains=@("Might","Fortitude","Mettle","Tenacity");Title=@("The Mighty","The Powerful","The Colossal","The Supreme");Opposites=@("Weakness","The Feeble","Helplessness","The Tiny");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("The tenacious","The gritty","The steely");Syllables=@("Dyn","Rom","Robur","Vis")}
 	[pscustomobject]@{Domain="Summoning";Iconography=@("A pentagram","A magic circle");AlternateDomains=@("Binding","Calling");Title=@("Summoner","<Master>[Mistress]{Keeper}","Imprisoner");Opposites=@("Freedom","Agency");Alignments=@("Lawful Neutral","Lawful Evil","Neutral Evil","Chaotic Neutral","Chaotic Evil");Patronage=@("Summoners","Power seekers");Syllables=@("Evoc","Excit","Klis","Zitis")}
@@ -2210,8 +2238,15 @@ $Outsiders = @(
         [pscustomobject]@{Type = "Pyreen"; Weight = 10}
     );Alignment = "Neutral Good"}
     [pscustomobject]@{Type = @(
-        [pscustomobject]@{Type = "Guardinal"; Weight = 50}
-        [pscustomobject]@{Type = "Empyrean"; Weight = 10}
+        [pscustomobject]@{Type = "Guardinal"; Weight = 10}
+        [pscustomobject]@{Type = "Avoral"; Weight = 5}
+        [pscustomobject]@{Type = "Cervidal"; Weight = 5}
+        [pscustomobject]@{Type = "Equinal"; Weight = 5}
+        [pscustomobject]@{Type = "Leonal"; Weight = 5}
+        [pscustomobject]@{Type = "Lupinal"; Weight = 5}
+        [pscustomobject]@{Type = "Musteval"; Weight = 5}
+        [pscustomobject]@{Type = "Ursinal"; Weight = 5}
+        [pscustomobject]@{Type = "Empyrean"; Weight = 50}
         [pscustomobject]@{Type = "Asura"; Weight = 10}
         [pscustomobject]@{Type = "Unicorn"; Weight = 5}
         [pscustomobject]@{Type = "Opinicus"; Weight = 5}
@@ -2266,6 +2301,24 @@ $Others = @(
     [pscustomobject]@{Type = "The Embodiment"; Weight = 1}
     [pscustomobject]@{Type = "Aspect"; Weight = 1}
     [pscustomobject]@{Type = "Primordial"; Weight = 1}
+
+)
+
+$OppositionTitles = @(
+
+    "Enemy"
+    "Foe"
+    "Adversary"
+    "Opponent"
+
+)
+
+$PatronTitles = @(
+
+    "Defender"
+    "Guardian"
+    "Protector"
+    "Keeper"
 
 )
 
@@ -2444,15 +2497,12 @@ Friend of
 
 #>
 
-#Secondary domain
 #Curate secondary iconography
-#Title based on personality traits - e.g. low agreeableness means opposed to opposite or "Title Name"/"Name the Title" for extraversion, etc.
 #Material(s) for holy symbol?
 #Improve name generation
 #Curved rolls for appearance (e.g. Sickly<-->Normal<-->Muscular)
 #Star name generation function
 #Dragon type/color table
 #Revisit human descriptors - add logic?
-#Are vices working?
 
-$x=Get-God;$x.personality;$x.Gender;$x.Description;$x.Incidentals
+$x=Get-God;$x.personality;$x.Gender;$x.Description;$x.Incidentals.Iconography;$x.Incidentals.SecondaryIconography
