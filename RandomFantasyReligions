@@ -496,7 +496,7 @@ function Get-God{
     if($GodPersonality.Agreeableness -lt 0){$EnemyTitle = $OppositionTitles[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $OppositionTitles))]}
 
     $PatronTitle = ''
-    if(($GodPersonality.Extraversion + $GodPersonality.'Honesty-humilty') -gt 0){$PatronTitle = $PatronTitles[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $PatronTitles))]}
+    if(($GodPersonality.Extraversion + $GodPersonality.'Honesty-humility') -gt 0){$PatronTitle = $PatronTitles[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $PatronTitles))]}
 
     $Title = ''
     if($GodPersonality.Conscientiousness -gt 0){if((Get-Random -Minimum 1 -Maximum 3) -eq 1){$Tile="Before"}else{$Title="After"}}
