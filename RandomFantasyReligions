@@ -2227,12 +2227,12 @@ $Outsiders = @(
         [pscustomobject]@{Type = "Aurumach"; Weight = 10}
     );Alignment = "True Neutral"}
     [pscustomobject]@{Type = @(
-        [pscustomobject]@{Type = "Great Old One"; Weight = 40}
-        [pscustomobject]@{Type = "Outer God"; Weight = 10}
-        [pscustomobject]@{Type = "Slaad"; Weight = 5}
+        [pscustomobject]@{Type = "Great Old One"; Weight = 10}
+        [pscustomobject]@{Type = "Outer God"; Weight = 30}
+        [pscustomobject]@{Type = "Slaad"; Weight = 1}
         [pscustomobject]@{Type = "Protean"; Weight = 10}
-        [pscustomobject]@{Type = "Aboleth"; Weight = 5}
-        [pscustomobject]@{Type = "Beholder"; Weight = 5}
+        [pscustomobject]@{Type = "Aboleth"; Weight = 3}
+        [pscustomobject]@{Type = "Beholder"; Weight = 3}
         [pscustomobject]@{Type = "Star Spawn"; Weight = 1}
     );Alignment = "Chaotic Neutral"}
     [pscustomobject]@{Type = @(
@@ -2443,5 +2443,15 @@ Prophet
 Friend of 
 
 #>
+
+#Secondary domain
+#Curate secondary iconography
+#Title based on personality traits - e.g. low agreeableness means opposed to opposite or "Title Name"/"Name the Title" for extraversion, etc.
+#Material(s) for holy symbol?
+#Improve name generation
+#Curved rolls for appearance (e.g. Sickly<-->Normal<-->Muscular)
+#Star name generation function
+#Dragon type/color table
+#Revisit human descriptors - add logic?
 
 $x=Get-God;$x.personality;$x.Gender;$x.Description;$x.Incidentals
