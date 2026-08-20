@@ -368,6 +368,14 @@ function Get-Locus{
                 
             }
 
+            if($GodLocus -like "*<*"){
+        
+                if($Gender -eq "Male"){$GodLocus = $GodLocus.split(">")[0].Replace("<","")}
+                if($Gender -eq "Female"){$GodLocus = $GodLocus.split("[")[1].Split("]")[0]}
+                if(($Gender -ne "Male") -and ($Gender -ne "Female")){$GodLocus = $GodLocus.split("{")[1].Replace("}","")}
+
+            }
+
         }
         
     }
@@ -2142,6 +2150,7 @@ $Locus = @(
 
     [pscustomobject]@{Type = "Human"; Weight = 30}
     [pscustomobject]@{Type = "God"; Weight = 70}
+    [pscustomobject]@{Type = "Dragon"; Weight = 1}
     
 )
 
@@ -2192,7 +2201,6 @@ $Outsiders = @(
         [pscustomobject]@{Type = "Deva"; Weight = 10}
         [pscustomobject]@{Type = "Ki-rin"; Weight = 5}
         [pscustomobject]@{Type = "Unicorn"; Weight = 5}
-        [pscustomobject]@{Type = "Dragon"; Weight = 1}
     );Alignment = "Lawful Good"}
     [pscustomobject]@{Type = @(
         [pscustomobject]@{Type = "Celestial"; Weight = 50}
@@ -2200,7 +2208,6 @@ $Outsiders = @(
         [pscustomobject]@{Type = "Arch-Lich"; Weight = 5}
         [pscustomobject]@{Type = "Mortai"; Weight = 10}
         [pscustomobject]@{Type = "Pyreen"; Weight = 10}
-        [pscustomobject]@{Type = "Dragon"; Weight = 1}
     );Alignment = "Neutral Good"}
     [pscustomobject]@{Type = @(
         [pscustomobject]@{Type = "Guardinal"; Weight = 50}
@@ -2208,19 +2215,16 @@ $Outsiders = @(
         [pscustomobject]@{Type = "Asura"; Weight = 10}
         [pscustomobject]@{Type = "Unicorn"; Weight = 5}
         [pscustomobject]@{Type = "Opinicus"; Weight = 5}
-        [pscustomobject]@{Type = "Dragon"; Weight = 1}
     );Alignment = "Chaotic Good"}
     [pscustomobject]@{Type = @(
         [pscustomobject]@{Type = "Inevitable"; Weight = 10}
         [pscustomobject]@{Type = "Observer"; Weight = 10}
         [pscustomobject]@{Type = "Vaati"; Weight = 10}
         [pscustomobject]@{Type = "<Androsphinx>[Sphinx]{Sphinx}"; Weight = 50}
-        [pscustomobject]@{Type = "Dragon"; Weight = 1}
     );Alignment = "Lawful Neutral"}
     [pscustomobject]@{Type = @(
         [pscustomobject]@{Type = "Rilmani"; Weight = 50}
         [pscustomobject]@{Type = "Aurumach"; Weight = 10}
-        [pscustomobject]@{Type = "Dragon"; Weight = 1}
     );Alignment = "True Neutral"}
     [pscustomobject]@{Type = @(
         [pscustomobject]@{Type = "Great Old One"; Weight = 40}
@@ -2230,7 +2234,6 @@ $Outsiders = @(
         [pscustomobject]@{Type = "Aboleth"; Weight = 5}
         [pscustomobject]@{Type = "Beholder"; Weight = 5}
         [pscustomobject]@{Type = "Star Spawn"; Weight = 1}
-        [pscustomobject]@{Type = "Dragon"; Weight = 1}
     );Alignment = "Chaotic Neutral"}
     [pscustomobject]@{Type = @(
         [pscustomobject]@{Type = "Devil"; Weight = 50}
@@ -2242,19 +2245,16 @@ $Outsiders = @(
         [pscustomobject]@{Type = "Neogi"; Weight = 5}
         [pscustomobject]@{Type = "Mind Flayer"; Weight = 5}
         [pscustomobject]@{Type = "Lich"; Weight = 5}
-        [pscustomobject]@{Type = "Dragon"; Weight = 5}
     );Alignment = "Lawful Evil"}
     [pscustomobject]@{Type = @(
         [pscustomobject]@{Type = "Fiend"; Weight = 50}
         [pscustomobject]@{Type = "Yugoloth"; Weight = 10}
         [pscustomobject]@{Type = "Dracolich"; Weight = 1}
-        [pscustomobject]@{Type = "Dragon"; Weight = 1}
     );Alignment = "Neutral Evil"}
     [pscustomobject]@{Type = @(
         [pscustomobject]@{Type = "Demon"; Weight = 50}
         [pscustomobject]@{Type = "Obyrith"; Weight = 5}
         [pscustomobject]@{Type = "Loumara"; Weight = 5}
-        [pscustomobject]@{Type = "Dragon"; Weight = 1}
     );Alignment = "Chaotic Evil"}
 
 )
