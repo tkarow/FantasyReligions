@@ -633,9 +633,9 @@ function Get-GodIncidentals{
         $AlternateDomains = ''
         $AlternateDomains = $GodInfo.Specifics
 
-        if($SpecificDomains.Domain -eq 'A Specific Star'){$AlternateDomains = "$(Get-StarName)"}
-
         $DomainName = $AlternateDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $AlternateDomains))]
+
+        if($SpecificDomains.Domain -eq 'A Specific Star'){$AlternateDomains = "$(Get-StarName)"}
 
     }
 
@@ -2598,7 +2598,6 @@ Friend of
 #Material(s) for holy symbol?
 #Improve name generation
 #Curved rolls for appearance (e.g. Sickly<-->Normal<-->Muscular)
-#Star name generation function
 #Dragon type/color table
 #Revisit human descriptors - add logic?
 
