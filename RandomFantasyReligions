@@ -633,6 +633,8 @@ function Get-GodIncidentals{
         $AlternateDomains = ''
         $AlternateDomains = $GodInfo.Specifics
 
+        if($SpecificDomains.Domain -eq 'A Specific Star'){$AlternateDomains = "$(Get-StarName)"}
+
         $DomainName = $AlternateDomains[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $AlternateDomains))]
 
     }
@@ -1143,6 +1145,39 @@ function Get-GodName{
 
     $Name = $Name.ToLower()
     $Name = $Name.Substring(0,1).ToUpper() + $Name.Substring(1)
+
+    $Name
+
+}
+
+function Get-StarName{
+
+    $Name = ''
+
+    $FirstPart = ''
+    $FirstPart = $StarFirstParts[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $StarFirstParts))]
+
+    $SecondPart = ''
+    $SecondPart = $StarSecondParts[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $StarSecondParts))]
+
+    $ThirdPart = ''
+    if((Get-Random -Minimum 1 -Maximum 6) -eq 1){$ThirdPart = " of $($StarThirdParts[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $StarThirdParts))])"}
+    if(($ThirdPart -eq '') -or ($ThirdPart -eq $null)){if((Get-Random -Minimum 1 -Maximum 11) -eq 1){$Name = "The $($SecondPart) of $(Get-GodName -GodInfo ($SpecificDomains | ?{$_.Domain -eq 'A Specific Star'}))"}}
+
+    if(($Name -like '') -or ($Name -eq $null)){
+
+        $Name = ''
+        $Name = "$($FirstPart) $($SecondPart)"
+        if($Name -notlike "* of the *"){$Name = "$($FirstPart) $($SecondPart)$($ThirdPart)"}
+
+        $Name = $Name.Replace('of the of the','of the')
+        $Name = $Name.Replace('of the Wisdom','of Wisdom')
+        $Name = $Name.Replace('of the Doom','of Doom')
+        $Name = $Name.Replace(' of of ',' of ')
+        if($Name -eq 'The Arrow of the Lance'){$Name = "$(Get-GodName -GodInfo ($SpecificDomains | ?{$_.Domain -eq 'A Specific Star'}))'s Lance"}
+        if(($SecondPart -like "Wisdom") -and ($Name -like "The*")){$Name = "$($Name.Substring(4))"}
+
+    }
 
     $Name
 
@@ -1986,7 +2021,7 @@ $UltraCuratedDNDDomains = @(
     [pscustomobject]@{Domain="Fertility";Iconography=@("Stylized anatomy","A flower","An egg");AlternateDomains=@("New Life","Birth");Title=@("Lifegiver","<Father>[Mother]{Parent}");Opposites=@("Death","Decay","Disease");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good","Chaotic Neutral");Patronage=@("Children","<Fathers>[Mothers]{Parents}","Family");Syllables=@("Fer","Fert","Eff","Karp")}
 	[pscustomobject]@{Domain="Creation";Iconography=@("A serpent coiled around an egg","A tree");AlternateDomains=@("Genesis","Manifestation");Title=@("Creator","Cause","Source");Opposites=@("Destruction","Annihilation");Alignments=@("True Neutral","Chaotic Neutral","Chaotic Good","Chaotic Evil","Lawful Good","Lawful Evil","Lawful Neutral");Patronage=@("All");Syllables=@("Dim","Plas","Gen","Plas")}
     [pscustomobject]@{Domain="Speed";Iconography=@("A hare","Wings","A line","A sprinter");AlternateDomains=@("Quickness","Celerity","Alacrity");Title=@("<Herald>[Heraldess]{Harbinger}","Harbinger","Comet","Charger");Opposites=@("Torpor","Laziness","Languor","Sleep");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Messengers","Heralds","Harbingers","Travelers");Syllables=@("Cel","Vel","Grig","Tach")}
-	[pscustomobject]@{Domain="Weather";Iconography=@("Clouds","The Sun and the Moon","Stars","Rain drops","A lightning bolt");AlternateDomains=@("The Heavens","The Sky");Title=@("Chronologist","Chronicler");Opposites=@("The Depths","The Abyss");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Meteorologists","Skygazers");Syllables=@("Kair","Aer","Temp","Coel")}
+	[pscustomobject]@{Domain="Weather";Iconography=@("Clouds","The Sun and the Moon","Stars","Rain drops","A lightning bolt");AlternateDomains=@("The Heavens","The Sky");Title=@("Chronologist","Chronicler");Opposites=@("The Depths","The Abyss");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Oracles","Skygazers");Syllables=@("Kair","Aer","Temp","Coel")}
 	[pscustomobject]@{Domain="Chaos";Iconography=@("Arrows pointing away from each other","Squiggly lines");AlternateDomains=@("Discord","Pandemonium","Tumult","Disorder","Change","Havok","Mayhem","Turmoil","Entropy");Title=@("Upsetter","Changer","Disrupter","Instigator","Agitator");Opposites=@("Order","Plans","Tradition");Alignments=@("Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Changers","Disruptors","Troublemakers","Vandals","Anarchists");Syllables=@("Conf","Cong","Sync","Berd")}
 	[pscustomobject]@{Domain="the Cold";Iconography=@("A snowflake","A pine tree");AlternateDomains=@("Frost","Ice","Winter");Title=@("Hyperborean","Primordial");Opposites=@("The Flame","Summer","Heat");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Furriers","Woodcutters","Colliers");Syllables=@("Kair","Krai","Frig","Gel")}
 	[pscustomobject]@{Domain="Civilization";Iconography="A temple","A tome","A crown","A scepter","A castle";AlternateDomains=@("Kingship","Law","Rule");Title=@("<King>[Queen]{Monarch}","<Emperor>[Empress]{Sovereign}","Ruler");Opposites=@("Anarchy","Chaos","Lawlessness","Barbarity");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil");Patronage=@("The Civilized","Kings","Nobility");Syllables=@("Cul","Hum","Pol","Ek")}
@@ -2018,7 +2053,7 @@ $UltraCuratedDNDDomains = @(
 	[pscustomobject]@{Domain="Glory";Iconography=@("A banner","The Sun","A sword");AlternateDomains=@("Victory","Righteousness","Majesty","Triumph","Vindication","Deliverance","Radiance","Light");Title=@("Paladin","Crusader","<Champion>[Championess]{Champion}","Avenger","Paragon");Opposites=@("Subversion","Corruption","Tyranny");Alignments=@("Lawful Good","Neutral Good","Chaotic Good");Patronage=@("The Righteous","The Good");Syllables=@("Dox","Agall","Glor","Dec")}
 	[pscustomobject]@{Domain="Protection";Iconography=@("A shield","Armor","A castle","A key");AlternateDomains=@("Refuge","Safety","Shelter");Title=@("Aegis","Bulwark","Protector","Vanguard");Opposites=@("Invasion","Marauders","Chaos");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","Chaotic Good");Patronage=@("The Weak","The Feeble","The Fearful","The Vulnerable");Syllables=@("Scut","Clyp","Aspid","Prost")}
     [pscustomobject]@{Domain="the Afterlife";Iconography=@("An inverted skull","An ankh");AlternateDomains=@("The Soul","The Hereafter","Otherworld");Title=@("Psychopomp","Soul Collector","<Shepherd>[Shepherdess]{Shepherd}");Opposites=@("Mortality","Physicality");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("The living","All souls");Syllables=@("Cael","Aur","Our","Parad")}
-	[pscustomobject]@{Domain="Healing";Iconography=@("Mortar and pestle","A serpent-entwined rod","A winged rod entwined by two serpents","A leaf","Flowers","The Svefnthorn");AlternateDomains=@("Restoration","Invogoration","Renewal");Title=@("Physician","Chirurgeon","Leech","<Wiseman>[Wisewoman]{Wise One}");Opposites=@("Sickness","Decay","Plague");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good","Chaotic Neutral");Patronage=@("The living","The dead","All souls");Syllables=@("Farm","Therap","Sanar","San")}
+	[pscustomobject]@{Domain="Healing";Iconography=@("Mortar and pestle","A serpent-entwined rod","A winged rod entwined by two serpents","A leaf","Flowers","The Svefnthorn");AlternateDomains=@("Restoration","Invogoration","Renewal");Title=@("Physician","Chirurgeon","Leech","<Wise Man>[Wise Woman]{Wise One}");Opposites=@("Sickness","Decay","Plague");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Chaotic Good","Chaotic Neutral");Patronage=@("The living","The dead","All souls");Syllables=@("Farm","Therap","Sanar","San")}
 	[pscustomobject]@{Domain="the Hunt";Iconography=@("A dog","A horn","A horseman","A falcon");AlternateDomains=@("Nobility","The Chase");Title=@("<Hunter>[Huntress]{Hunter}","<Warden>[Wardeness]{Warden}","Forester","Marshal");Opposites=@("Poacher","Trespasser","Game");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Hunters","Noblemen","Wardens","Foresters");Syllables=@("Venar","Perag","Kyn","Zit")}
 	[pscustomobject]@{Domain="Insight";Iconography=@("An eye","Glass","Many eyes","A tower","A torch");AlternateDomains=@("Observation","Vigilance","Intuition");Title=@("<Watchman>[Watchwoman]{Watcher}","Watcher","Sentinel");Opposites=@("The Blind","Obliviousness","Ignorance","Carelessness","The Lax","Negligence");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil");Patronage=@("Watchmen","Alarms","Guardians","Keepers","Shepherds","Sentinels");Syllables=@("Orat","Oxyder","Persp","Sagac")}
 	[pscustomobject]@{Domain="Inspiration";Iconography=@("A quill","A tome","A third eye");AlternateDomains=@("Motivation","Vision","Creativity");Title=@("Muse","Impetus");Opposites=@("Dullards","Forgetfulness","Rejection");Alignments=@("Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","True Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil");Patronage=@("Artists","Creators","Inventors","Thinkers","Tinkerers","Writers","Musicians","Poets");Syllables=@("spir","Afflat","Empnef","Oist")}
@@ -2182,6 +2217,55 @@ $Weapons = @(
 $Plants = @()
 
 #Starstuff
+$StarFirstParts = @(
+
+    "The Great"
+    "Heaven's"
+    "The Eye of the"
+    "The Arrow of the"
+    "Fate's"
+    "The Bright"
+    "The Blue"
+    "The Faint"
+    "The Blinking"
+    "The Red"
+    "The Sunken"
+    "The Flying"
+    "The Mother of the"
+    "Tear of the"
+    "The Wildflower of the"
+    "The Wandering"
+    "The Approaching"
+
+)
+
+$StarSecondParts = @(
+
+    "Strand"
+    "Stinger"
+    "Wisdom"
+    "Godhead"
+    "Talon"
+    "Beacon"
+    "Wing"
+    "Crook"
+    "Father"
+    "Spindle"
+    "Diamond"
+    "Topaz"
+    "Lance"
+    "Doom"
+    "Arrow"
+    "Spearhead"
+
+)
+
+$StarThirdParts = @(
+
+    "of the North"
+    "of the South"
+
+)
 
 #endregion
 
