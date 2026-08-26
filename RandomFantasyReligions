@@ -538,6 +538,7 @@ function Get-God{
 
     $Name = ''
     $Name = Get-GodName -GodInfo $GodSphere -Gender $Gender
+    if(($GodLocus -like "*dragon*") -or ($GodLocus -like "*wyrm*")){$Name = Get-DragonName}
 
     if($TwoDomains -eq $true){
     
@@ -1205,30 +1206,40 @@ function Get-StarName{
 
 function Get-DragonName{
 
-    $FifthEditionNameElements = @(
-    
-        @("Aeros","Agha","Akkan","Alae")
-        @("Andra","Andusk","Angkar","Aradace")
-        @("Arauth","Arveia","Aryz","Atar")
-        @("Auntyr","Auth","Bahr","Bala")
-        @("Calaun","Ciym","Claug","Daerev")
-        @("Dalagh","Durg","Eir","Elden")
-        @("Endar","Ethar","Fel","Galad")
-        @("Gaul","Golos","Guth","Ingeir")
-        @("Ix","Iyliam","Jhar","Kerin")
-        @("Lham","Lothor","Malae","Marun")
-        @("Mere","Miir","Morn","Nabal")
-        @("Nur","Nym","Oloth","Ontor")
-        @("Othim","Palar","Raali","Ragoth")
-        @("Rith","Rysear","Saryx","Ser")
-        @("Skad","Surr","Thal","Thanach")
-        @("Thoth","Thrax","Thriin","Tostyn")
-        @("Tratain","Treori","Turace","Ualin")
-        @("Umer","Uryte","Uxin","Vaer")
-        @("Vala","Valos","Vinc","Voar")
-        @("Vureem","Waur","Zundae","Zyreph")
-
+    Param(
+        [Parameter(Mandatory=$False)]
+        [ValidateSet("5e")]
+        $NamingScheme
     )
+
+    if(($NamingScheme -like '') -or ($NamingScheme -eq $null)){$NamingScheme = '5e'}
+
+    #The 5th Edition dragon nam elements and generation rules come from "Fizban's Treasury of Dragons," pg 34
+    #It doesn't say how many elements should be rolled/used. Three seems best I guess...
+    if($NamingScheme -eq '5e'){
+    
+        $FirstEelement = ''
+        $SecondEelement = ''
+        $ThirdEelement = ''
+        $FourthEelement = ''
+
+        $FirstEelement = $FifthEditionNameElements[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FifthEditionNameElements))]
+        $FirstEelement = $FirstEelement[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FirstEelement))]
+        $SecondEelement = $FifthEditionNameElements[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FifthEditionNameElements))]
+        $SecondEelement = $SecondEelement[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $SecondEelement))]
+        $ThirdEelement = $FifthEditionNameElements[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FifthEditionNameElements))]
+        $ThirdEelement = $ThirdEelement[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $ThirdEelement))]
+        #$FourthEelement = $FifthEditionNameElements[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FifthEditionNameElements))]
+        #$FourthEelement = $FourthEelement[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $FourthEelement))]
+
+        $Name = ''
+        $Name = "$($FirstEelement)$($SecondEelement)$($ThirdEelement)$($FourthEelement)"
+        $Name = $Name.ToLower()
+        $Name = $Name.Substring(0,1).ToUpper() + $Name.Substring(1)
+
+    }
+
+    $Name
 
 }
 
@@ -2484,25 +2495,25 @@ $Dragons = @(
 
 $FifthEditionNameElements = @(
     
-    @("Aeros","Agha","Akkan","Alae")
-    @("Andra","Andusk","Angkar","Aradace")
-    @("Arauth","Arveia","Aryz","Atar")
-    @("Auntyr","Auth","Bahr","Bala")
-    @("Calaun","Ciym","Claug","Daerev")
-    @("Dalagh","Durg","Eir","Elden")
-    @("Endar","Ethar","Fel","Galad")
-    @("Gaul","Golos","Guth","Ingeir")
-    @("Ix","Iyliam","Jhar","Kerin")
-    @("Lham","Lothor","Malae","Marun")
-    @("Mere","Miir","Morn","Nabal")
-    @("Nur","Nym","Oloth","Ontor")
-    @("Othim","Palar","Raali","Ragoth")
-    @("Rith","Rysear","Saryx","Ser")
-    @("Skad","Surr","Thal","Thanach")
-    @("Thoth","Thrax","Thriin","Tostyn")
-    @("Tratain","Treori","Turace","Ualin")
-    @("Umer","Uryte","Uxin","Vaer")
-    @("Vala","Valos","Vinc","Voar")
+    @("Aeros","Agha","Akkan","Alae"),
+    @("Andra","Andusk","Angkar","Aradace"),
+    @("Arauth","Arveia","Aryz","Atar"),
+    @("Auntyr","Auth","Bahr","Bala"),
+    @("Calaun","Ciym","Claug","Daerev"),
+    @("Dalagh","Durg","Eir","Elden"),
+    @("Endar","Ethar","Fel","Galad"),
+    @("Gaul","Golos","Guth","Ingeir"),
+    @("Ix","Iyliam","Jhar","Kerin"),
+    @("Lham","Lothor","Malae","Marun"),
+    @("Mere","Miir","Morn","Nabal"),
+    @("Nur","Nym","Oloth","Ontor"),
+    @("Othim","Palar","Raali","Ragoth"),
+    @("Rith","Rysear","Saryx","Ser"),
+    @("Skad","Surr","Thal","Thanach"),
+    @("Thoth","Thrax","Thriin","Tostyn"),
+    @("Tratain","Treori","Turace","Ualin"),
+    @("Umer","Uryte","Uxin","Vaer"),
+    @("Vala","Valos","Vinc","Voar"),
     @("Vureem","Waur","Zundae","Zyreph")
 
 )
