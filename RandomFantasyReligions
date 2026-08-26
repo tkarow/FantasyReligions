@@ -660,6 +660,15 @@ function Get-GodIncidentals{
 
     }
 
+    if($AlternateDomains -eq 'Glyphs/Runes/Sigils'){
+    
+        $NewAlternateDomains = ''
+        $NewAlternateDomains = @("Sigils","Glyphs","Runes")
+        
+        $AlternateDomains = $NewAlternateDomains[(Get-Random -Minimum 0 -Maximum 3)]
+        
+    }
+
     $Iconography = ''
     $Iconography = if(($GodInfo.Iconography).Count -eq 1){$GodInfo.Iconography}else{$GodInfo.Iconography[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $GodInfo.Iconography))]}
 
@@ -701,7 +710,7 @@ function Get-GodIncidentals{
         $NewIconography = ''
         $NewIconography = @("Sigils","Glyphs","Runes")
 
-        $Iconography = $NewIconography[(Get-Random -Minimum 0 -Maximum 3)]
+        $Iconography = $AlternateDomains
 
     }
 
@@ -2525,6 +2534,7 @@ $FifthEditionNameElements = @(
 #Appearance ("other"): A great eye or disembodied voice
 #Representation: Iconoclasty<-->Literal representation
 #Temple locations: Rural<-->Urban
+#Locus of worship: Anyone carrying idol<-->Shrine in home<-->Temple shrine<-->Specific landmark shine
 #Temple ornateness?: Standing stones/nature altars<-->Cathedrals
 #Cleric class: Hermits<-->Clerical bureaucracy
 #Dogma: Oral tradition<-->Libraries of theological works
@@ -2685,6 +2695,16 @@ Friend of
 #Improve name generation
 #Revisit human descriptors - add logic?
 
-$x=Get-God;$x.personality;$x.Gender;$x.Description;$x.Incidentals.Iconography;if($x.SecondIncidentals.Iconography){$x.SecondIncidentals.Iconography}else{$x.Incidentals.SecondaryIconography}
+<#
+Controlled vocabulary: tags. Each tag corresponds with weighting or filtering things with the same tag- e.g. a god of a domain with the "health" tag chooses from festivals, foods, etc. with that same tag, if applicable
+
+Add an attribute for opposing domains per domain?
+
+Random phobia? Influences/influenced by opposing domains?
+
+Name logic for each type of being (e.g. angel names, beholder names, etc.)
+#>
+
+$Alignment = '';$Gender = '';$x=Get-God;$x.personality;$x.Gender;$x.Description;$x.Incidentals.Iconography;if($x.SecondIncidentals.Iconography){$x.SecondIncidentals.Iconography}else{$x.Incidentals.SecondaryIconography}
 
 0..100 | %{$x=Get-God;$x.SecondSphere}
