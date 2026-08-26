@@ -1203,6 +1203,35 @@ function Get-StarName{
 
 }
 
+function Get-DragonName{
+
+    $FifthEditionNameElements = @(
+    
+        @("Aeros","Agha","Akkan","Alae")
+        @("Andra","Andusk","Angkar","Aradace")
+        @("Arauth","Arveia","Aryz","Atar")
+        @("Auntyr","Auth","Bahr","Bala")
+        @("Calaun","Ciym","Claug","Daerev")
+        @("Dalagh","Durg","Eir","Elden")
+        @("Endar","Ethar","Fel","Galad")
+        @("Gaul","Golos","Guth","Ingeir")
+        @("Ix","Iyliam","Jhar","Kerin")
+        @("Lham","Lothor","Malae","Marun")
+        @("Mere","Miir","Morn","Nabal")
+        @("Nur","Nym","Oloth","Ontor")
+        @("Othim","Palar","Raali","Ragoth")
+        @("Rith","Rysear","Saryx","Ser")
+        @("Skad","Surr","Thal","Thanach")
+        @("Thoth","Thrax","Thriin","Tostyn")
+        @("Tratain","Treori","Turace","Ualin")
+        @("Umer","Uryte","Uxin","Vaer")
+        @("Vala","Valos","Vinc","Voar")
+        @("Vureem","Waur","Zundae","Zyreph")
+
+    )
+
+}
+
 #region Psychological Arrays
 
 $PsychomachiaVirtuesAndVices = @(
@@ -2450,6 +2479,31 @@ $Dragons = @(
     [pscustomobject]@{Alignment = "Chaotic Good";Types = @("Copper","Brass","Copper","Brass","Faerie","Arboreal","Beast","Chaos","Incarnum")}
     [pscustomobject]@{Alignment = "Chaotic Neutral";Types = @("Fang","Rosrarr","Nickel","Wretch","Ectoplasmic","Chaos","Howling","Tempest","Crystal","Topaz")}
     [pscustomobject]@{Alignment = "Chaotic Evil";Types = @("Red","Black","White","Red","Black","White","Salt","Chromium","Chaos","Howling","Tarterian","Shadow","Vampiric","Chole","Incarnum")}
+
+)
+
+$FifthEditionNameElements = @(
+    
+    @("Aeros","Agha","Akkan","Alae")
+    @("Andra","Andusk","Angkar","Aradace")
+    @("Arauth","Arveia","Aryz","Atar")
+    @("Auntyr","Auth","Bahr","Bala")
+    @("Calaun","Ciym","Claug","Daerev")
+    @("Dalagh","Durg","Eir","Elden")
+    @("Endar","Ethar","Fel","Galad")
+    @("Gaul","Golos","Guth","Ingeir")
+    @("Ix","Iyliam","Jhar","Kerin")
+    @("Lham","Lothor","Malae","Marun")
+    @("Mere","Miir","Morn","Nabal")
+    @("Nur","Nym","Oloth","Ontor")
+    @("Othim","Palar","Raali","Ragoth")
+    @("Rith","Rysear","Saryx","Ser")
+    @("Skad","Surr","Thal","Thanach")
+    @("Thoth","Thrax","Thriin","Tostyn")
+    @("Tratain","Treori","Turace","Ualin")
+    @("Umer","Uryte","Uxin","Vaer")
+    @("Vala","Valos","Vinc","Voar")
+    @("Vureem","Waur","Zundae","Zyreph")
 
 )
 
