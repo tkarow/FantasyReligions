@@ -2520,9 +2520,13 @@ $FifthEditionNameElements = @(
 
 #endregion
 
+#Appearance (god/human): Sickly<-->Normal<-->Muscular
+#Appearance ("other"): A great eye or disembodied voice
+#Representation: Iconoclasty<-->Literal representation
 #Temple locations: Rural<-->Urban
 #Temple ornateness?: Standing stones/nature altars<-->Cathedrals
 #Cleric class: Hermits<-->Clerical bureaucracy
+#Dogma: Oral tradition<-->Libraries of theological works
 #Organization: Self-expression in worship by practitioner<-->Organized mass
 #Exclusivity/Jealousy: Worship of companion gods<-->Exclusivity
 #Pacifism: Madatory<-->Holy wars/Jihads
@@ -2532,6 +2536,7 @@ $FifthEditionNameElements = @(
 #Prayer: None<-->Holidays<-->Holy month<-->Holy day of the week<-->Mandatory three times a day
 #Sacrifice: None<-->Libations/Meals(Ritual: Eaten by pracicers<-->left out for god/burnt<-->Eaten by priests on behalf of god)<-->Tithing<-->Child sacrifice<-->Human sacrifice
 #Festivals/Holidays: None<-->Juggernaut
+#Value on life: None<-->Live a full life<-->Martyrdom
 
 <#What transactions does the religion demand?
 -Sacrifices
@@ -2651,26 +2656,10 @@ Sex-Specific for any of the above
 
 <#
 Two standard deviation rolls. The first one determines how much the God cares about a given topic. If the God cares, one or greater than the second rule is given on a valuation. For example, how much does a God care about dress? If he does then modesty would be the virtue and a negative score in that would be extreme non-conformative whereas an extreme high would be extremely conservative.
-Spectra:
-Iconoclasty literal representations 
-Oral tradition to libraries of work
-Aggression indices one for insiders and one for outsiders- This casts the God as either a Shepherd, a teacher, a father, an avenger, a judge, or a punisher. Being positive is different than being negative or a trait or it's opposite.
-Really loves or hates the natural world, human civilizations, human life.
-
 Incorporate the tenants of the satanic Bible?
-
-
 #>
 
-#Emphasis on afterlife? None? Martyrdom?
-#Iconography
-##Tools (specific to interests?)
-##Abstract: A great eye or disembodied voice
-##########
-
 <#
-
-A domain is chosen at random and if the deities alignment is compatible with the alignments options of that domain then they will be given either a patron status of the agents of that domain or they will simply be a god of that domain or its subdomains. Alternatively, if the alignments are incompatible then they will be an opponent of a judger of or some other oppositional figure. 2. Those alignments. It could also be that they embody godhood of one of the opposing domains.
 
 Stole something 
 Win something 
@@ -2693,7 +2682,6 @@ Friend of
 #Curate secondary iconography
 #Material(s) for holy symbol?
 #Improve name generation
-#Curved rolls for appearance (e.g. Sickly<-->Normal<-->Muscular)
 #Revisit human descriptors - add logic?
 
 $x=Get-God;$x.personality;$x.Gender;$x.Description;$x.Incidentals.Iconography;if($x.SecondIncidentals.Iconography){$x.SecondIncidentals.Iconography}else{$x.Incidentals.SecondaryIconography}
