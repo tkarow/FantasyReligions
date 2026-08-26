@@ -1160,6 +1160,7 @@ function Get-GodName{
 
     $Name = $Name.Replace('pp','p')
     $Name = $Name.Replace('aa','a')
+    $Name = $Name.Replace('chch','ch')
 
     if($Name -like "*kox"){$Name = $Name.Replace('kox','ktox')}
     if($Name -like "*cox"){$Name = $Name.Replace('cox','ctox')}
