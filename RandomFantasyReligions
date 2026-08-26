@@ -299,6 +299,18 @@ function Get-Locus{
 
     $GodLocus = (Get-WeightedResult $Locus).Entry.Type
 
+    if($GodLocus -like "Dragon"){
+    
+        if((Get-Random -Minimum 1 -Maximum 6) -eq 1){$GodLocus = "Wyrm"}
+
+        $DragonOptions = ''
+        $DragonOptions = ($Dragons | ?{$_.Alignment -eq $Alignment}).Types
+
+        $Descriptor = ''
+        $Descriptor = $DragonOptions[(Get-Random -Minimum 0 -Maximum (Get-ArrayCount $DragonOptions))]
+
+    }
+
     if($GodLocus -like "Human"){
 
         if($Gender -like "Other"){$Gender = "Hermaphroditic"}
@@ -327,7 +339,15 @@ function Get-Locus{
 
     if($GodLocus -like "God"){
     
-        if($Gender -eq 'Other'){$GodLocus = (Get-WeightedResult $Others).Entry.Type}else{$GodLocus = (Get-WeightedResult $Gods).Entry.Type}
+        if($Gender -eq 'Other'){
+        
+            $GodLocus = (Get-WeightedResult $Others).Entry.Type
+            
+        }else{
+        
+            $GodLocus = (Get-WeightedResult $Gods).Entry.Type
+            
+        }
 
         if($GodLocus -like "*<*"){
         
@@ -340,7 +360,7 @@ function Get-Locus{
         if($GodLocus -eq 'Outsider'){
         
             $Reversed = $false
-            if((Get-Random -Minimum 1 -Maximum 6) -eq 1){$Reversed = $true}
+            if(((Get-Random -Minimum 1 -Maximum 6) -eq 1) -and (($Alignment -like "* Good") -or ($Alignment -like "* Evil"))){$Reversed = $true}
 
             if(($Reversed -eq $true) -and ($Alignment -like "* Good")){$Descriptor = @('Redeemed','Purged','Exiled','Repentant')[(Get-Random -Minimum 0 -Maximum 4)]}
             if(($Reversed -eq $true) -and ($Alignment -like "* Evil")){$Descriptor = @('Fallen','Corrupted','Exiled','Damned')[(Get-Random -Minimum 0 -Maximum 4)]}
@@ -2275,7 +2295,7 @@ $Locus = @(
 
     [pscustomobject]@{Type = "Human"; Weight = 30}
     [pscustomobject]@{Type = "God"; Weight = 70}
-    [pscustomobject]@{Type = "Dragon"; Weight = 1}
+    [pscustomobject]@{Type = "Dragon"; Weight = 10}
     
 )
 
@@ -2609,7 +2629,6 @@ Friend of
 #Material(s) for holy symbol?
 #Improve name generation
 #Curved rolls for appearance (e.g. Sickly<-->Normal<-->Muscular)
-#Dragon type/color table
 #Revisit human descriptors - add logic?
 
 $x=Get-God;$x.personality;$x.Gender;$x.Description;$x.Incidentals.Iconography;if($x.SecondIncidentals.Iconography){$x.SecondIncidentals.Iconography}else{$x.Incidentals.SecondaryIconography}
