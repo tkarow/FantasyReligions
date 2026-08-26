@@ -2419,17 +2419,35 @@ $PatronTitles = @(
 
 )
 
+$Dragons = @(
+
+    [pscustomobject]@{Alignment = "Lawful Good";Types = @("Bronze","Gold","Silver","Platinum","Bronze","Gold","Silver","Radiant","Incarnum")}
+    [pscustomobject]@{Alignment = "Lawful Neutral";Types = @("Steel","Pact","Axial","Rust","Sapphire","Crystalline","Ruby")}
+    [pscustomobject]@{Alignment = "Lawful Evil";Types = @("Blue","Green","Blue","Green","Cobalt","Pyroclastic","Rust","Hellfire","Incarnum")}
+    [pscustomobject]@{Alignment = "Neutral Good";Types = @("Electrum","Tungsten","Battle","Adamantine","Elysian","Beast","Oceanus")}
+    [pscustomobject]@{Alignment = "True Neutral";Types = @("Mercury","Iron","Mirage","Astral","Ethereal","Concordant","Amethyst","Emerald","Jade","Onyx","Amber","Jacinth","Moonstone","Pearl")}
+    [pscustomobject]@{Alignment = "Neutral Evil";Types = @("Brown","Deep","Yellow","Shadow","Blight","Pyroclastic","Styx","Tarterian","Skeletal","Gloom","Obsidian")}
+    [pscustomobject]@{Alignment = "Chaotic Good";Types = @("Copper","Brass","Copper","Brass","Faerie","Arboreal","Beast","Chaos","Incarnum")}
+    [pscustomobject]@{Alignment = "Chaotic Neutral";Types = @("Fang","Rosrarr","Nickel","Wretch","Ectoplasmic","Chaos","Howling","Tempest","Crystal","Topaz")}
+    [pscustomobject]@{Alignment = "Chaotic Evil";Types = @("Red","Black","White","Red","Black","White","Salt","Chromium","Chaos","Howling","Tarterian","Shadow","Vampiric","Chole","Incarnum")}
+
+)
+
 #endregion
 
-$Secrecy = @()
+#Temple locations: Rural<-->Urban
+#Temple ornateness?: Standing stones/nature altars<-->Cathedrals
+#Cleric class: Hermits<-->Clerical bureaucracy
+#Organization: Self-expression in worship by practitioner<-->Organized mass
+#Exclusivity/Jealousy: Worship of companion gods<-->Exclusivity
+#Pacifism: Madatory<-->Holy wars/Jihads
+#Secrecy: Mystery cult<-->State sponsored religion
+#Works: Secret acts/practices/codes<-->public works (patronage of art/community projects or charity)
+#Hedonism: Cultic orgies/Festivals of excess<-->Mandatory aesceticism/Self denial/Fasting
+#Prayer: None<-->Holidays<-->Holy month<-->Holy day of the week<-->Mandatory three times a day
+#Sacrifice: None<-->Libations/Meals(Ritual: Eaten by pracicers<-->left out for god/burnt<-->Eaten by priests on behalf of god)<-->Tithing<-->Child sacrifice<-->Human sacrifice
+#Festivals/Holidays: None<-->Juggernaut
 
-$Exclusivity = @()
-
-$Jealousness = @("Polytheistic","Preference","Exclusivity","Hostility to other gods")
-
-$Hedonism = @()
-
-$Demands = @("Prayer","Child sacrifice","Libation","Festivals - sports/athletics, hedomsim, sacrifice, family, penance","Temperance/Self control - vows, asceticism")
 <#What transactions does the religion demand?
 -Sacrifices
     -Libation/Food offering
@@ -2545,13 +2563,6 @@ Sacred things/Fixations:
 
 Sex-Specific for any of the above
 #>
-
-
-$Practices = @("Public works/Community projects/Patronage","Secret code","Juggernaut")
-
-$Heirarchy = @()
-
-$Aggression = @("Pacifism","Holy war")
 
 <#
 Two standard deviation rolls. The first one determines how much the God cares about a given topic. If the God cares, one or greater than the second rule is given on a valuation. For example, how much does a God care about dress? If he does then modesty would be the virtue and a negative score in that would be extreme non-conformative whereas an extreme high would be extremely conservative.
